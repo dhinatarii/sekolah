@@ -1,4 +1,4 @@
-<title>Admin</title>
+<title>Siswa</title>
 </head>
 
 <body id="page-top" class="sidebar-toggled">

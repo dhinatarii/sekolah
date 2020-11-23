@@ -1,7 +1,7 @@
 <?php
 class Login_model extends CI_Model
 {
-    public function cek_login($username, $password)
+    public function check_login($username, $password)
     {
 
         $this->db->where('username', $username);

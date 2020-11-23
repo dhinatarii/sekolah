@@ -1,0 +1,11 @@
+.logo-login{
+    background-image: url('./../img/logo-sekolah.jpg');
+    display: flex;
+    width: 100%;
+    min-height: 150px;
+    background-position: center;
+    background-color: white;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-bottom: 18px;
+}
