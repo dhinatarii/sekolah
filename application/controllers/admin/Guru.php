@@ -35,11 +35,12 @@ class Guru extends CI_Controller
 
     public function input()
     {
+        $data['menu'] = 'akademik';
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
-            $this->load->view('templates_admin/sidebar');
+            $this->load->view('templates_admin/sidebar', $data);
             $this->load->view('admin/guru_input');
             $this->load->view('templates/footer');
         } else {
@@ -52,12 +53,14 @@ class Guru extends CI_Controller
     public function edit($id)
     {
         $data['guru'] = $this->Guru_model->get_detail_data($id);
+        $data['menu'] = 'akademik';
+        $data['jenis_kelamin'] = ['Laki-laki', 'Perempuan'];
 
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
-            $this->load->view('templates_admin/sidebar');
+            $this->load->view('templates_admin/sidebar', $data);
             $this->load->view('admin/guru_edit', $data);
             $this->load->view('templates/footer');
         } else {

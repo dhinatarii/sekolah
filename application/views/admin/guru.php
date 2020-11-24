@@ -20,6 +20,7 @@
                 <th>No</th>
                 <th>NIP</th>
                 <th>Nama</th>
+                <th>Jenis Kelamin</th>
                 <th>No Handphone</th>
                 <th>Email</th>
                 <th>Alamat</th>
@@ -35,6 +36,7 @@
                     <td width="20px"><?php echo $no++ ?></td>
                     <td><?php echo $gr->nip ?></td>
                     <td><?php echo $gr->nama ?></td>
+                    <td><?php echo $gr->jenis_kelamin ?></td>
                     <td><?php echo $gr->no_hp ?></td>
                     <td><?php echo $gr->email ?></td>
                     <td><?php echo $gr->alamat ?></td>
@@ -53,26 +55,51 @@
             </tbody>
         <?php endforeach ?>
     </table>
+</div>
 
-    <script>
-        // Hapus data guru
-        $('.btn-delete-guru').on('click', function(event) {
-            event.preventDefault();
-            const href = $(this).attr('href');
+</div>
+<!-- End of Main Content -->
 
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "data guru akan dihapus",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Hapus Data',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.location.href = href;
-                }
-            });
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Your Website 2020</span>
+        </div>
+    </div>
+</footer>
+<!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<script>
+    // Hapus data guru
+    $('.btn-delete-guru').on('click', function(event) {
+        event.preventDefault();
+        const href = $(this).attr('href');
+
+        Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: "data guru akan dihapus",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Hapus Data',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.location.href = href;
+            }
         });
-    </script>
+    });
+</script>

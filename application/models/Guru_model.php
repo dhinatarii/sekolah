@@ -14,11 +14,12 @@ class Guru_model extends CI_Model
     public function input_data()
     {
         $data = array(
-            'nip'       => $this->input->post('nip', TRUE),
-            'nama'      => $this->input->post('nama', TRUE),
-            'no_hp'     => $this->input->post('no_hp', TRUE),
-            'email'     => $this->input->post('email', TRUE),
-            'alamat'    => $this->input->post('alamat', TRUE)
+            'nip'           => $this->input->post('nip', TRUE),
+            'nama'          => $this->input->post('nama', TRUE),
+            'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
+            'no_hp'         => $this->input->post('no_hp', TRUE),
+            'email'         => $this->input->post('email', TRUE),
+            'alamat'        => $this->input->post('alamat', TRUE)
         );
 
         $this->db->insert('tb_guru', $data);
@@ -41,6 +42,5 @@ class Guru_model extends CI_Model
     public function delete_data($id)
     {
         $this->db->delete('tb_guru', ['id_guru' => $id]);
-        
     }
 }
