@@ -1,22 +1,23 @@
 <?php
-class Auth extends CI_Controller
+
+class Login extends CI_Controller
 {
     public function index()
     {
         $this->load->view('templates/header');
-        $this->load->view('admin/login');
+        $this->load->view('login/index');
         $this->load->view('templates/footer');
     }
 
-    public function process_login()
+    public function auth()
     {
 
-        $this->form_validation->set_rules('username', 'username', 'required', ['required' => 'Username wajib di isi!']);
+        $this->form_validation->set_rules('username', 'username', 'required', ['required' => 'Username / Email / NISN wajib di isi!']);
         $this->form_validation->set_rules('password', 'password', 'required', ['required' => 'Password wajib di isi!']);
 
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
-            $this->load->view('admin/login');
+            $this->load->view('login/index');
             $this->load->view('templates/footer');
         } else {
             $username = $this->input->post('username');
@@ -32,11 +33,13 @@ class Auth extends CI_Controller
                     $sess_data['username'] = $ck->username;
                     $sess_data['email'] = $ck->email;
                     $sess_data['level'] = $ck->level;
-                    
+
                     $this->session->set_userdata($sess_data);
                 }
-                if ($sess_data['level'] == 'admin') {
-                    redirect('admin/dashboard');
+                if ($sess_data['level'] == 'guru') {
+                    redirect('guru/dashboard');
+                } elseif ($sess_data['level'] == 'siswa') {
+                    redirect('siswa/dashboard');
                 } else {
                     $this->session->set_flashdata('message', '
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -45,7 +48,7 @@ class Auth extends CI_Controller
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>');
-                    redirect('admin/auth');
+                    redirect('login');
                 }
             } else {
                 $this->session->set_flashdata('message', '
@@ -55,7 +58,7 @@ class Auth extends CI_Controller
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>');
-                redirect('admin/auth');
+                redirect('login');
             }
         }
     }
@@ -63,6 +66,6 @@ class Auth extends CI_Controller
     public function logout()
     {
         $this->session->sess_destroy();
-        redirect('admin/auth');
+        redirect('login');
     }
 }
