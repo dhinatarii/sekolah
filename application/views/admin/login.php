@@ -6,9 +6,9 @@
     <div class="container-login sign-up-mode">
         <div class="forms-container">
             <div class="signup">
-                <form method="post" action="<?php echo base_url('admin/auth/process_login') ?>" class="sign-up-form">
-                    <?php echo $this->session->flashdata('message'); ?>
+                <form method="post" action="" class="sign-up-form">
                     <h2 class="title">Login Admin</h2>
+                    <?php echo $this->session->flashdata('message'); ?>
                     <div class="input-field">
                         <i class="fas fa-user"></i>
                         <input type="text" placeholder="Username" id="username" name="username" />

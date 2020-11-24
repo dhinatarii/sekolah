@@ -34,7 +34,6 @@ class Dashboard extends CI_Controller
             'username'  => $data->username,
             'level'     => $data->level,
         );
-
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar');
         $this->load->view('admin/dashboard', $data);

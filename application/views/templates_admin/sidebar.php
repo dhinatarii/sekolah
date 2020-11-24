@@ -36,12 +36,9 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Sub-Menu Akademik:</h6>
-                        <a class="collapse-item" href="buttons.html">Mata Pelajaran</a>
-                        <a class="collapse-item" href="cards.html">Tahun Akademik</a>
-                        <a class="collapse-item" href="cards.html">Input Nilai</a>
-                        <a class="collapse-item" href="cards.html">Guru</a>
-                        <a class="collapse-item" href="cards.html">Wali Kelas</a>
                         <a class="collapse-item" href="cards.html">Siswa</a>
+                        <a class="collapse-item" href="<?php echo base_url('admin/guru') ?>">Guru</a>
+                        <a class="collapse-item" href="<?php echo base_url('admin/kelas') ?>">Kelas</a>
                     </div>
                 </div>
             </li>

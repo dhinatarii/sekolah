@@ -6,7 +6,7 @@ class Login_model extends CI_Model
 
         $this->db->where('username', $username);
         $this->db->where('password', $password);
-        return $this->db->get('user');
+        return $this->db->get('tb_user');
     }
 
     public function getLoginData($user, $pass)
