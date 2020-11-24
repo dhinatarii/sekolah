@@ -8,7 +8,14 @@
             <div class="signin">
                 <form method="post" action="<?php echo base_url('login/auth') ?>" class="sign-in-form">
                     <img src="<?php echo base_url() ?>assets/img/logo_dikdasmen.svg" alt="" class="image-logo">
-                    <?php echo $this->session->flashdata('message'); ?>
+                    <?php if ($this->session->flashdata('message')) : ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php echo $this->session->flashdata('message'); ?>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <?php endif; ?>
                     <div class="input-field">
                         <i class="fas fa-user"></i>
                         <input type="text" placeholder="Username / Email / NISN" id="username" name="username" />

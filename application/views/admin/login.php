@@ -6,9 +6,16 @@
     <div class="container-login sign-up-mode">
         <div class="forms-container">
             <div class="signup">
-                <form method="post" action="<?php echo base_url('admin/auth/process_login') ?>" class="sign-up-form">
-                    <?php echo $this->session->flashdata('message'); ?>
+                <form method="post" action="" class="sign-up-form">
                     <h2 class="title">Login Admin</h2>
+                    <?php if ($this->session->flashdata('message')) : ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php echo $this->session->flashdata('message'); ?>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <?php endif; ?>
                     <div class="input-field">
                         <i class="fas fa-user"></i>
                         <input type="text" placeholder="Username" id="username" name="username" />

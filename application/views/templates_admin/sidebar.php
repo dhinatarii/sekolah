@@ -21,14 +21,14 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item <?php if ($menu == 'dashboard') {echo 'active';} ?>">
                 <a class="nav-link" href="<?php echo base_url('admin/dashboard') ?>">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <!-- Nav Item - Akademik Menu -->
+            <li class="nav-item <?php if ($menu == 'akademik') {echo 'active';} ?>">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-university"></i>
                     <span>Akademik</span>
@@ -36,12 +36,9 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Sub-Menu Akademik:</h6>
-                        <a class="collapse-item" href="buttons.html">Mata Pelajaran</a>
-                        <a class="collapse-item" href="cards.html">Tahun Akademik</a>
-                        <a class="collapse-item" href="cards.html">Input Nilai</a>
-                        <a class="collapse-item" href="cards.html">Guru</a>
-                        <a class="collapse-item" href="cards.html">Wali Kelas</a>
                         <a class="collapse-item" href="cards.html">Siswa</a>
+                        <a class="collapse-item" href="<?php echo base_url('admin/guru') ?>">Guru</a>
+                        <a class="collapse-item" href="<?php echo base_url('admin/kelas') ?>">Kelas</a>
                     </div>
                 </div>
             </li>

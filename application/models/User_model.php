@@ -5,9 +5,7 @@
         {
             
             $this->db->where('username', $name);
-            return $this->db->get('user')->row();
+            return $this->db->get('tb_user')->row();
             
         }
     }
-    
-?>
