@@ -6,6 +6,12 @@ class Guru_model extends CI_Model
         return $this->db->get('tb_guru')->result();
     }
 
+    public function get_data_only_name()
+    {
+        $this->db->select('nama');
+        return $this->db->get('tb_guru')->result();
+    }
+
     public function get_detail_data($id)
     {
         return $this->db->get_where('tb_guru', ['id_guru' => $id])->row_array();
@@ -30,6 +36,7 @@ class Guru_model extends CI_Model
         $data = array(
             'nip'       => $this->input->post('nip', TRUE),
             'nama'      => $this->input->post('nama', TRUE),
+            'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
             'no_hp'     => $this->input->post('no_hp', TRUE),
             'email'     => $this->input->post('email', TRUE),
             'alamat'    => $this->input->post('alamat', TRUE)
