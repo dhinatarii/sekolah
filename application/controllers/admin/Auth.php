@@ -30,23 +30,11 @@ class Auth extends CI_Controller
                 if ($sess_data['level'] == 'admin') {
                     redirect('admin/dashboard');
                 } else {
-                    $this->session->set_flashdata('message', '
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        Username atau Password Salah!
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>');
+                    $this->session->set_flashdata('message', 'Username atau Password Salah!');
                     redirect('admin/auth');
                 }
             } else {
-                $this->session->set_flashdata('message', '
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Username atau Password Salah!
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>');
+                $this->session->set_flashdata('message', 'Username atau Password Salah!');
                 redirect('admin/auth');
             }
         }

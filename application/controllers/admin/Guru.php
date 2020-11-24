@@ -11,24 +11,12 @@ class Guru extends CI_Controller
         $this->output->set_header('Pragma: no-cache');
 
         if (!isset($this->session->userdata['username']) && $this->session->userdata['level'] != 'admin') {
-            $this->session->set_flashdata('message', '
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Anda Belum Login!
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>');
+            $this->session->set_flashdata('message', 'Anda Belum Login!');
             redirect('admin/auth');
         }
 
         if ($this->session->userdata['level'] != 'admin') {
-            $this->session->set_flashdata('message', '
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Anda Belum Login!
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>');
+            $this->session->set_flashdata('message', 'Anda Belum Login!');
             redirect('admin/auth');
         }
     }
@@ -37,9 +25,10 @@ class Guru extends CI_Controller
     public function index()
     {
         $data['guru'] = $this->Guru_model->get_data();
+        $data['menu'] = 'akademik';
 
         $this->load->view('templates/header');
-        $this->load->view('templates_admin/sidebar');
+        $this->load->view('templates_admin/sidebar', $data);
         $this->load->view('admin/guru', $data);
         $this->load->view('templates/footer');
     }
@@ -55,13 +44,7 @@ class Guru extends CI_Controller
             $this->load->view('templates/footer');
         } else {
             $this->Guru_model->input_data();
-            $this->session->set_flashdata('message', '
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Data Guru Berhasil Ditambahkan!
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>');
+            $this->session->set_flashdata('message', 'Data Guru Berhasil Ditambahkan!');
             redirect('admin/guru');
         }
     }
@@ -79,13 +62,7 @@ class Guru extends CI_Controller
             $this->load->view('templates/footer');
         } else {
             $this->Guru_model->edit_data($id);
-            $this->session->set_flashdata('message', '
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Data Guru Berhasil Update!
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>');
+            $this->session->set_flashdata('message', 'Data Guru Berhasil Diupdate!');
             redirect('admin/guru');
         }
     }
@@ -93,13 +70,7 @@ class Guru extends CI_Controller
     public function delete($id)
     {
         $this->Guru_model->delete_data($id);
-        $this->session->set_flashdata('message', '
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                Data Guru Berhasil Dihapus!
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>');
+        $this->session->set_flashdata('message', 'Data Guru Berhasil Dihapus!');
         redirect('admin/guru');
     }
 

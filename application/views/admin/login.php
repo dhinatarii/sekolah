@@ -8,7 +8,14 @@
             <div class="signup">
                 <form method="post" action="" class="sign-up-form">
                     <h2 class="title">Login Admin</h2>
-                    <?php echo $this->session->flashdata('message'); ?>
+                    <?php if ($this->session->flashdata('message')) : ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?php echo $this->session->flashdata('message'); ?>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <?php endif; ?>
                     <div class="input-field">
                         <i class="fas fa-user"></i>
                         <input type="text" placeholder="Username" id="username" name="username" />

@@ -5,24 +5,12 @@ class Dashboard extends CI_Controller
     {
         parent::__construct();
         if (!isset($this->session->userdata['username']) && $this->session->userdata['level'] != 'admin') {
-            $this->session->set_flashdata('message', '
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Anda Belum Login!
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>');
+            $this->session->set_flashdata('message', 'Anda Belum Login!');
             redirect('admin/auth');
         }
 
         if ($this->session->userdata['level'] != 'admin') {
-            $this->session->set_flashdata('message', '
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Anda Belum Login!
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>');
+            $this->session->set_flashdata('message', 'Anda Belum Login!');
             redirect('admin/auth');
         }
     }
@@ -33,9 +21,10 @@ class Dashboard extends CI_Controller
         $data = array(
             'username'  => $data->username,
             'level'     => $data->level,
+            'menu'      => 'dashboard'
         );
         $this->load->view('templates/header');
-        $this->load->view('templates_admin/sidebar');
+        $this->load->view('templates_admin/sidebar', $data);
         $this->load->view('admin/dashboard', $data);
         $this->load->view('templates/footer');
     }

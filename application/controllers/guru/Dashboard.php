@@ -5,24 +5,12 @@ class Dashboard extends CI_Controller
     {
         parent::__construct();
         if (!isset($this->session->userdata['username'])) {
-            $this->session->set_flashdata('message', '
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Anda Belum Login!
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>');
+            $this->session->set_flashdata('message', 'Anda Belum Login!');
             redirect('login');
         }
 
         if ($this->session->userdata['level'] != 'guru') {
-            $this->session->set_flashdata('message', '
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    Anda Belum Login!
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>');
+            $this->session->set_flashdata('message', 'Anda Belum Login!');
             redirect('login');
         }
     }
