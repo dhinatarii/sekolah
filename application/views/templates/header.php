@@ -27,3 +27,7 @@
 
     <!-- SweetAlert2 -->
     <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+
+    <!-- Date Picker -->
+    <script src="<?php echo base_url() ?>assets/js/bootstrap-datepicker.min.js"></script>
+    <link href="<?php echo base_url() ?>assets/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css">

@@ -23,6 +23,7 @@ class Guru_model extends CI_Model
             'nip'           => $this->input->post('nip', TRUE),
             'nama'          => $this->input->post('nama', TRUE),
             'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
+            'tanggal_lahir' => $this->input->post('tanggal_lahir', TRUE),
             'no_hp'         => $this->input->post('no_hp', TRUE),
             'email'         => $this->input->post('email', TRUE),
             'alamat'        => $this->input->post('alamat', TRUE)
@@ -37,6 +38,7 @@ class Guru_model extends CI_Model
             'nip'       => $this->input->post('nip', TRUE),
             'nama'      => $this->input->post('nama', TRUE),
             'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
+            'tanggal_lahir' => $this->input->post('tanggal_lahir', TRUE),
             'no_hp'     => $this->input->post('no_hp', TRUE),
             'email'     => $this->input->post('email', TRUE),
             'alamat'    => $this->input->post('alamat', TRUE)

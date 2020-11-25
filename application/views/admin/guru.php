@@ -21,6 +21,7 @@
                 <th>NIP</th>
                 <th>Nama</th>
                 <th>Jenis Kelamin</th>
+                <th>Tanggal Lahir</th>
                 <th>No Handphone</th>
                 <th>Email</th>
                 <th>Alamat</th>
@@ -37,6 +38,7 @@
                     <td><?php echo $gr->nip ?></td>
                     <td><?php echo $gr->nama ?></td>
                     <td><?php echo $gr->jenis_kelamin ?></td>
+                    <td><?php echo $gr->tanggal_lahir ?></td>
                     <td><?php echo $gr->no_hp ?></td>
                     <td><?php echo $gr->email ?></td>
                     <td><?php echo $gr->alamat ?></td>
