@@ -19,6 +19,7 @@
                 <div class="form-group">
                     <label for="">Jenis Kelamin</label>
                     <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
+                        <option value="">--Pilih Jenis Kelamin--</option>
                         <option value="Laki-laki">Laki-laki</option>
                         <option value="Perempuan">Perempuan</option>
                     </select>
