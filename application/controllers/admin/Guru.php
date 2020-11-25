@@ -81,6 +81,7 @@ class Guru extends CI_Controller
     {
         $this->form_validation->set_rules('nip', 'NIP', 'numeric');
         $this->form_validation->set_rules('nama', 'Nama', 'required');
+        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
         $this->form_validation->set_rules('no_hp', 'No Handphone', 'required|numeric|min_length[10]|max_length[13]');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
         $this->form_validation->set_rules('alamat', 'alamat', 'required');
