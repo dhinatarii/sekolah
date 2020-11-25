@@ -14,6 +14,7 @@
                 <div class="form-group">
                     <label for="wali_kelas">Wali Kelas</label>
                     <select class="form-control" id="wali_kelas" name="wali_kelas">
+                        <option value="">--Pilih Guru--</option>
                         <?php foreach ($guru as $gr) : ?>
                             <option value="<?php echo $gr->nama ?>"><?php echo $gr->nama ?></option>
                         <?php endforeach; ?>
