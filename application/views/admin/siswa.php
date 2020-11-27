@@ -25,7 +25,7 @@
                         <th>Nama</th>
                         <th>Tanggal Lahir</th>
                         <th>Agama</th>
-                        <th>Pendidikan Sebelumnya</th>
+                        <th>Jenis Kelamin</th>
                         <th>Kelas</th>
                         <th colspan="3">Aksi</th>
                     </tr>
@@ -42,11 +42,10 @@
                             <td><?php echo $sw->nama ?></td>
                             <td><?php echo $sw->tanggal_lahir ?></td>
                             <td><?php echo $sw->agama ?></td>
-                            <td><?php echo $sw->pend_sebelumnya ?></td>
+                            <td><?php echo $sw->jenis_kelamin ?></td>
                             <td></td>
                             <td width="40px">
                                 <div id="set_detailModal" class="btn btn-sm btn-success" data-toggle="modal" data-target="#detailModal" data-idsiswa="<?= $sw->id_siswa ?>" data-siswa="<?= $sw->nama ?>" data-namaibu="<?= $sw->nama_ibu ?>" data-pendidikanibu="<?= $sw->pendidikan_ibu ?>" data-perkejaanibu="<?= $sw->pekerjaan_ibu ?>" data-namaayah="<?= $sw->nama_ayah ?>" data-pendidikanayah="<?= $sw->pendidikan_ayah ?>" data-pekerjaanayah="<?= $sw->pekerjaan_ayah ?>" data-nohp="<?= $sw->no_hp ?>" data-dusun="<?= $sw->dusun ?>" data-desa="<?= $sw->desa ?>" data-kecamatan="<?= $sw->kecamatan ?>" data-kabupaten="<?= $sw->kabupaten ?>">
-
                                     <i class="fa fa-eye"></i></div>
                             </td>
                             <td width="40px">

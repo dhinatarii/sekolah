@@ -29,7 +29,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="tanggal_lahir">Tanggal Lahir</label>
-                                    <input type="text" name="tanggal_lahir" id="tanggal_lahir" placeholder="Masukan Tanggal Lahir" class="form-control">
+                                    <input placeholder="Masukan Tanggal Lahir" type="text" class="form-control datepicker" name="tanggal_lahir" id="tanggal_lahir">
                                     <?php echo form_error('tanggal_lahir', '<div class="text-danger small ml-3">', '</div>') ?>
                                 </div>
                                 <div class="form-group">
@@ -38,9 +38,13 @@
                                     <?php echo form_error('agama', '<div class="text-danger small ml-3">', '</div>') ?>
                                 </div>
                                 <div class="form-group">
-                                    <label for="pend_sebelumnya">Pendidikan Sebelumnya</label>
-                                    <input type="text" name="pend_sebelumnya" id="pend_sebelumnya" placeholder="Masukan Pendidikan Sebelumnya" class="form-control">
-                                    <?php echo form_error('pend_sebelumnya', '<div class="text-danger small ml-3">', '</div>') ?>
+                                    <label for="">Jenis Kelamin</label>
+                                    <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
+                                        <option value="">--Pilih Jenis Kelamin--</option>
+                                        <option value="Laki-laki">Laki-laki</option>
+                                        <option value="Perempuan">Perempuan</option>
+                                    </select>
+                                    <?php echo form_error('jenis_kelamin', '<div class="text-danger small ml-3">', '</div>') ?>
                                 </div>
                                 <div class="form-group">
                                     <label for="kelas">Kelas</label>
@@ -62,9 +66,9 @@
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="namaibu">Nama Ibu</label>
-                                    <input type="text" name="namaibu" id="namaibu" placeholder="Masukan Nama Ibu" class="form-control">
-                                    <?php echo form_error('namaibu', '<div class="text-danger small ml-3">', '</div>') ?>
+                                    <label for="nama_ibu">Nama Ibu</label>
+                                    <input type="text" name="nama_ibu" id="nama_ibu" placeholder="Masukan Nama Ibu" class="form-control">
+                                    <?php echo form_error('nama_ibu', '<div class="text-danger small ml-3">', '</div>') ?>
                                 </div>
                                 <div class="form-group">
                                     <label for="pendidikan_ibu">Pendidikan Ibu</label>
@@ -77,9 +81,9 @@
                                     <?php echo form_error('pekerjaan_ibu', '<div class="text-danger small ml-3">', '</div>') ?>
                                 </div>
                                 <div class="form-group">
-                                    <label for="namaayah">Nama Ayah</label>
-                                    <input type="text" name="namaayah" id="namaayah" placeholder="Masukan Nama Ayah" class="form-control">
-                                    <?php echo form_error('namaayah', '<div class="text-danger small ml-3">', '</div>') ?>
+                                    <label for="nama_ayah">Nama Ayah</label>
+                                    <input type="text" name="nama_ayah" id="nama_ayah" placeholder="Masukan Nama Ayah" class="form-control">
+                                    <?php echo form_error('nama_ayah', '<div class="text-danger small ml-3">', '</div>') ?>
                                 </div>
                                 <div class="form-group">
                                     <label for="pendidikan_ayah">Pendidikan Ayah</label>
@@ -161,3 +165,13 @@
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
+
+<script>
+    $(function() {
+        $(".datepicker").datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true,
+        });
+    });
+</script>
