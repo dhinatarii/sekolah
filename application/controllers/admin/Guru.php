@@ -35,11 +35,12 @@ class Guru extends CI_Controller
 
     public function input()
     {
+        $data['menu'] = 'akademik';
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
-            $this->load->view('templates_admin/sidebar');
+            $this->load->view('templates_admin/sidebar', $data);
             $this->load->view('admin/guru_input');
             $this->load->view('templates/footer');
         } else {
@@ -52,12 +53,14 @@ class Guru extends CI_Controller
     public function edit($id)
     {
         $data['guru'] = $this->Guru_model->get_detail_data($id);
+        $data['menu'] = 'akademik';
+        $data['jenis_kelamin'] = ['Laki-laki', 'Perempuan'];
 
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
-            $this->load->view('templates_admin/sidebar');
+            $this->load->view('templates_admin/sidebar', $data);
             $this->load->view('admin/guru_edit', $data);
             $this->load->view('templates/footer');
         } else {
@@ -78,8 +81,10 @@ class Guru extends CI_Controller
     {
         $this->form_validation->set_rules('nip', 'NIP', 'numeric');
         $this->form_validation->set_rules('nama', 'Nama', 'required');
+        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
         $this->form_validation->set_rules('no_hp', 'No Handphone', 'required|numeric|min_length[10]|max_length[13]');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-        $this->form_validation->set_rules('alamat', 'alamat', 'required');
+        $this->form_validation->set_rules('alamat', 'Alamat', 'required');
+        $this->form_validation->set_rules('tanggal_lahir', 'Tanggal lahir', 'required');
     }
 }

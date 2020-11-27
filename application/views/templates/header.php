@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="notranslate" translate="no">
 
 <head>
 
@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="google" content="notranslate">
 
     <!-- Custom fonts for this template-->
     <link href="<?php echo base_url() ?>assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -26,3 +27,7 @@
 
     <!-- SweetAlert2 -->
     <script src="<?php echo base_url() ?>assets/js/sweetalert2.all.min.js"></script>
+
+    <!-- Date Picker -->
+    <script src="<?php echo base_url() ?>assets/js/bootstrap-datepicker.min.js"></script>
+    <link href="<?php echo base_url() ?>assets/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css">

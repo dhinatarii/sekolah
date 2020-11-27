@@ -21,14 +21,18 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item <?php if ($menu == 'dashboard') {echo 'active';} ?>">
+            <li class="nav-item <?php if ($menu == 'dashboard') {
+                                    echo 'active';
+                                } ?>">
                 <a class="nav-link" href="<?php echo base_url('admin/dashboard') ?>">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
 
             <!-- Nav Item - Akademik Menu -->
-            <li class="nav-item <?php if ($menu == 'akademik') {echo 'active';} ?>">
+            <li class="nav-item <?php if ($menu == 'akademik') {
+                                    echo 'active';
+                                } ?>">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-university"></i>
                     <span>Akademik</span>
@@ -36,7 +40,7 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Sub-Menu Akademik:</h6>
-                        <a class="collapse-item" href="cards.html">Siswa</a>
+                        <a class="collapse-item" href="<?php echo base_url('admin/siswa') ?>">Siswa</a>
                         <a class="collapse-item" href="<?php echo base_url('admin/guru') ?>">Guru</a>
                         <a class="collapse-item" href="<?php echo base_url('admin/kelas') ?>">Kelas</a>
                     </div>
@@ -283,3 +287,22 @@
 
                 </nav>
                 <!-- End of Topbar -->
+
+                <!-- Logout Modal-->
+                <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Apakah Anda ingin Logout?</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">Pilih "Logout" di bawah ini jika Anda siap untuk mengakhiri sesi Anda saat ini.</div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                <a class="btn btn-primary" href="<?php echo base_url('admin/auth/logout') ?>">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
