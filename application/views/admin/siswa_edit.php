@@ -29,7 +29,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="tanggal_lahir">Tanggal Lahir</label>
-                                    <input type="text" name="tanggal_lahir" id="tanggal_lahir" placeholder="Masukan Tanggal Lahir" class="form-control" value="<?php echo $siswa['tanggal_lahir']; ?>">
+                                    <input type="date" name="tanggal_lahir" id="tanggal_lahir" placeholder="Masukan Tanggal Lahir" class="form-control" value="<?php echo $siswa['tanggal_lahir']; ?>">
                                     <?php echo form_error('tanggal_lahir', '<div class="text-danger small ml-3">', '</div>') ?>
                                 </div>
                                 <div class="form-group">
@@ -171,11 +171,11 @@
 </a>
 
 <script>
-    $(function() {
-        $(".datepicker").datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true,
-            todayHighlight: true,
-        });
-    });
+    // $(function() {
+    //     $(".datepicker").datepicker({
+    //         format: 'yyyy-mm-dd',
+    //         autoclose: true,
+    //         todayHighlight: true,
+    //     });
+    // });
 </script>

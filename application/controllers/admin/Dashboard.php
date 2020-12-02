@@ -6,12 +6,12 @@ class Dashboard extends CI_Controller
         parent::__construct();
         if (!isset($this->session->userdata['username']) && $this->session->userdata['level'] != 'admin') {
             $this->session->set_flashdata('message', 'Anda Belum Login!');
-            redirect('admin/auth');
+            redirect('login');
         }
 
         if ($this->session->userdata['level'] != 'admin') {
             $this->session->set_flashdata('message', 'Anda Belum Login!');
-            redirect('admin/auth');
+            redirect('login');
         }
     }
 

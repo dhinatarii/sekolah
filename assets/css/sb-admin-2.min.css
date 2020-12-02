@@ -5023,8 +5023,8 @@ input[type=submit].btn-block {
 .card-header {
     padding: .75rem 1.25rem;
     margin-bottom: 0;
-    background-color: #f8f9fc;
-    border-bottom: 1px solid #e3e6f0
+    background-color: rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 .card-header:first-child {
@@ -5033,8 +5033,8 @@ input[type=submit].btn-block {
 
 .card-footer {
     padding: .75rem 1.25rem;
-    background-color: #f8f9fc;
-    border-top: 1px solid #e3e6f0
+    background-color: rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 .card-footer:last-child {

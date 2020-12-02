@@ -6,7 +6,7 @@
     <div class="container-login">
         <div class="forms-container">
             <div class="signin">
-                <form method="post" action="<?php echo base_url('login/auth') ?>" class="sign-in-form">
+                <form method="post" action="" class="sign-in-form">
                     <img src="<?php echo base_url() ?>assets/img/logo_dikdasmen.svg" alt="" class="image-logo">
                     <?php if ($this->session->flashdata('message')) : ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
