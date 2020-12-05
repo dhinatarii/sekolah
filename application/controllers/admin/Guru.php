@@ -24,7 +24,7 @@ class Guru extends CI_Controller
     public function index()
     {
         $data['guru'] = $this->Guru_model->get_data();
-        $data['menu'] = 'akademik';
+        $data['menu'] = 'guru';
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -34,7 +34,7 @@ class Guru extends CI_Controller
 
     public function input()
     {
-        $data['menu'] = 'akademik';
+        $data['menu'] = 'guru';
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
@@ -52,7 +52,7 @@ class Guru extends CI_Controller
     public function edit($id)
     {
         $data['guru'] = $this->Guru_model->get_detail_data($id);
-        $data['menu'] = 'akademik';
+        $data['menu'] = 'guru';
         $data['jenis_kelamin'] = ['Laki-laki', 'Perempuan'];
 
         $this->_rules();
@@ -78,12 +78,12 @@ class Guru extends CI_Controller
 
     function _rules()
     {
-        $this->form_validation->set_rules('nip', 'NIP', 'numeric');
-        $this->form_validation->set_rules('nama', 'Nama', 'required');
+        $this->form_validation->set_rules('nip', 'NIP', 'numeric|max_length[20]');
+        $this->form_validation->set_rules('nama', 'Nama', 'required|max_length[100]');
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
-        $this->form_validation->set_rules('no_hp', 'No Handphone', 'required|numeric|min_length[10]|max_length[13]');
-        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-        $this->form_validation->set_rules('alamat', 'Alamat', 'required');
+        $this->form_validation->set_rules('no_hp', 'No Handphone', 'required|numeric|min_length[10]|max_length[15]');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|max_length[100]');
+        $this->form_validation->set_rules('alamat', 'Alamat', 'required|max_length[100]');
         $this->form_validation->set_rules('tanggal_lahir', 'Tanggal lahir', 'required');
     }
 }

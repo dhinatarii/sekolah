@@ -1,5 +1,14 @@
 <div class="container-fluid">
 
+    <?php if ($this->session->flashdata('message_error')) : ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?php echo $this->session->flashdata('message_error'); ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <?php endif; ?>
+
     <div class="card">
         <div class="card-header">
             <i class="fas fa-users mr-3"></i>Form Tambah Data Admin
@@ -21,33 +30,18 @@
                     <input type="password" name="konfirmasi" id="konfirmasi" placeholder="Masukan Konfirmasi Password" class="form-control">
                     <?php echo form_error('konfirmasi', '<div class="text-danger small ml-3">', '</div>') ?>
                 </div>
+                <div class="form-group">
+                    <label for="">Status</label>
+                    <select class="form-control" id="status" name="status">
+                        <option value="">--Pilih Status--</option>
+                        <option value="1">Aktif</option>
+                        <option value="0">Tidak Aktif</option>
+                    </select>
+                    <?php echo form_error('status', '<div class="text-danger small ml-3">', '</div>') ?>
+                </div>
                 <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="<?php echo $this->agent->referrer(); ?>" class="btn btn-secondary ml-1">Batal</a>
+                <button type="reset" class="btn btn-secondary ml-1">Reset</button>
             </form>
         </div>
     </div>
 </div>
-
-</div>
-<!-- End of Main Content -->
-
-<!-- Footer -->
-<footer class="sticky-footer bg-white">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Your Website 2020</span>
-        </div>
-    </div>
-</footer>
-<!-- End of Footer -->
-
-</div>
-<!-- End of Content Wrapper -->
-
-</div>
-<!-- End of Page Wrapper -->
-
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>

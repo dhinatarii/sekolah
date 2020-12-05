@@ -22,7 +22,7 @@ class Kelas extends CI_Controller
     public function index()
     {
         $data['kelas'] = $this->Kelas_model->get_data();
-        $data['menu'] = 'akademik';
+        $data['menu'] = 'kelas';
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -33,7 +33,7 @@ class Kelas extends CI_Controller
     public function input()
     {
         $data['guru'] = $this->Guru_model->get_data_only_name();
-        $data['menu'] = 'akademik';
+        $data['menu'] = 'kelas';
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
@@ -52,7 +52,7 @@ class Kelas extends CI_Controller
     {
         $data['kelas'] = $this->Kelas_model->get_detail_data($id);
         $data['guru'] = $this->Guru_model->get_data_only_name();
-        $data['menu'] = 'akademik';
+        $data['menu'] = 'kelas';
 
         $this->_rules();
 
@@ -77,7 +77,7 @@ class Kelas extends CI_Controller
 
     function _rules()
     {
-        $this->form_validation->set_rules('kelas', 'Kelas', 'required');
-        $this->form_validation->set_rules('wali_kelas', 'Wali Kelas', 'required');
+        $this->form_validation->set_rules('kelas', 'Kelas', 'required|max_length[10]');
+        $this->form_validation->set_rules('wali_kelas', 'Wali Kelas', 'required|max_length[100]');
     }
 }

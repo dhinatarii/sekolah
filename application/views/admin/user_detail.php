@@ -12,7 +12,7 @@
             </button>
         </div>
     <?php endif; ?>
-    <?php if ($level == 'admin') echo anchor('admin/user/input', '<button class="btn btn-sm btn-primary mb-3"><i class="fas fa-plus fa-sm"> Tambah Data</i></button>') ?>
+    <?php if ($level == 'admin') echo anchor('admin/user/input', '<button class="btn btn-sm btn-primary mb-3"><i class="fas fa-plus fa-sm"></i> Tambah Data</button>') ?>
 
     <div class="card">
         <div class="card-body">
@@ -20,10 +20,10 @@
                 <thead class="thead-light">
                     <tr>
                         <th>No</th>
-                        <th>Username</th>
+                        <th>Username / NISN / Email</th>
                         <th>Level</th>
-                        <th>Status</th>
-                        <th colspan="2">Aksi</th>
+                        <th class="text-center">Status</th>
+                        <?= ($level == 'admin') ? '<th class="text-center" colspan="3">Aksi</th>' : '<th class="text-center" colspan="2">Aksi</th>'; ?>
                     </tr>
                 </thead>
 
@@ -35,8 +35,7 @@
                             <td width="20px"><?php echo $no++ ?></td>
                             <td><?php echo $user->username ?></td>
                             <td><?php echo $user->level ?></td>
-                            <td width="80px" class="text-center"><?php if ($user->status == 1) echo '<strong class="badge badge-success">aktif</strong>';
-                                                                    else echo '<strong class="badge badge-danger">tidak aktif</strong>'; ?></td>
+                            <td width="160px" class="text-center"><?= ($user->status == 1) ? '<strong class="badge badge-success">aktif</strong>' : '<strong class="badge badge-danger">tidak aktif</strong>'; ?></td>
                             <td width="40px">
                                 <?php echo anchor(
                                     'admin/user/edit?level=' . $level . '&id=' . $user->id_user,
@@ -44,10 +43,18 @@
                                 ) ?>
                             </td>
                             <td width="40px">
-                                <a href="<?php echo base_url(); ?>admin/kelas/delete/<?php echo $user->id_user ?>" class="btn btn-sm btn-danger btn-delete-kelas">
-                                    <i class="fa fa-trash"></i>
-                                </a>
+                                <?php echo anchor(
+                                    'admin/user/change_password?level=' . $level . '&id=' . $user->id_user,
+                                    '<div class="btn btn-sm btn-success"><i class="fa fa-lock"></i></div>'
+                                ) ?>
                             </td>
+                            <?php if ($level == 'admin') : ?>
+                                <td width="40px">
+                                    <a href="<?php echo base_url(); ?>admin/user/delete/<?= $level . '/' . $user->id_user ?>" class="btn btn-sm btn-danger btn-delete-user">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
+                            <?php endif; ?>
                         </tr>
                     </tbody>
                 <?php endforeach ?>
@@ -56,39 +63,15 @@
     </div>
 </div>
 
-</div>
-<!-- End of Main Content -->
-
-<!-- Footer -->
-<footer class="sticky-footer bg-white">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Your Website 2020</span>
-        </div>
-    </div>
-</footer>
-<!-- End of Footer -->
-
-</div>
-<!-- End of Content Wrapper -->
-
-</div>
-<!-- End of Page Wrapper -->
-
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
-
 <script>
-    // Hapus data kelas
-    $('.btn-delete-kelas').on('click', function(event) {
+    // Hapus data user
+    $('.btn-delete-user').on('click', function(event) {
         event.preventDefault();
         const href = $(this).attr('href');
 
         Swal.fire({
             title: 'Apakah anda yakin?',
-            text: "data kelas akan dihapus",
+            text: "data user akan dihapus",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
