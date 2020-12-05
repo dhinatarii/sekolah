@@ -2,18 +2,18 @@
 
 class Login extends CI_Controller
 {
-    public function index()
+    public function __construct()
     {
-        $this->load->view('templates/header');
-        $this->load->view('login/index');
-        $this->load->view('templates/footer');
+        parent::__construct();
+        $this->output->set_header('Cache-Control: no-cache, must-revalidate');
+        $this->output->set_header('Cache-Control: post-check=0, pre-check=0', false);
+        $this->output->set_header('Pragma: no-cache');
     }
 
-    public function auth()
+    public function index()
     {
-
-        $this->form_validation->set_rules('username', 'username', 'required', ['required' => 'Username / Email / NISN wajib di isi!']);
-        $this->form_validation->set_rules('password', 'password', 'required', ['required' => 'Password wajib di isi!']);
+        $this->form_validation->set_rules('username', 'Username', 'required', ['required' => 'Username / Email / NISN wajib di isi!']);
+        $this->form_validation->set_rules('password', 'Password', 'required', ['required' => 'Password wajib di isi!']);
 
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
@@ -36,7 +36,9 @@ class Login extends CI_Controller
 
                     $this->session->set_userdata($sess_data);
                 }
-                if ($sess_data['level'] == 'guru') {
+                if ($sess_data['level'] == 'admin') {
+                    redirect('admin/dashboard');
+                } elseif ($sess_data['level'] == 'guru') {
                     redirect('guru/dashboard');
                 } elseif ($sess_data['level'] == 'siswa') {
                     redirect('siswa/dashboard');

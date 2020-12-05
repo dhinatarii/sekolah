@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Welcome extends CI_Controller {
+class Welcome extends CI_Controller
+{
 
 	/**
 	 * Index Page for this controller.
@@ -20,6 +21,19 @@ class Welcome extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('welcome_message');
+		$username = $this->session->userdata['username'];
+		$level = $this->session->userdata['level'];
+
+		if (!isset($username)) {
+			redirect('login');
+		}
+
+		if ($level == 'admin') {
+			redirect('admin/dashboard');
+		} elseif ($level == 'guru') {
+			redirect('guru/dashboard');
+		} elseif ($level == 'siswa') {
+			redirect('siswa/dashboard');
+		}
 	}
 }
