@@ -7,7 +7,7 @@
             <a class="c-sidebar-brand-full">
                 <svg width="46" height="46" alt="CoreUI Logo">
                     <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-education"></use>
-                </svg> SD Muhammadiyah Trini
+                </svg> SIPDN
             </a>
             <svg class="c-sidebar-brand-minimized" width="46" height="46" alt="CoreUI Logo">
                 <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-education"></use>
@@ -71,7 +71,7 @@
             </button><a class="c-header-brand d-lg-none" href="#">
                 <svg width="46" height="46" alt="CoreUI Logo">
                     <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-education"></use>
-                </svg> SD Muhammadiyah Trini</a>
+                </svg> SIPDN</a>
             <button class="c-header-toggler c-class-toggler mfs-3 d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true">
                 <svg class="c-icon c-icon-lg">
                     <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-menu"></use>
