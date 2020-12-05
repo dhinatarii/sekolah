@@ -4,26 +4,25 @@ class Kelas extends CI_Controller
     function __construct()
     {
         parent::__construct();
-        $this->output->set_header('Last-Modified:' . gmdate('D, d M Y H:i:s') . 'GMT');
-        $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate');
+        $this->output->set_header('Cache-Control: no-cache, must-revalidate');
         $this->output->set_header('Cache-Control: post-check=0, pre-check=0', false);
         $this->output->set_header('Pragma: no-cache');
 
         if (!isset($this->session->userdata['username']) && $this->session->userdata['level'] != 'admin') {
             $this->session->set_flashdata('message', 'Anda Belum Login!');
-            redirect('admin/auth');
+            redirect('login');
         }
 
         if ($this->session->userdata['level'] != 'admin') {
             $this->session->set_flashdata('message', 'Anda Belum Login!');
-            redirect('admin/auth');
+            redirect('login');
         }
     }
 
     public function index()
     {
         $data['kelas'] = $this->Kelas_model->get_data();
-        $data['menu'] = 'akademik';
+        $data['menu'] = 'kelas';
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -34,7 +33,7 @@ class Kelas extends CI_Controller
     public function input()
     {
         $data['guru'] = $this->Guru_model->get_data_only_name();
-        $data['menu'] = 'akademik';
+        $data['menu'] = 'kelas';
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
@@ -49,11 +48,16 @@ class Kelas extends CI_Controller
         }
     }
 
-    public function edit($id)
+    public function edit()
     {
+        $id           = $this->uri->segment(4);
+        if (!$id) {
+            redirect('admin/kelas');
+        }
+
         $data['kelas'] = $this->Kelas_model->get_detail_data($id);
         $data['guru'] = $this->Guru_model->get_data_only_name();
-        $data['menu'] = 'akademik';
+        $data['menu'] = 'kelas';
 
         $this->_rules();
 
@@ -69,16 +73,17 @@ class Kelas extends CI_Controller
         }
     }
 
-    public function delete($id)
+    public function delete()
     {
+        $id           = $this->uri->segment(4);
         $this->Kelas_model->delete_data($id);
         $this->session->set_flashdata('message', 'Data Kelas Berhasil Dihapus!');
         redirect('admin/kelas');
     }
 
-    function _rules()
+    private function _rules()
     {
-        $this->form_validation->set_rules('kelas', 'Kelas', 'required');
-        $this->form_validation->set_rules('wali_kelas', 'Wali Kelas', 'required');
+        $this->form_validation->set_rules('kelas', 'Kelas', 'required|max_length[10]');
+        $this->form_validation->set_rules('wali_kelas', 'Wali Kelas', 'required|max_length[100]');
     }
 }

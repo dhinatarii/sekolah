@@ -1,21 +1,21 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-user-graduate"></i> Data Siswa</h1>
+    </div>
+    <?php if ($this->session->flashdata('message')) : ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?php echo $this->session->flashdata('message'); ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    <?php endif; ?>
+    <?php echo anchor('admin/siswa/input', '<button class="btn btn-sm btn-primary mb-3"><i class="fas fa-plus fa-sm"></i> Tambah Data</button>') ?>
+
     <div class="card">
         <div class="card-body">
-            <!-- Page Heading -->
-            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-user-graduate"></i> Data Siswa</h1>
-            </div>
-            <?php if ($this->session->flashdata('message')) : ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <?php echo $this->session->flashdata('message'); ?>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            <?php endif; ?>
-            <?php echo anchor('admin/siswa/input', '<button class="btn btn-sm btn-primary mb-3"><i class="fas fa-plus fa-sm"> Tambah Data</i></button>') ?>
-
             <table class="table table-responsive table-bordered table-hover w-100 d-block d-md-table">
                 <thead class="thead-light">
                     <tr>
@@ -67,30 +67,6 @@
         </div>
     </div>
 </div>
-
-</div>
-<!-- End of Main Content -->
-
-<!-- Footer -->
-<footer class="sticky-footer bg-white">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Your Website 2020</span>
-        </div>
-    </div>
-</footer>
-<!-- End of Footer -->
-
-</div>
-<!-- End of Content Wrapper -->
-
-</div>
-<!-- End of Page Wrapper -->
-
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
 
 <!-- Detal Modal -->
 <div class="modal fade detailModal" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detalModal" aria-hidden="true">

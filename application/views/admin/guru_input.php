@@ -27,7 +27,7 @@
                 </div>
                 <div class="form-group">
                     <label for="tanggal_lahir">Tanggal Lahir</label>
-                    <input placeholder="Masukan Tanggal Lahir" type="text" class="form-control datepicker" name="tanggal_lahir" id="tanggal_lahir">
+                    <input placeholder="Masukan Tanggal Lahir" type="date" class="form-control datepicker" name="tanggal_lahir" id="tanggal_lahir">
                     <?php echo form_error('tanggal_lahir', '<div class="text-danger small ml-3">', '</div>') ?>
                 </div>
                 <div class="form-group">
@@ -46,7 +46,7 @@
                     <?php echo form_error('alamat', '<div class="text-danger small ml-3">', '</div>') ?>
                 </div>
                 <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="<?php echo base_url('admin/guru') ?>" class="btn btn-secondary ml-1">Batal</a>
+                <button type="reset" class="btn btn-secondary ml-1">Reset</button>
             </form>
         </div>
     </div>
@@ -55,33 +55,13 @@
 </div>
 <!-- End of Main Content -->
 
-<!-- Footer -->
-<footer class="sticky-footer bg-white">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Your Website 2020</span>
-        </div>
-    </div>
-</footer>
-<!-- End of Footer -->
-
-</div>
-<!-- End of Content Wrapper -->
-
-</div>
-<!-- End of Page Wrapper -->
-
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
 
 <script>
-    $(function() {
-        $(".datepicker").datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true,
-            todayHighlight: true,
-        });
-    });
+    // $(function() {
+    //     $(".datepicker").datepicker({
+    //         format: 'yyyy-mm-dd',
+    //         autoclose: true,
+    //         todayHighlight: true,
+    //     });
+    // });
 </script>
