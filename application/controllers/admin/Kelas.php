@@ -77,7 +77,7 @@ class Kelas extends CI_Controller
 
     function _rules()
     {
-        $this->form_validation->set_rules('kelas', 'Kelas', 'required');
-        $this->form_validation->set_rules('wali_kelas', 'Wali Kelas', 'required');
+        $this->form_validation->set_rules('kelas', 'Kelas', 'required|max_length[10]');
+        $this->form_validation->set_rules('wali_kelas', 'Wali Kelas', 'required|max_length[100]');
     }
 }
