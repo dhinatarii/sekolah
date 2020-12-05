@@ -22,7 +22,7 @@ class Siswa extends CI_Controller
     public function index()
     {
         $data['siswa'] = $this->Siswa_model->get_all_data();
-        $data['menu'] = 'akademik';
+        $data['menu'] = 'siswa';
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -33,7 +33,7 @@ class Siswa extends CI_Controller
     public function edit($id)
     {
         $data['siswa'] = $this->Siswa_model->get_detail_data($id);
-        $data['menu'] = 'akademik';
+        $data['menu'] = 'siswa';
         $data['jenis_kelamin'] = ['Laki-laki', 'Perempuan'];
 
         $this->_rules();
@@ -52,7 +52,7 @@ class Siswa extends CI_Controller
 
     public function input()
     {
-        $data['menu'] = 'akademik';
+        $data['menu'] = 'siswa';
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {

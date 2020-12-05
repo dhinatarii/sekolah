@@ -24,7 +24,7 @@ class Guru extends CI_Controller
     public function index()
     {
         $data['guru'] = $this->Guru_model->get_data();
-        $data['menu'] = 'akademik';
+        $data['menu'] = 'guru';
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -34,7 +34,7 @@ class Guru extends CI_Controller
 
     public function input()
     {
-        $data['menu'] = 'akademik';
+        $data['menu'] = 'guru';
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
@@ -52,7 +52,7 @@ class Guru extends CI_Controller
     public function edit($id)
     {
         $data['guru'] = $this->Guru_model->get_detail_data($id);
-        $data['menu'] = 'akademik';
+        $data['menu'] = 'guru';
         $data['jenis_kelamin'] = ['Laki-laki', 'Perempuan'];
 
         $this->_rules();
