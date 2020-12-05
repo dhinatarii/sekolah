@@ -49,8 +49,13 @@ class Guru extends CI_Controller
         }
     }
 
-    public function edit($id)
+    public function edit()
     {
+        $id           = $this->uri->segment(4);
+        if (!$id) {
+            redirect('admin/guru');
+        }
+
         $data['guru'] = $this->Guru_model->get_detail_data($id);
         $data['menu'] = 'guru';
         $data['jenis_kelamin'] = ['Laki-laki', 'Perempuan'];
@@ -69,8 +74,9 @@ class Guru extends CI_Controller
         }
     }
 
-    public function delete($id)
+    public function delete()
     {
+        $id           = $this->uri->segment(4);
         $this->Guru_model->delete_data($id);
         $this->session->set_flashdata('message', 'Data Guru Berhasil Dihapus!');
         redirect('admin/guru');

@@ -48,8 +48,13 @@ class Kelas extends CI_Controller
         }
     }
 
-    public function edit($id)
+    public function edit()
     {
+        $id           = $this->uri->segment(4);
+        if (!$id) {
+            redirect('admin/kelas');
+        }
+
         $data['kelas'] = $this->Kelas_model->get_detail_data($id);
         $data['guru'] = $this->Guru_model->get_data_only_name();
         $data['menu'] = 'kelas';
@@ -68,14 +73,15 @@ class Kelas extends CI_Controller
         }
     }
 
-    public function delete($id)
+    public function delete()
     {
+        $id           = $this->uri->segment(4);
         $this->Kelas_model->delete_data($id);
         $this->session->set_flashdata('message', 'Data Kelas Berhasil Dihapus!');
         redirect('admin/kelas');
     }
 
-    function _rules()
+    private function _rules()
     {
         $this->form_validation->set_rules('kelas', 'Kelas', 'required|max_length[10]');
         $this->form_validation->set_rules('wali_kelas', 'Wali Kelas', 'required|max_length[100]');
