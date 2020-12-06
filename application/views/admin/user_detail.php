@@ -20,7 +20,7 @@
                 <thead class="thead-light">
                     <tr>
                         <th>No</th>
-                        <th>Username / NISN / Email</th>
+                        <th>Username / NIS / Email</th>
                         <th>Level</th>
                         <th class="text-center">Status</th>
                         <?= ($level == 'admin') ? '<th class="text-center" colspan="3">Aksi</th>' : '<th class="text-center" colspan="2">Aksi</th>'; ?>

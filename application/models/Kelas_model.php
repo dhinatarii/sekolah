@@ -11,6 +11,15 @@ class Kelas_model extends CI_Model
         return $this->db->get_where('tb_kelas', ['id_kelas' => $id])->row_array();
     }
 
+    public function get_id_kelas()
+    {
+        $kelas = $this->input->post('kelas', TRUE);
+        $this->db->select('id_kelas');
+        $this->db->where('kelas', $kelas);
+        $row = $this->db->get('tb_kelas')->row();
+        return $row->id_kelas;
+    }
+
     public function input_data()
     {
         $data = array(

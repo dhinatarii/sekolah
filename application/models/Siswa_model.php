@@ -1,12 +1,15 @@
 <?php
 class Siswa_model extends CI_Model
 {
-    public function get_all_data()
+    public function get_all_data($limit, $start)
     {
-        $this->db->select('*');
+        $this->db->select('*')->limit($limit, $start);
         $this->db->from('tb_siswa');
         $this->db->join('tb_orangtua', 'tb_siswa.id_orangtua = tb_orangtua.id_orangtua', 'left');
         $this->db->join('tb_alamat', 'tb_orangtua.id_alamat = tb_alamat.id_alamat', 'left');
+        $this->db->join('tb_kelas', 'tb_siswa.id_kelas = tb_kelas.id_kelas', 'left');
+        $this->db->order_by('tb_kelas.kelas', 'asc');
+        
         return $this->db->get()->result();
     }
 
@@ -17,10 +20,21 @@ class Siswa_model extends CI_Model
         $this->db->where('id_siswa', $id);
         $this->db->join('tb_orangtua', 'tb_siswa.id_orangtua = tb_orangtua.id_orangtua', 'left');
         $this->db->join('tb_alamat', 'tb_orangtua.id_alamat = tb_alamat.id_alamat', 'left');
+        $this->db->join('tb_kelas', 'tb_siswa.id_kelas = tb_kelas.id_kelas', 'left');
         return $this->db->get()->row_array();
     }
 
-    public function input_data_siswa()
+    public function get_count_allsiswa()
+    {
+        $this->db->select('*');
+        $this->db->from('tb_siswa');
+        $this->db->join('tb_orangtua', 'tb_siswa.id_orangtua = tb_orangtua.id_orangtua', 'left');
+        $this->db->join('tb_alamat', 'tb_orangtua.id_alamat = tb_alamat.id_alamat', 'left');
+        $this->db->join('tb_kelas', 'tb_siswa.id_kelas = tb_kelas.id_kelas', 'left');
+        return $this->db->get()->num_rows();
+    }
+
+    public function input_data_siswa($id_kelas)
     {
         $id_orangtua = $this->_input_data_orangtua();
         $data = array(
@@ -30,13 +44,14 @@ class Siswa_model extends CI_Model
             'tanggal_lahir' => $this->input->post('tanggal_lahir', TRUE),
             'agama'         => $this->input->post('agama', TRUE),
             'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
-            'id_orangtua'   => $id_orangtua
+            'id_orangtua'   => $id_orangtua,
+            'id_kelas'      => $id_kelas
         );
 
         $this->db->insert('tb_siswa', $data);
     }
 
-    public function edit_data($id)
+    public function edit_data($id, $id_kelas)
     {
         $id_orangtua = $this->db->get_where('tb_siswa', ['id_siswa' => $id])->row()->id_orangtua;
         $id_alamat = $this->db->get_where('tb_orangtua', ['id_orangtua' => $id_orangtua])->row()->id_alamat;
@@ -47,7 +62,8 @@ class Siswa_model extends CI_Model
             'nama'          => $this->input->post('nama', TRUE),
             'tanggal_lahir' => $this->input->post('tanggal_lahir', TRUE),
             'agama'         => $this->input->post('agama', TRUE),
-            'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE)
+            'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
+            'id_kelas'      => $id_kelas
         );
 
         $data_orangtua = array(

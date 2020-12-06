@@ -32,7 +32,7 @@
                 </thead>
 
                 <?php
-                $no = 1;
+                $no = ++$start;
                 foreach ($siswa as $sw) : ?>
                     <tbody>
                         <tr>
@@ -43,7 +43,7 @@
                             <td><?php echo $sw->tanggal_lahir ?></td>
                             <td><?php echo $sw->agama ?></td>
                             <td><?php echo $sw->jenis_kelamin ?></td>
-                            <td></td>
+                            <td><?php echo $sw->kelas ?></td>
                             <td width="40px">
                                 <div id="set_detailModal" class="btn btn-sm btn-success" data-toggle="modal" data-target="#detailModal" data-idsiswa="<?= $sw->id_siswa ?>" data-siswa="<?= $sw->nama ?>" data-namaibu="<?= $sw->nama_ibu ?>" data-pendidikanibu="<?= $sw->pendidikan_ibu ?>" data-perkejaanibu="<?= $sw->pekerjaan_ibu ?>" data-namaayah="<?= $sw->nama_ayah ?>" data-pendidikanayah="<?= $sw->pendidikan_ayah ?>" data-pekerjaanayah="<?= $sw->pekerjaan_ayah ?>" data-nohp="<?= $sw->no_hp ?>" data-dusun="<?= $sw->dusun ?>" data-desa="<?= $sw->desa ?>" data-kecamatan="<?= $sw->kecamatan ?>" data-kabupaten="<?= $sw->kabupaten ?>">
                                     <i class="fa fa-eye"></i></div>
@@ -64,6 +64,7 @@
 
                 <?php endforeach ?>
             </table>
+            <?=  $this->pagination->create_links();?>
         </div>
     </div>
 </div>
@@ -147,7 +148,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-primary" id="edit-siswa">Edit</a>
+                <a class="btn btn-primary text-white" id="edit-siswa">Edit</a>
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
             </div>
         </div>

@@ -53,9 +53,12 @@
                                 <div class="form-group">
                                     <label for="kelas">Kelas</label>
                                     <select class="form-control" id="kelas" name="kelas">
-                                        <option value="">--Pilih Kelas--</option>
                                         <?php foreach ($kelas as $kl) : ?>
-                                            <option value="<?php echo $kl->kelas ?>"><?php echo $kl->kelas ?></option>
+                                            <?php if ($kl->kelas == $siswa['kelas']) : ?>
+                                                <option value="<?php echo $kl->kelas ?>" selected><?php echo $kl->kelas ?></option>
+                                            <?php else : ?>
+                                                <option value="<?php echo $kl->kelas ?>"><?php echo $kl->kelas ?></option>
+                                            <?php endif; ?>
                                         <?php endforeach; ?>
                                     </select>
                                     <?php echo form_error('kelas', '<div class="text-danger small ml-3">', '</div>') ?>
