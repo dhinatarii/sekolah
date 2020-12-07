@@ -37,25 +37,19 @@ class User extends CI_Controller
     public function detail()
     {
         $id      = $this->uri->segment(4);
-        if ($id < 1) {
+
+        if ($id < '1' || $id > '4') {
             redirect('admin/user');
+        } else {
+            $data['level']  = $id == 1 ? 'admin' : ($id == 2 ? 'guru' : ($id == 3 ? 'wali kelas' : ($id == 4 ? 'siswa' : null)));
+            $data['menu']   = 'user';
+            $data['users']  = $this->User_model->get_user($data['level']);
+
+            $this->load->view('templates/header');
+            $this->load->view('templates_admin/sidebar', $data);
+            $this->load->view('admin/user_detail', $data);
+            $this->load->view('templates/footer');
         }
-
-        if ($id > 4) {
-            redirect('admin/user');
-        }
-
-
-        $data['level']  = $id == 1 ? 'admin' : ($id == 2 ? 'guru' : ($id == 3 ? 'wali kelas' : ($id == 4 ? 'siswa' : null)));
-
-
-        $data['menu']   = 'user';
-        $data['users']  = $this->User_model->get_user($data['level']);
-
-        $this->load->view('templates/header');
-        $this->load->view('templates_admin/sidebar', $data);
-        $this->load->view('admin/user_detail', $data);
-        $this->load->view('templates/footer');
     }
 
     public function input()
