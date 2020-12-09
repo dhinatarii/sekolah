@@ -1,5 +1,5 @@
 <?php
-class Kelas extends CI_Controller
+class Tahunajaran extends CI_Controller
 {
     function __construct()
     {
@@ -21,37 +21,36 @@ class Kelas extends CI_Controller
 
     public function index()
     {
-        $data['kelas'] = $this->Kelas_model->get_data();
-        $data['menu'] = 'kelas';
+        $data['menu'] = 'tahun ajaran';
+        $data['tahun'] = $this->Tahun_model->get_data();
         $data['breadcrumb'] = [
             0 => (object)[
                 'name' => 'Dashboard',
                 'link' => 'admin/dashboard'
             ],
             1 => (object)[
-                'name' => 'Kelas',
+                'name' => 'Tahun Ajaran',
                 'link' => NULL
             ]
         ];
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
-        $this->load->view('admin/kelas', $data);
+        $this->load->view('admin/tahun', $data);
         $this->load->view('templates/footer');
     }
 
     public function input()
     {
-        $data['guru'] = $this->Guru_model->get_data_only_name();
-        $data['menu'] = 'kelas';
+        $data['menu'] = 'tahun ajaran';
         $data['breadcrumb'] = [
             0 => (object)[
                 'name' => 'Dashboard',
                 'link' => 'admin/dashboard'
             ],
             1 => (object)[
-                'name' => 'Kelas',
-                'link' => 'admin/kelas'
+                'name' => 'Tahun Ajaran',
+                'link' => 'admin/tahunajaran'
             ],
             2 => (object)[
                 'name' => 'Input',
@@ -64,12 +63,12 @@ class Kelas extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
             $this->load->view('templates_admin/sidebar', $data);
-            $this->load->view('admin/kelas_input', $data);
+            $this->load->view('admin/tahun_input', $data);
             $this->load->view('templates/footer');
         } else {
-            $this->Kelas_model->input_data();
-            $this->session->set_flashdata('message', 'Data Kelas Berhasil Ditambahkan!');
-            redirect('admin/kelas');
+            $this->Tahun_model->input_data();
+            $this->session->set_flashdata('message', 'Data Tahun Ajaran Berhasil Ditambahkan!');
+            redirect('admin/tahunajaran');
         }
     }
 
@@ -77,20 +76,20 @@ class Kelas extends CI_Controller
     {
         $id           = $this->uri->segment(4);
         if (!$id) {
-            redirect('admin/kelas');
+            redirect('admin/tahunajaran');
         }
 
-        $data['kelas'] = $this->Kelas_model->get_detail_data($id);
-        $data['guru'] = $this->Guru_model->get_data_only_name();
-        $data['menu'] = 'kelas';
+        $data['tahun'] = $this->Tahun_model->get_detail_data($id);
+        $data['status'] = ['0', '1'];
+        $data['menu'] = 'tahun ajaran';
         $data['breadcrumb'] = [
             0 => (object)[
                 'name' => 'Dashboard',
                 'link' => 'admin/dashboard'
             ],
             1 => (object)[
-                'name' => 'Kelas',
-                'link' => 'admin/kelas'
+                'name' => 'Tahun Ajaran',
+                'link' => 'admin/tahunajaran'
             ],
             2 => (object)[
                 'name' => 'Edit',
@@ -103,26 +102,26 @@ class Kelas extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
             $this->load->view('templates_admin/sidebar', $data);
-            $this->load->view('admin/kelas_edit', $data);
+            $this->load->view('admin/tahun_edit', $data);
             $this->load->view('templates/footer');
         } else {
-            $this->Kelas_model->edit_data($id);
-            $this->session->set_flashdata('message', 'Data Kelas Berhasil Diupdate!');
-            redirect('admin/kelas');
+            $this->Tahun_model->edit_data($id);
+            $this->session->set_flashdata('message', 'Data Tahun Ajaran Berhasil Diupdate!');
+            redirect('admin/tahunajaran');
         }
     }
 
     public function delete()
     {
         $id           = $this->uri->segment(4);
-        $this->Kelas_model->delete_data($id);
-        $this->session->set_flashdata('message', 'Data Kelas Berhasil Dihapus!');
-        redirect('admin/kelas');
+        $this->Tahun_model->delete_data($id);
+        $this->session->set_flashdata('message', 'Data Tahun Ajaran Berhasil Dihapus!');
+        redirect('admin/tahunajaran');
     }
 
     private function _rules()
     {
-        $this->form_validation->set_rules('kelas', 'Kelas', 'required|max_length[10]');
-        $this->form_validation->set_rules('wali_kelas', 'Wali Kelas', 'required|max_length[100]');
+        $this->form_validation->set_rules('nama', 'Tahun Ajaran', 'required|max_length[50]');
+        $this->form_validation->set_rules('status', 'Status', 'required');
     }
 }

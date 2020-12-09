@@ -28,6 +28,16 @@ class Siswa extends CI_Controller
         $data['start'] = $this->uri->segment(4);
         $data['siswa'] = $this->Siswa_model->get_all_data($config['per_page'], $data['start']);
         $data['menu'] = 'siswa';
+        $data['breadcrumb'] = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => 'admin/dashboard'
+            ],
+            1 => (object)[
+                'name' => 'Siswa',
+                'link' => NULL
+            ]
+        ];
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -46,6 +56,20 @@ class Siswa extends CI_Controller
         $data['kelas'] = $this->Kelas_model->get_data();
         $data['menu'] = 'siswa';
         $data['jenis_kelamin'] = ['Laki-laki', 'Perempuan'];
+        $data['breadcrumb'] = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => 'admin/dashboard'
+            ],
+            1 => (object)[
+                'name' => 'Siswa',
+                'link' => 'admin/siswa'
+            ],
+            2 => (object)[
+                'name' => 'Edit',
+                'link' => NULL
+            ]
+        ];
 
         $this->_rules();
 
@@ -66,6 +90,21 @@ class Siswa extends CI_Controller
     {
         $data['menu'] = 'siswa';
         $data['kelas'] = $this->Kelas_model->get_data();
+        $data['breadcrumb'] = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => 'admin/dashboard'
+            ],
+            1 => (object)[
+                'name' => 'Siswa',
+                'link' => 'admin/siswa'
+            ],
+            2 => (object)[
+                'name' => 'Input',
+                'link' => NULL
+            ]
+        ];
+
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
@@ -125,7 +164,7 @@ class Siswa extends CI_Controller
 
         $config['full_tag_open'] = '<nav><ul class="pagination justify-content-center">';
         $config['full_tag_close'] = '</ul></nav>';
-        
+
         $config['first_link'] = 'First';
         $config['first_tag_open'] = '<li class="page-item">';
         $config['first_tag_close'] = '</li>';
@@ -148,7 +187,7 @@ class Siswa extends CI_Controller
         $config['num_tag_open'] = ' <li class="page-item">';
         $config['num_tag_close'] = '</li>';
 
-        $config['attributes'] = ['class' => 'page-link' ];
+        $config['attributes'] = ['class' => 'page-link'];
 
         return $config;
     }

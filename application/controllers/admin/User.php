@@ -27,6 +27,16 @@ class User extends CI_Controller
         $data['count_guru']     = $this->User_model->count_user('guru');
         $data['count_wali']     = $this->User_model->count_user('wali kelas');
         $data['count_siswa']    = $this->User_model->count_user('siswa');
+        $data['breadcrumb'] = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => 'admin/dashboard'
+            ],
+            1 => (object)[
+                'name' => 'Users',
+                'link' => NULL
+            ]
+        ];
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -44,6 +54,20 @@ class User extends CI_Controller
             $data['level']  = $id == 1 ? 'admin' : ($id == 2 ? 'guru' : ($id == 3 ? 'wali kelas' : ($id == 4 ? 'siswa' : null)));
             $data['menu']   = 'user';
             $data['users']  = $this->User_model->get_user($data['level']);
+            $data['breadcrumb'] = [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Users',
+                    'link' => 'admin/user'
+                ],
+                2 => (object)[
+                    'name' => $data['level'],
+                    'link' => NULL
+                ]
+            ];
 
             $this->load->view('templates/header');
             $this->load->view('templates_admin/sidebar', $data);
@@ -55,6 +79,24 @@ class User extends CI_Controller
     public function input()
     {
         $data['menu']   = 'user';
+        $data['breadcrumb'] = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => 'admin/dashboard'
+            ],
+            1 => (object)[
+                'name' => 'Users',
+                'link' => 'admin/user'
+            ],
+            2 => (object)[
+                'name' => 'admin',
+                'link' => 'admin/user/detail/1'
+            ],
+            3 => (object)[
+                'name' => 'input',
+                'link' => NULL
+            ],
+        ];
 
         $this->_rules();
 
@@ -84,6 +126,24 @@ class User extends CI_Controller
         $data['user']   = $this->User_model->get_detail_user($data['id'], $data['level']);
         $data['status'] = ['0', '1'];
         $detail         = $data['level'] == 'admin' ? '1' : ($data['level'] == 'guru' ? '2' : ($data['level'] == 'wali kelas' ? '3' : ($data['level'] == 'siswa' ? '4' : NULL)));
+        $data['breadcrumb'] = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => 'admin/dashboard'
+            ],
+            1 => (object)[
+                'name' => 'Users',
+                'link' => 'admin/user'
+            ],
+            2 => (object)[
+                'name' => $data['level'],
+                'link' => 'admin/user/detail/' . $detail
+            ],
+            3 => (object)[
+                'name' => 'edit',
+                'link' => NULL
+            ],
+        ];
 
         $this->_rules_data();
 
@@ -105,8 +165,27 @@ class User extends CI_Controller
         $data['id']     = $this->input->get('id', TRUE);
         $data['level']  = $this->input->get('level', TRUE);
         $detail         = $data['level'] == 'admin' ? '1' : ($data['level'] == 'guru' ? '2' : ($data['level'] == 'wali kelas' ? '3' : ($data['level'] == 'siswa' ? '4' : NULL)));
-        $this->_rules_password();
+        $data['breadcrumb'] = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => 'admin/dashboard'
+            ],
+            1 => (object)[
+                'name' => 'Users',
+                'link' => 'admin/user'
+            ],
+            2 => (object)[
+                'name' => $data['level'],
+                'link' => 'admin/user/detail/' . $detail
+            ],
+            3 => (object)[
+                'name' => 'password',
+                'link' => NULL
+            ],
+        ];
 
+
+        $this->_rules_password();
 
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');

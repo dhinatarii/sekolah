@@ -23,6 +23,16 @@ class Mapel extends CI_Controller
     {
         $data['menu'] = 'mata pelajaran';
         $data['mapel'] = $this->Mapel_model->get_data();
+        $data['breadcrumb'] = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => 'admin/dashboard'
+            ],
+            1 => (object)[
+                'name' => 'Mata Pelajaran',
+                'link' => NULL
+            ]
+        ];
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -33,6 +43,21 @@ class Mapel extends CI_Controller
     public function input()
     {
         $data['menu'] = 'mata pelajaran';
+        $data['breadcrumb'] = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => 'admin/dashboard'
+            ],
+            1 => (object)[
+                'name' => 'Mata Pelajaran',
+                'link' => 'admin/mapel'
+            ],
+            2 => (object)[
+                'name' => 'Input',
+                'link' => NULL
+            ]
+        ];
+
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
@@ -57,6 +82,20 @@ class Mapel extends CI_Controller
         $data['mapel']  = $this->Mapel_model->get_detail_data($id);
         $data['level']  = [1, 2, 3, 4, 5, 6];
         $data['menu']   = 'mata pelajaran';
+        $data['breadcrumb'] = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => 'admin/dashboard'
+            ],
+            1 => (object)[
+                'name' => 'Mata Pelajaran',
+                'link' => 'admin/mapel'
+            ],
+            2 => (object)[
+                'name' => 'Edit',
+                'link' => NULL
+            ]
+        ];
 
         $this->_rules();
 

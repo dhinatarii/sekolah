@@ -25,6 +25,16 @@ class Guru extends CI_Controller
     {
         $data['guru'] = $this->Guru_model->get_data();
         $data['menu'] = 'guru';
+        $data['breadcrumb'] = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => 'admin/dashboard'
+            ],
+            1 => (object)[
+                'name' => 'Guru',
+                'link' => NULL
+            ]
+        ];
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -35,6 +45,21 @@ class Guru extends CI_Controller
     public function input()
     {
         $data['menu'] = 'guru';
+        $data['breadcrumb'] = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => 'admin/dashboard'
+            ],
+            1 => (object)[
+                'name' => 'Guru',
+                'link' => 'admin/guru'
+            ],
+            2 => (object)[
+                'name' => 'Input',
+                'link' => NULL
+            ]
+        ];
+
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
@@ -59,6 +84,21 @@ class Guru extends CI_Controller
         $data['guru'] = $this->Guru_model->get_detail_data($id);
         $data['menu'] = 'guru';
         $data['jenis_kelamin'] = ['Laki-laki', 'Perempuan'];
+
+        $data['breadcrumb'] = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => 'admin/dashboard'
+            ],
+            1 => (object)[
+                'name' => 'Guru',
+                'link' => 'admin/guru'
+            ],
+            2 => (object)[
+                'name' => 'Edit',
+                'link' => NULL
+            ]
+        ];
 
         $this->_rules();
 

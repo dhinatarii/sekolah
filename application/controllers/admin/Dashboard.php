@@ -23,6 +23,14 @@ class Dashboard extends CI_Controller
             'level'     => $data->level,
             'menu'      => 'dashboard'
         );
+
+        $data['breadcrumb'] = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => NULL
+            ]
+        ];
+
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
         $this->load->view('admin/dashboard', $data);

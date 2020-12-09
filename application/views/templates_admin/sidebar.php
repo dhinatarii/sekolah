@@ -27,10 +27,9 @@
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'guru') echo 'c-active' ?>" href="<?= base_url('admin/guru') ?>"> Guru</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'kelas') echo 'c-active' ?>" href="<?= base_url('admin/kelas') ?>"> Kelas</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'siswa') echo 'c-active' ?>" href="<?= base_url('admin/siswa') ?>"> Siswa</a></li>
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'mata pelajaran') echo 'c-active' ?>" href=""> Mata Pelajaran</a></li>
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'tahun ajaran') echo 'c-active' ?>" href=""> Tahun Ajaran</a></li>
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'guru mapel') echo 'c-active' ?>" href=""> Guru Mata Pelajaran</a></li>
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'kelas mengajar') echo 'c-active' ?>" href=""> Kelas Mengajar</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'mata pelajaran') echo 'c-active' ?>" href="<?= base_url('admin/mapel') ?>"> Mata Pelajaran</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'tahun ajaran') echo 'c-active' ?>" href="<?= base_url('admin/tahunajaran') ?>"> Tahun Ajaran</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'pengajar') echo 'c-active' ?>" href="<?= base_url('admin/pengajar') ?>"> Guru Pengajar</a></li>
                 </ul>
             </li>
             <li class="c-sidebar-nav-dropdown"><a class="c-sidebar-nav-dropdown-toggle" href="#">
@@ -78,10 +77,10 @@
                 </svg>
             </button>
             <!-- <ul class="c-header-nav d-md-down-none">
-        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="#">Dashboard</a></li>
-        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="#">Users</a></li>
-        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="#">Settings</a></li>
-      </ul> -->
+                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="#">Dashboard</a></li>
+                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="#">Users</a></li>
+                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="#">Settings</a></li>
+            </ul> -->
             <ul class="c-header-nav ml-auto mr-4">
                 <li class="c-header-nav-item d-md-down-none mx-2">
                     <svg class="c-icon">
@@ -104,9 +103,14 @@
             <div class="c-subheader px-3">
                 <!-- Breadcrumb-->
                 <ol class="breadcrumb border-0 m-0">
-                    <li class="breadcrumb-item">Home</li>
-                    <li class="breadcrumb-item"><a href="#"></a>Admin</a></li>
-                    <li class="breadcrumb-item active">Dashboard</li>
+                    <?php foreach ($breadcrumb as $bc) {
+                        if ($bc->link != NULL) {
+                            echo '<li class="breadcrumb-item"><a href="' . base_url($bc->link) . '">' . $bc->name . '</a></li>';
+                        } else {
+                            echo '<li class="breadcrumb-item active">' . $bc->name . '</li>';
+                        }
+                    }
+                    ?>
                     <!-- Breadcrumb Menu-->
                 </ol>
             </div>

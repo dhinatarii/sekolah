@@ -12,8 +12,7 @@ class Login extends CI_Controller
 
     public function index()
     {
-        $this->form_validation->set_rules('username', 'Username', 'required', ['required' => 'Username / Email / NISN wajib di isi!']);
-        $this->form_validation->set_rules('password', 'Password', 'required', ['required' => 'Password wajib di isi!']);
+        $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
@@ -57,5 +56,11 @@ class Login extends CI_Controller
     {
         $this->session->sess_destroy();
         redirect('login');
+    }
+
+    public function _rules()
+    {
+        $this->form_validation->set_rules('username', 'Username', 'required', ['required' => 'Username / Email / NISN wajib di isi!']);
+        $this->form_validation->set_rules('password', 'Password', 'required', ['required' => 'Password wajib di isi!']);
     }
 }
