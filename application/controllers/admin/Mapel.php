@@ -22,7 +22,6 @@ class Mapel extends CI_Controller
     public function index()
     {
         $data['menu'] = 'mata pelajaran';
-        $data['mapel'] = $this->Mapel_model->get_data();
         $data['breadcrumb'] = [
             0 => (object)[
                 'name' => 'Dashboard',
@@ -39,6 +38,34 @@ class Mapel extends CI_Controller
         $this->load->view('admin/mapel', $data);
         $this->load->view('templates/footer');
     }
+
+    function get_result_mapel()
+    {
+        $list = $this->Mapel_model->get_datatables();
+        $data = array();
+        $no = @$_POST['start'];
+        foreach ($list as $item) {
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $item->nama_mapel;
+            $row[] = $item->level;
+            $row[] = $item->jum_tema;
+            $row[] = anchor('admin/mapel/edit/' . $item->id_mapel, '<div class="btn btn-sm btn-primary btn-xs mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>')
+                . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_mapel . ')" class="btn btn-sm btn-danger btn-xs mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => @$_POST['draw'],
+            "recordsTotal" => $this->Mapel_model->count_all(),
+            "recordsFiltered" => $this->Mapel_model->count_filtered(),
+            "data" => $data,
+        );
+
+        echo json_encode($output);
+    }
+
 
     public function input()
     {

@@ -16,48 +16,27 @@
 
     <div class="card">
         <div class="card-body">
-            <table class="table table-responsive table-bordered table-hover w-100 d-block d-md-table">
-                <thead class="thead-light">
+            <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-tahun">
+                <thead>
                     <tr>
-                        <th>No</th>
+                        <th width="20px">No</th>
                         <th>Tahun Ajaran</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-center" colspan="2">Aksi</th>
+                        <th class="text-center" width="200px">Status</th>
+                        <th class="text-center" width="100px">Aksi</th>
                     </tr>
                 </thead>
 
-                <?php
-                $no = 1;
-                foreach ($tahun as $th) : ?>
-                    <tbody>
-                        <tr>
-                            <td width="20px"><?php echo $no++ ?></td>
-                            <td><?php echo $th->nama ?></td>
-                            <td width="160px" class="text-center"><?= ($th->status == 1) ? '<strong class="badge badge-success">aktif</strong>' : '<strong class="badge badge-danger">tidak aktif</strong>'; ?></td>
-                            <td width="40px">
-                                <?php echo anchor(
-                                    'admin/tahunajaran/edit/' . $th->id_tahun,
-                                    '<div class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></div>'
-                                ) ?>
-                            </td>
-                            <td width="40px">
-                                <a href="<?php echo base_url(); ?>admin/tahunajaran/delete/<?php echo $th->id_tahun ?>" class="btn btn-sm btn-danger btn-delete-mapel">
-                                    <i class="fa fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                <?php endforeach ?>
+                <tbody>
+                </tbody>
             </table>
         </div>
     </div>
 </div>
 
 <script>
-    // Hapus data mapel
-    $('.btn-delete-mapel').on('click', function(event) {
-        event.preventDefault();
-        const href = $(this).attr('href');
+    //onclick hapus data tahun
+    function confirmDelete(id) {
+        const href = '<?= site_url('admin/tahunajaran/delete/') ?>' + id;
 
         Swal.fire({
             title: 'Apakah anda yakin?',
@@ -72,6 +51,26 @@
             if (result.isConfirmed) {
                 document.location.href = href;
             }
+        });
+    }
+
+    //datatables
+    $(document).ready(function() {
+        $('#table-tahun').DataTable({
+            "serverSide": true,
+            "ajax": {
+                "url": "<?= site_url('admin/tahunajaran/get_result_tahun') ?>",
+                "type": "POST"
+            },
+            "columnDefs": [{
+                    "targets": [0, -1, -2],
+                    "className": 'text-center'
+                },
+                {
+                    "targets": [-1],
+                    "orderable": false
+                }
+            ]
         });
     });
 </script>

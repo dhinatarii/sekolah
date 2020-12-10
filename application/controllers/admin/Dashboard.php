@@ -4,7 +4,7 @@ class Dashboard extends CI_Controller
     function __construct()
     {
         parent::__construct();
-        if (!isset($this->session->userdata['username']) && $this->session->userdata['level'] != 'admin') {
+        if (!isset($this->session->userdata['username'])) {
             $this->session->set_flashdata('message', 'Anda Belum Login!');
             redirect('login');
         }
@@ -21,7 +21,11 @@ class Dashboard extends CI_Controller
         $data = array(
             'username'  => $data->username,
             'level'     => $data->level,
-            'menu'      => 'dashboard'
+            'menu'      => 'dashboard',
+            'tahun'     => $this->Tahun_model->get_active_stats(),
+            'siswa'     => $this->Siswa_model->get_count_allsiswa(),
+            'kelas'     => $this->Kelas_model->get_count(),
+            'guru'      => $this->Guru_model->get_count(),
         );
 
         $data['breadcrumb'] = [

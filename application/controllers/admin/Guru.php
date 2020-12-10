@@ -23,7 +23,6 @@ class Guru extends CI_Controller
 
     public function index()
     {
-        $data['guru'] = $this->Guru_model->get_data();
         $data['menu'] = 'guru';
         $data['breadcrumb'] = [
             0 => (object)[
@@ -40,6 +39,37 @@ class Guru extends CI_Controller
         $this->load->view('templates_admin/sidebar', $data);
         $this->load->view('admin/guru', $data);
         $this->load->view('templates/footer');
+    }
+
+    function get_result_guru()
+    {
+        $list = $this->Guru_model->get_datatables();
+        $data = array();
+        $no = @$_POST['start'];
+        foreach ($list as $item) {
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $item->nip;
+            $row[] = $item->nama;
+            $row[] = $item->jenis_kelamin;
+            $row[] = $item->tanggal_lahir;
+            $row[] = $item->no_hp;
+            $row[] = $item->email;
+            $row[] = $item->alamat;
+            $row[] = anchor('admin/guru/edit/' . $item->id_guru, '<div class="btn btn-sm btn-primary btn-xs mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>')
+                . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_guru . ')" class="btn btn-sm btn-danger btn-delete-guru btn-xs mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => @$_POST['draw'],
+            "recordsTotal" => $this->Guru_model->count_all(),
+            "recordsFiltered" => $this->Guru_model->count_filtered(),
+            "data" => $data,
+        );
+
+        echo json_encode($output);
     }
 
     public function input()

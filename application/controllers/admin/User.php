@@ -51,6 +51,7 @@ class User extends CI_Controller
         if ($id < '1' || $id > '4') {
             redirect('admin/user');
         } else {
+            $data['id']     = $id;
             $data['level']  = $id == 1 ? 'admin' : ($id == 2 ? 'guru' : ($id == 3 ? 'wali kelas' : ($id == 4 ? 'siswa' : null)));
             $data['menu']   = 'user';
             $data['users']  = $this->User_model->get_user($data['level']);
@@ -74,6 +75,41 @@ class User extends CI_Controller
             $this->load->view('admin/user_detail', $data);
             $this->load->view('templates/footer');
         }
+    }
+
+    function get_result_user($id)
+    {
+        $level  = $id == 1 ? 'admin' : ($id == 2 ? 'guru' : ($id == 3 ? 'wali kelas' : ($id == 4 ? 'siswa' : null)));
+        $list = $this->User_model->get_datatables($level);
+        $data = array();
+        $no = @$_POST['start'];
+        foreach ($list as $item) {
+            $isDelete = $level == 'admin' ? '<a href="javascript:;" onclick="confirmDelete(' . $item->id_user . ')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>' : '';
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $item->username;
+            $row[] = $item->level;
+            $row[] = ($item->status == 1) ? '<strong class="badge badge-success">aktif</strong>' : '<strong class="badge badge-danger">tidak aktif</strong>';
+            $row[] = anchor(
+                'admin/user/edit?level=' . $level . '&id=' . $item->id_user,
+                '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>'
+            )
+                . anchor(
+                    'admin/user/change_password?level=' . $level . '&id=' . $item->id_user,
+                    '<div class="btn btn-sm btn-success  mr-1 ml-1 mb-1"><i class="fa fa-lock"></i></div>'
+                ) . $isDelete;
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => @$_POST['draw'],
+            "recordsTotal" => $this->User_model->count_all($level),
+            "recordsFiltered" => $this->User_model->count_filtered($level),
+            "data" => $data,
+        );
+
+        echo json_encode($output);
     }
 
     public function input()

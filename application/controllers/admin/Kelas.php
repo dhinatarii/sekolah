@@ -21,7 +21,6 @@ class Kelas extends CI_Controller
 
     public function index()
     {
-        $data['kelas'] = $this->Kelas_model->get_data();
         $data['menu'] = 'kelas';
         $data['breadcrumb'] = [
             0 => (object)[
@@ -38,6 +37,32 @@ class Kelas extends CI_Controller
         $this->load->view('templates_admin/sidebar', $data);
         $this->load->view('admin/kelas', $data);
         $this->load->view('templates/footer');
+    }
+
+    function get_result_kelas()
+    {
+        $list = $this->Kelas_model->get_datatables();
+        $data = array();
+        $no = @$_POST['start'];
+        foreach ($list as $item) {
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $item->kelas;
+            $row[] = $item->wali_kelas;
+            $row[] = anchor('admin/kelas/edit/' . $item->id_kelas, '<div class="btn btn-sm btn-primary btn-xs mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>')
+                . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_kelas . ')" class="btn btn-sm btn-danger btn-xs mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => @$_POST['draw'],
+            "recordsTotal" => $this->Kelas_model->count_all(),
+            "recordsFiltered" => $this->Kelas_model->count_filtered(),
+            "data" => $data,
+        );
+
+        echo json_encode($output);
     }
 
     public function input()

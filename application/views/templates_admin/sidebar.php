@@ -37,12 +37,7 @@
                         <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-education"></use>
                     </svg> Pengolahan Data</a>
                 <ul class="c-sidebar-nav-dropdown-items">
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="icons/coreui-icons-free.html"> CoreUI
-                            Icons<span class="badge badge-success">Free</span></a></li>
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="icons/coreui-icons-brand.html"> CoreUI
-                            Icons - Brand</a></li>
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="icons/coreui-icons-flag.html"> CoreUI Icons
-                            - Flag</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'nilai') echo 'c-active' ?>" href="<?= base_url('admin/nilai') ?>"> Nilai</a></li>
                 </ul>
             </li>
             <li class="c-sidebar-nav-dropdown"><a class="c-sidebar-nav-dropdown-toggle" href="#">
@@ -50,12 +45,9 @@
                         <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-description"></use>
                     </svg> Laporan</a>
                 <ul class="c-sidebar-nav-dropdown-items">
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="icons/coreui-icons-free.html"> CoreUI
-                            Icons<span class="badge badge-success">Free</span></a></li>
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="icons/coreui-icons-brand.html"> CoreUI
-                            Icons - Brand</a></li>
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="icons/coreui-icons-flag.html"> CoreUI Icons
-                            - Flag</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'laporan_guru') echo 'c-active' ?>" href="<?= base_url('admin/laporan_guru') ?>"> Laporan Daftar Guru</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'laporan_siswa') echo 'c-active' ?>" href="<?= base_url('admin/laporan_siswa') ?>"> Laporan Daftar Siswa</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'laporan_nilai') echo 'c-active' ?>" href="<?= base_url('admin/laporan_nilai') ?>"> Laporan Daftar Nilai</a></li>
                 </ul>
             </li>
         </ul>
@@ -76,11 +68,9 @@
                     <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-menu"></use>
                 </svg>
             </button>
-            <!-- <ul class="c-header-nav d-md-down-none">
-                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="#">Dashboard</a></li>
-                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="#">Users</a></li>
-                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="#">Settings</a></li>
-            </ul> -->
+            <ul class="c-header-nav d-md-down-none">
+                <li class="c-header-nav-item px-3">Sistem Informasi Pengolahan Data Nilai Siswa</li>
+            </ul>
             <ul class="c-header-nav ml-auto mr-4">
                 <li class="c-header-nav-item d-md-down-none mx-2">
                     <svg class="c-icon">

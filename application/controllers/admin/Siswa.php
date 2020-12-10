@@ -19,14 +19,40 @@ class Siswa extends CI_Controller
         }
     }
 
+    function get_result_siswa()
+    {
+        $list = $this->Siswa_model->get_datatables();
+        $data = array();
+        $no = @$_POST['start'];
+        foreach ($list as $item) {
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $item->nis;
+            $row[] = $item->nisn;
+            $row[] = $item->nama;
+            $row[] = $item->tanggal_lahir;
+            $row[] = $item->agama;
+            $row[] = $item->jenis_kelamin;
+            $row[] = $item->kelas;
+            $row[] = '<div id="set_detailModal" class="btn btn-sm btn-success mr-1 ml-1 mb-1" data-toggle="modal" data-target="#detailModal" data-idsiswa="' . $item->id_siswa . '" data-siswa="' . $item->nama . '" data-namaibu="' . $item->nama_ibu . '" data-pendidikanibu="' . $item->pendidikan_ibu . '" data-perkejaanibu="' . $item->pekerjaan_ibu . '" data-namaayah="' . $item->nama_ayah . '" data-pendidikanayah="' . $item->pendidikan_ayah . '" data-pekerjaanayah="' . $item->pekerjaan_ayah . '" data-nohp="' . $item->no_hp . '" data-dusun="' . $item->dusun . '" data-desa="' . $item->desa . '" data-kecamatan="' . $item->kecamatan . '" data-kabupaten="' . $item->kabupaten . '"><i class="fa fa-eye"></i></div>'
+                . anchor('admin/siswa/edit/' . $item->id_siswa, '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>')
+                . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_siswa . ')" class="btn btn-sm btn-danger btn-delete-siswa mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => @$_POST['draw'],
+            "recordsTotal" => $this->Siswa_model->count_all(),
+            "recordsFiltered" => $this->Siswa_model->count_filtered(),
+            "data" => $data,
+        );
+
+        echo json_encode($output);
+    }
+
     public function index()
     {
-
-        $config = $this->_config();
-        $this->pagination->initialize($config);
-
-        $data['start'] = $this->uri->segment(4);
-        $data['siswa'] = $this->Siswa_model->get_all_data($config['per_page'], $data['start']);
         $data['menu'] = 'siswa';
         $data['breadcrumb'] = [
             0 => (object)[
@@ -154,41 +180,4 @@ class Siswa extends CI_Controller
         $this->form_validation->set_rules('kabupaten', 'Kabupaten', 'required|max_length[50]');
     }
 
-    private function _config()
-    {
-        //config pagination
-        $config['base_url'] = 'http://localhost/sipdn-web/admin/siswa/index';
-        $config['total_rows'] = $this->Siswa_model->get_count_allsiswa();;
-        $config['per_page'] = 10;
-        $config['num_link'] = 5;
-
-        $config['full_tag_open'] = '<nav><ul class="pagination justify-content-center">';
-        $config['full_tag_close'] = '</ul></nav>';
-
-        $config['first_link'] = 'First';
-        $config['first_tag_open'] = '<li class="page-item">';
-        $config['first_tag_close'] = '</li>';
-
-        $config['last_link'] = 'Last';
-        $config['last_tag_open'] = '<li class="page-item">';
-        $config['last_tag_close'] = '</li>';
-
-        $config['next_link'] = '&raquo';
-        $config['next_tag_open'] = ' <li class="page-item">';
-        $config['next_tag_close'] = '</li>';
-
-        $config['prev_link'] = '&laquo';
-        $config['prev_tag_open'] = ' <li class="page-item">';
-        $config['prev_tag_close'] = '</li>';
-
-        $config['cur_tag_open'] = ' <li class="page-item active"><a class="page-link" href="#">';
-        $config['cur_tag_close'] = '</a></li>';
-
-        $config['num_tag_open'] = ' <li class="page-item">';
-        $config['num_tag_close'] = '</li>';
-
-        $config['attributes'] = ['class' => 'page-link'];
-
-        return $config;
-    }
 }

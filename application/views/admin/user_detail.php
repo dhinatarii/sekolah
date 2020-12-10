@@ -16,58 +16,30 @@
 
     <div class="card">
         <div class="card-body">
-            <table class="table table-responsive table-bordered table-hover w-100 d-block d-md-table">
-                <thead class="thead-light">
+            <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-user">
+                <thead>
                     <tr>
-                        <th>No</th>
+                        <th width="20px">No</th>
                         <th>Username / NIS / Email</th>
                         <th>Level</th>
-                        <th class="text-center">Status</th>
-                        <?= ($level == 'admin') ? '<th class="text-center" colspan="3">Aksi</th>' : '<th class="text-center" colspan="2">Aksi</th>'; ?>
+                        <th width="120px" class="text-center">Status</th>
+                        <th width="120px">Aksi</th>
+                        <!-- <?= ($level == 'admin') ? '<th class="text-center" colspan="3">Aksi</th>' : '<th class="text-center" colspan="2">Aksi</th>'; ?> -->
                     </tr>
                 </thead>
 
-                <?php
-                $no = 1;
-                foreach ($users as $user) : ?>
-                    <tbody>
-                        <tr>
-                            <td width="20px"><?php echo $no++ ?></td>
-                            <td><?php echo $user->username ?></td>
-                            <td><?php echo $user->level ?></td>
-                            <td width="160px" class="text-center"><?= ($user->status == 1) ? '<strong class="badge badge-success">aktif</strong>' : '<strong class="badge badge-danger">tidak aktif</strong>'; ?></td>
-                            <td width="40px">
-                                <?php echo anchor(
-                                    'admin/user/edit?level=' . $level . '&id=' . $user->id_user,
-                                    '<div class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></div>'
-                                ) ?>
-                            </td>
-                            <td width="40px">
-                                <?php echo anchor(
-                                    'admin/user/change_password?level=' . $level . '&id=' . $user->id_user,
-                                    '<div class="btn btn-sm btn-success"><i class="fa fa-lock"></i></div>'
-                                ) ?>
-                            </td>
-                            <?php if ($level == 'admin') : ?>
-                                <td width="40px">
-                                    <a href="<?php echo base_url(); ?>admin/user/delete/<?= $level . '/' . $user->id_user ?>" class="btn btn-sm btn-danger btn-delete-user">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
-                                </td>
-                            <?php endif; ?>
-                        </tr>
-                    </tbody>
-                <?php endforeach ?>
+                <tbody>
+                </tbody>
             </table>
         </div>
     </div>
 </div>
 
 <script>
-    // Hapus data user
-    $('.btn-delete-user').on('click', function(event) {
-        event.preventDefault();
-        const href = $(this).attr('href');
+    //onclick hapus data user
+    function confirmDelete(id) {
+        const href = '<?= site_url('admin/user/delete/' . $level . '/') ?>' + id;
+        console.log(href);
 
         Swal.fire({
             title: 'Apakah anda yakin?',
@@ -82,6 +54,26 @@
             if (result.isConfirmed) {
                 document.location.href = href;
             }
+        });
+    }
+
+    //datatables
+    $(document).ready(function() {
+        $('#table-user').DataTable({
+            "serverSide": true,
+            "ajax": {
+                "url": "<?= site_url('admin/user/get_result_user/' . $id) ?>",
+                "type": "POST"
+            },
+            "columnDefs": [{
+                    "targets": [0, 3, -1],
+                    "className": 'text-center'
+                },
+                {
+                    "targets": [-1],
+                    "orderable": false
+                }
+            ]
         });
     });
 </script>
