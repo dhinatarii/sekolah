@@ -24,6 +24,7 @@ class Siswa_model extends CI_Model
 
     public function input_data_siswa($id_kelas)
     {
+        $id_user = $this->_input_user();
         $id_orangtua = $this->_input_data_orangtua();
         $data = array(
             'nis'           => $this->input->post('nis', TRUE),
@@ -33,7 +34,8 @@ class Siswa_model extends CI_Model
             'agama'         => $this->input->post('agama', TRUE),
             'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
             'id_orangtua'   => $id_orangtua,
-            'id_kelas'      => $id_kelas
+            'id_kelas'      => $id_kelas,
+            'id_user'       => $id_user
         );
 
         $this->db->insert('tb_siswa', $data);
@@ -114,6 +116,19 @@ class Siswa_model extends CI_Model
         );
 
         $this->db->insert('tb_alamat', $data);
+        return $this->db->insert_id();
+    }
+
+    private function _input_user()
+    {
+        $data = array(
+            'username'  => $this->input->post('nis', TRUE),
+            'password'  => MD5($this->input->post('tanggal_lahir', TRUE)),
+            'level'     => 'siswa',
+            'status'    => '1'
+        );
+
+        $this->db->insert('tb_user', $data);
         return $this->db->insert_id();
     }
 

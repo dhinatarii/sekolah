@@ -20,6 +20,7 @@
                 <thead>
                     <tr>
                         <th width="20px">No</th>
+                        <th>Nama</th>
                         <th>Username / NIS / Email</th>
                         <th>Level</th>
                         <th width="120px" class="text-center">Status</th>
@@ -66,7 +67,7 @@
                 "type": "POST"
             },
             "columnDefs": [{
-                    "targets": [0, 3, -1],
+                    "targets": [0, 3, -1, -2],
                     "className": 'text-center'
                 },
                 {

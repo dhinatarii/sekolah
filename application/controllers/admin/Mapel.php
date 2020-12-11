@@ -50,7 +50,6 @@ class Mapel extends CI_Controller
             $row[] = $no;
             $row[] = $item->nama_mapel;
             $row[] = $item->level;
-            $row[] = $item->jum_tema;
             $row[] = anchor('admin/mapel/edit/' . $item->id_mapel, '<div class="btn btn-sm btn-primary btn-xs mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>')
                 . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_mapel . ')" class="btn btn-sm btn-danger btn-xs mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';
             $data[] = $row;
@@ -150,6 +149,5 @@ class Mapel extends CI_Controller
     {
         $this->form_validation->set_rules('nama_mapel', 'Nama Mata Pelajaran', 'required|max_length[100]');
         $this->form_validation->set_rules('level', 'Level', 'required');
-        $this->form_validation->set_rules('jum_tema', 'Jumlah Tema', 'required');
     }
 }

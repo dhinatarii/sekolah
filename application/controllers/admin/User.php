@@ -88,6 +88,7 @@ class User extends CI_Controller
             $no++;
             $row = array();
             $row[] = $no;
+            $row[] = $item->nama;
             $row[] = $item->username;
             $row[] = $item->level;
             $row[] = ($item->status == 1) ? '<strong class="badge badge-success">aktif</strong>' : '<strong class="badge badge-danger">tidak aktif</strong>';

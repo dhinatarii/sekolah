@@ -22,7 +22,6 @@
                         <th width="20px">No</th>
                         <th>Mata Pelajaran</th>
                         <th>Level</th>
-                        <th>Jumlah Tema</th>
                         <th width="100px">Aksi</th>
                     </tr>
                 </thead>

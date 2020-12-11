@@ -24,11 +24,6 @@
                     </select>
                     <?php echo form_error('level', '<div class="text-danger small ml-3">', '</div>') ?>
                 </div>
-                <div class="form-group">
-                    <label for="jum_tema">Jumlah Tema</label>
-                    <input type="number" name="jum_tema" id="jum_tema" placeholder="Masukan Jumlah Tema" class="form-control">
-                    <?php echo form_error('jum_tema', '<div class="text-danger small ml-3">', '</div>') ?>
-                </div>
                 <button type="submit" class="btn btn-primary">Simpan</button>
                 <button type="reset" class="btn btn-secondary ml-1">Reset</button>
             </form>

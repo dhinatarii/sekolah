@@ -22,8 +22,22 @@ class Guru_model extends CI_Model
         return $this->db->get_where('tb_guru', ['id_guru' => $id])->row_array();
     }
 
+    private function _input_user()
+    {
+        $data = array(
+            'username'  => $this->input->post('email', TRUE),
+            'password'  => MD5($this->input->post('tanggal_lahir', TRUE)),
+            'level'     => 'guru',
+            'status'    => '1'
+        );
+
+        $this->db->insert('tb_user', $data);
+        return $this->db->insert_id();
+    }
+
     public function input_data()
     {
+        $id_user = $this->_input_user();
         $data = array(
             'nip'           => $this->input->post('nip', TRUE),
             'nama'          => $this->input->post('nama', TRUE),
@@ -31,7 +45,8 @@ class Guru_model extends CI_Model
             'tanggal_lahir' => $this->input->post('tanggal_lahir', TRUE),
             'no_hp'         => $this->input->post('no_hp', TRUE),
             'email'         => $this->input->post('email', TRUE),
-            'alamat'        => $this->input->post('alamat', TRUE)
+            'alamat'        => $this->input->post('alamat', TRUE),
+            'id_user'       => $id_user
         );
 
         $this->db->insert('tb_guru', $data);

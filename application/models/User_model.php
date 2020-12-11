@@ -3,7 +3,6 @@ class User_model extends CI_Model
 {
     public function get_data($name)
     {
-
         $this->db->where('username', $name);
         return $this->db->get('tb_user')->row();
     }
@@ -65,15 +64,19 @@ class User_model extends CI_Model
         $this->db->delete('tb_user', ['id_user' => $id]);
     }
 
-    var $column_order = array(null, 'username', 'level', 'status'); //Sesuaikan dengan field
+    var $column_order = array(null, 'nama', 'username', 'level', 'status'); //Sesuaikan dengan field
     var $column_search = array('username'); //field yang diizin untuk pencarian 
     var $order = array('id_user' => 'asc'); // default order 
 
     private function _get_datatables_query($level)
     {
+        
+        $table_join = $level == 'admin' ? 'tb_admin' : ($level == 'guru' ? 'tb_guru' : ($level == 'wali kelas' ? 'tb_guru' : ($level == 'siswa' ? 'tb_siswa' : NULL)));
 
-        $this->db->from('tb_user');
+        $this->db->select("tu.id_user, $table_join.nama, tu.username, tu.level, tu.status");
+        $this->db->from('tb_user tu');
         $this->db->where('level', $level);
+        $this->db->join($table_join, "tu.id_user = $table_join.id_user", 'left');
 
         $i = 0;
 
