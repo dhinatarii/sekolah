@@ -36,6 +36,9 @@
     </div>
 </div>
 
+</main>
+</div>
+
 <script>
     //onclick hapus data user
     function confirmDelete(id) {

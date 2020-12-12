@@ -70,5 +70,5 @@
     </div>
 </div>
 
+</main>
 </div>
-<!-- End of Main Content -->

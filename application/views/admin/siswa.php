@@ -124,6 +124,9 @@
     </div>
 </div>
 
+</main>
+</div>
+
 <script>
     //onclick hapus data siswa
     function confirmDelete(id) {

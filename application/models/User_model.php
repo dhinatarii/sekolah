@@ -22,7 +22,43 @@ class User_model extends CI_Model
         return $this->db->get_where('tb_user', ['id_user' => $id, 'level' => $level])->row_array();
     }
 
+    public function get_detail_admin($id, $level)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_user');
+        $this->db->where('tb_user.id_user', $id);
+        $this->db->where('tb_user.level', $level);
+        $this->db->join('tb_admin', "tb_user.id_user = tb_admin.id_user", 'left');
+        return $this->db->get()->row_array();
+    }
+
     public function input_data()
+    {
+        // $data = array(
+        //     'username'  => $this->input->post('username', TRUE),
+        //     'password'  => MD5($this->input->post('password', TRUE)),
+        //     'level'     => 'admin',
+        //     'status'    => $this->input->post('status', TRUE)
+        // );
+
+        // $this->db->insert('tb_user', $data);
+
+        $id_user = $this->_input_admin();
+        $data = array(
+            'nip'           => $this->input->post('nip', TRUE),
+            'nama'          => $this->input->post('nama', TRUE),
+            'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
+            'tanggal_lahir' => $this->input->post('tanggal_lahir', TRUE),
+            'no_hp'         => $this->input->post('no_hp', TRUE),
+            'email'         => $this->input->post('email', TRUE),
+            'alamat'        => $this->input->post('alamat', TRUE),
+            'id_user'       => $id_user
+        );
+
+        $this->db->insert('tb_admin', $data);
+    }
+
+    public function _input_admin()
     {
         $data = array(
             'username'  => $this->input->post('username', TRUE),
@@ -32,6 +68,7 @@ class User_model extends CI_Model
         );
 
         $this->db->insert('tb_user', $data);
+        return $this->db->insert_id();
     }
 
     public function cek_user()
@@ -47,6 +84,31 @@ class User_model extends CI_Model
 
         $this->db->where('id_user', $id);
         $this->db->update('tb_user', $data);
+    }
+
+    public function edit_admin($id)
+    {
+        $data_admin = array(
+            'nip'           => $this->input->post('nip', TRUE),
+            'nama'          => $this->input->post('nama', TRUE),
+            'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
+            'tanggal_lahir' => $this->input->post('tanggal_lahir', TRUE),
+            'no_hp'         => $this->input->post('no_hp', TRUE),
+            'email'         => $this->input->post('email', TRUE),
+            'alamat'        => $this->input->post('alamat', TRUE)
+        );
+
+        $data_account = array(
+            'username'  => $this->input->post('username', TRUE),
+            'level'     => 'admin',
+            'status'    => $this->input->post('status', TRUE)
+        );
+
+        $this->db->where('id_user', $id);
+        $this->db->update('tb_user', $data_account);
+
+        $this->db->where('id_user', $id);
+        $this->db->update('tb_admin', $data_admin);
     }
 
     public function edit_password($id)
@@ -70,7 +132,7 @@ class User_model extends CI_Model
 
     private function _get_datatables_query($level)
     {
-        
+
         $table_join = $level == 'admin' ? 'tb_admin' : ($level == 'guru' ? 'tb_guru' : ($level == 'wali kelas' ? 'tb_guru' : ($level == 'siswa' ? 'tb_siswa' : NULL)));
 
         $this->db->select("tu.id_user, $table_join.nama, tu.username, tu.level, tu.status");

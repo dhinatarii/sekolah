@@ -29,7 +29,7 @@
                 <div class="form-group">
                     <label for="kelas">Kelas</label>
                     <select class="form-control" id="kelas" name="kelas">
-                        <option value="">--Pilih Mata Pelajaran--</option>
+                        <option value="">--Pilih Kelas--</option>
                         <?php foreach ($kelas as $kl) : ?>
                             <option value="<?php echo $kl->id_kelas ?>"><?= $kl->kelas ?></option>
                         <?php endforeach; ?>

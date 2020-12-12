@@ -9,15 +9,15 @@ class User extends CI_Controller
         $this->output->set_header('Cache-Control: post-check=0, pre-check=0', false);
         $this->output->set_header('Pragma: no-cache');
 
-        if (!isset($this->session->userdata['username']) && $this->session->userdata['level'] != 'admin') {
+        if (!isset($this->session->userdata['username']) || $this->session->userdata['level'] != 'admin') {
             $this->session->set_flashdata('message', 'Anda Belum Login!');
             redirect('login');
         }
 
-        if ($this->session->userdata['level'] != 'admin') {
-            $this->session->set_flashdata('message', 'Anda Belum Login!');
-            redirect('login');
-        }
+        // if ($this->session->userdata['level'] != 'admin') {
+        //     $this->session->set_flashdata('message', 'Anda Belum Login!');
+        //     redirect('login');
+        // }
     }
 
     public function index()
@@ -157,12 +157,14 @@ class User extends CI_Controller
 
     public function edit()
     {
-        $data['menu']   = 'user';
         $data['id']     = $this->input->get('id', TRUE);
         $data['level']  = $this->input->get('level', TRUE);
         $data['user']   = $this->User_model->get_detail_user($data['id'], $data['level']);
+        $data['admin']  = $this->User_model->get_detail_admin($data['id'], $data['level']);
         $data['status'] = ['0', '1'];
+        $data['jenis_kelamin'] = ['Laki-laki', 'Perempuan'];
         $detail         = $data['level'] == 'admin' ? '1' : ($data['level'] == 'guru' ? '2' : ($data['level'] == 'wali kelas' ? '3' : ($data['level'] == 'siswa' ? '4' : NULL)));
+        $data['menu']   = 'user';
         $data['breadcrumb'] = [
             0 => (object)[
                 'name' => 'Dashboard',
@@ -182,17 +184,32 @@ class User extends CI_Controller
             ],
         ];
 
-        $this->_rules_data();
+        if ($data['level'] == 'admin') {
+            $this->_rules_data();
 
-        if ($this->form_validation->run() == FALSE) {
-            $this->load->view('templates/header');
-            $this->load->view('templates_admin/sidebar', $data);
-            $this->load->view('admin/user_edit', $data);
-            $this->load->view('templates/footer');
+            if ($this->form_validation->run() == FALSE) {
+                $this->load->view('templates/header');
+                $this->load->view('templates_admin/sidebar', $data);
+                $this->load->view('admin/user_admin', $data);
+                $this->load->view('templates/footer');
+            } else {
+                $this->User_model->edit_admin($data['id']);
+                $this->session->set_flashdata('message', 'Data Berhasil Diupdate!');
+                redirect('admin/user/detail/' . $detail);
+            }
         } else {
-            $this->User_model->edit_data($data['id']);
-            $this->session->set_flashdata('message', 'Data Berhasil Diupdate!');
-            redirect('admin/user/detail/' . $detail);
+            $this->_rules_data();
+
+            if ($this->form_validation->run() == FALSE) {
+                $this->load->view('templates/header');
+                $this->load->view('templates_admin/sidebar', $data);
+                $this->load->view('admin/user_edit', $data);
+                $this->load->view('templates/footer');
+            } else {
+                $this->User_model->edit_data($data['id']);
+                $this->session->set_flashdata('message', 'Data Berhasil Diupdate!');
+                redirect('admin/user/detail/' . $detail);
+            }
         }
     }
 
@@ -253,6 +270,13 @@ class User extends CI_Controller
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]|max_length[50]');
         $this->form_validation->set_rules('konfirmasi', 'Konfirmasi Password', "required|min_length[6]|matches[password]|max_length[50]");
         $this->form_validation->set_rules('status', 'status', 'required');
+        $this->form_validation->set_rules('nip', 'NIP', 'numeric|max_length[20]');
+        $this->form_validation->set_rules('nama', 'Nama', 'required|max_length[100]');
+        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('no_hp', 'No Handphone', 'required|numeric|min_length[10]|max_length[15]');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|max_length[100]');
+        $this->form_validation->set_rules('alamat', 'Alamat', 'required|max_length[100]');
+        $this->form_validation->set_rules('tanggal_lahir', 'Tanggal lahir', 'required');
     }
 
     private function _rules_data()

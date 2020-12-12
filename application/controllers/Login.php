@@ -12,12 +12,13 @@ class Login extends CI_Controller
 
     public function index()
     {
+        $data['login'] = 'this is login';
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
             $this->load->view('login/index');
-            $this->load->view('templates/footer');
+            $this->load->view('templates/footer' , $data);
         } else {
             $username = $this->input->post('username');
             $password = $this->input->post('password');

@@ -33,6 +33,9 @@
     </div>
 </div>
 
+</main>
+</div>
+
 <script>
     //onclick hapus data mapel
     function confirmDelete(id) {

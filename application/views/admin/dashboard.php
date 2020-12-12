@@ -176,3 +176,6 @@
     </div>
 </div>
 <!-- /.container-fluid -->
+
+</main>
+</div>
