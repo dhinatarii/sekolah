@@ -34,7 +34,6 @@
 </div>
 
 </main>
-</div>
 
 <script>
     //onclick hapus data tahun

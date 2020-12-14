@@ -178,4 +178,3 @@
 <!-- /.container-fluid -->
 
 </main>
-</div>

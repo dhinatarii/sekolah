@@ -33,14 +33,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-9">
+        <div class="col-sm-9" id="table-result">
 
         </div>
     </div>
 </div>
 
 </main>
-</div>
 
 <script>
     $(document).ready(function() {
@@ -48,7 +47,7 @@
             const kelas = $(this).val();
             $.ajax({
                 type: 'POST',
-                url: '<?= site_url('admin/nilai/get_mapel') ?>',
+                url: '<?= base_url('admin/nilai/get_mapel') ?>',
                 data: 'id_kelas=' + kelas,
                 success: function(response) {
                     $('#mapel').html(response);
@@ -60,5 +59,32 @@
     function searchNilai() {
         const kelas = $('#kelas').val()
         const mapel = $('#mapel').val()
+        const href = '<?= base_url('admin/nilai/kd?id_kelas=') ?>' + kelas + '&id_mapel=' + mapel;
+        const htmlResult = `
+            <div class="card">
+                <div class="card-header bg-behance">
+                    <h6 class="text-white"> Matemtaik / Kelas 1A</h6>
+                </div>
+                <div class="card-body">
+                    <a href="${href}" class="btn btn-primary mb-3">Cek Selengkapnya</i></a>
+                    <h4 class="text-center">Data Nilai Belum Tersedia</h4>
+                </div>
+            </div>`
+        console.log(kelas + "------" + mapel);
+        if (kelas !== '' && mapel !== '') {
+            $('#table-result').html(htmlResult);
+        }
     }
+
+    // $(document).ready(function() {
+    //     $(document).on('click', '#detail-nilai', function() {
+
+    //     });
+    // });
+
+    // function detailNilai() {
+    //     const idKelas = $(this).data('idkelas');
+    //     const idMapel = $(this).data('idmapel');
+    //     console.log(idKelas + idMapel);
+    // }
 </script>

@@ -27,7 +27,7 @@
                         <th>Agama</th>
                         <th>Jenis Kelamin</th>
                         <th>Kelas</th>
-                        <th width="120px" class="text-center">Aksi</th>
+                        <th width="160px" class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -125,7 +125,6 @@
 </div>
 
 </main>
-</div>
 
 <script>
     //onclick hapus data siswa

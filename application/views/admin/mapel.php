@@ -22,7 +22,7 @@
                         <th width="20px">No</th>
                         <th>Mata Pelajaran</th>
                         <th>Level</th>
-                        <th width="100px">Aksi</th>
+                        <th width="150px">Aksi</th>
                     </tr>
                 </thead>
 
@@ -34,7 +34,6 @@
 </div>
 
 </main>
-</div>
 
 <script>
     //onclick hapus data mapel

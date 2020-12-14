@@ -60,8 +60,6 @@
 </div>
 
 </main>
-</div>
-
 <script>
     //onclick hapus data pengajar
     function confirmDelete(id) {

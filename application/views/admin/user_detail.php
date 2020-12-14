@@ -24,7 +24,7 @@
                         <th>Username / NIS / Email</th>
                         <th>Level</th>
                         <th width="120px" class="text-center">Status</th>
-                        <th width="120px">Aksi</th>
+                        <th width="160px">Aksi</th>
                         <!-- <?= ($level == 'admin') ? '<th class="text-center" colspan="3">Aksi</th>' : '<th class="text-center" colspan="2">Aksi</th>'; ?> -->
                     </tr>
                 </thead>
@@ -37,8 +37,6 @@
 </div>
 
 </main>
-</div>
-
 <script>
     //onclick hapus data user
     function confirmDelete(id) {

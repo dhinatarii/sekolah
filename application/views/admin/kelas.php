@@ -27,6 +27,7 @@
                 </thead>
 
                 <tbody>
+                    
                 </tbody>
             </table>
         </div>
@@ -34,7 +35,6 @@
 </div>
 
 </main>
-</div>
 
 <script>
     //onclick hapus data kelas

@@ -12,6 +12,38 @@ class Mapel_model extends CI_Model
         return $this->db->get_where('tb_matapelajaran', ['id_mapel' => $id])->row_array();
     }
 
+    public function get_mapel_with_kd_detail($id_mapel, $id_kelas)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_matapelajaran tm');
+        $this->db->join('tb_kd tk', 'tm.id_mapel = tk.id_mapel', 'inner');
+        $this->db->join('tb_pengajar tp', 'tm.id_mapel = tp.id_mapel', 'inner');
+        $this->db->where('tm.id_mapel', $id_mapel);
+        $this->db->where('tp.id_kelas', $id_kelas);
+        return $this->db->get()->result();
+    }
+
+    public function get_kd_permapel($id_mapel)
+    {
+        return $this->db->get_where('tb_kd', ['id_mapel' => $id_mapel])->result();
+    }
+
+    public function input_kd_inmapel($id_mapel)
+    {
+        $komp_dasar = $this->input->post('kd', TRUE);
+        if (!empty($komp_dasar)) {
+            foreach ($komp_dasar as $kd) {
+                $data_kd = array(
+                    'nama_kd'   => $kd,
+                    'id_mapel'  => $id_mapel
+
+                );
+
+                $this->db->insert('tb_kd', $data_kd);
+            }
+        }
+    }
+
     public function get_mapel_with_kelas($id_kelas)
     {
         $this->db->select('tm.id_mapel, tm.nama_mapel, tm.level');
@@ -30,7 +62,20 @@ class Mapel_model extends CI_Model
         );
 
         $this->db->insert('tb_matapelajaran', $data);
-        $this->db->insert_id();
+
+        $last_idmapel = $this->db->insert_id();
+        $komp_dasar = $this->input->post('kd', TRUE);
+        if (!empty($komp_dasar)) {
+            foreach ($komp_dasar as $kd) {
+                $data_kd = array(
+                    'nama_kd'   => $kd,
+                    'id_mapel'  => $last_idmapel
+
+                );
+
+                $this->db->insert('tb_kd', $data_kd);
+            }
+        }
     }
 
     public function edit_data($id)
@@ -49,9 +94,14 @@ class Mapel_model extends CI_Model
         $this->db->delete('tb_matapelajaran', ['id_mapel' => $id]);
     }
 
+    public function delete_kd($id)
+    {
+        $this->db->delete('tb_kd', ['id_kd' => $id]);
+    }
+
     var $column_order = array(null, 'nama_mapel', 'level'); //Sesuaikan dengan field
     var $column_search = array('nama_mapel', 'level'); //field yang diizin untuk pencarian 
-    var $order = array('level' => 'asc'); // default order 
+    var $order = array('tb_matapelajaran.level' => 'asc'); // default order 
 
     private function _get_datatables_query()
     {
