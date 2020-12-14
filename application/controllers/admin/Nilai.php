@@ -115,14 +115,27 @@ class Nilai extends CI_Controller
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Nama</th>';
+                                    <th rowspan="2" >No</th>
+                                    <th rowspan="2" >Nama</th>';
+
+            //heading table
+            foreach ($jenis as $jn => $value) {
+                $html = $html . '<th class="text-center">' .
+                    anchor('admin/guru/edit/', '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-edit fa-sm"></i></div>') .
+                    anchor('admin/guru/edit/', '<div class="btn btn-sm btn-danger mr-1 ml-1 mb-1"><i class="fa fa-trash fa-sm"></i></div>')
+                    . '</th>';
+            }
+
+            $html = $html . '<th rowspan="2">Jumlah</th>
+                            <th rowspan="2">Rata-rata</th>
+                            </tr><tr>';
 
             //heading table
             foreach ($jenis as $jn => $value) {
                 $html = $html . '<th>' . $value->jenis . '</th>';
             }
-            $html = $html . '<th>Rata-rata</th></tr></thead><tbody>';
+
+            $html = $html . '</tr></thead><tbody>';
 
             //body table
             foreach ($data as $dt => $value_dt) {
@@ -133,7 +146,7 @@ class Nilai extends CI_Controller
                     $html = $html . '<td>' . $value_dt[$value_jn->jenis] . '</td>';
                 }
 
-                $html = $html . '<td></td></tr>';
+                $html = $html . '<td></td><td></td></tr>';
             }
 
             //akhir table
@@ -155,5 +168,66 @@ class Nilai extends CI_Controller
                             </div>';
         }
         echo ($html);
+    }
+
+    public function nilai_input()
+    {
+        $id_kelas   = $this->input->get('id_kelas', TRUE);
+        $id_mapel   = $this->input->get('id_mapel', TRUE);
+        $id_kd      = $this->input->get('id_kd', TRUE);
+
+        if (!isset($id_kelas) || !isset($id_mapel) || !isset($id_kd)) {
+            redirect('error_404');
+        }
+
+        $result_jenis = array_column($this->Nilai_model->get_jenis_nilai_in_perkd_array($id_kelas, $id_mapel, $id_kd), 'jenis');
+        $object_jenis = ['Tugas Harian 1', 'Tugas Harian 2', 'Tugas Harian 3', 'Tugas Harian 4', 'Ulangan Harian 1', 'Ulangan Harian 2', 'Ulangan Harian 3', 'Ulangan Harian 4', 'UTS', 'UAS'];
+
+        $data['kelas']          = $this->Kelas_model->get_detail_data($id_kelas);
+        $data['mapel']          = $this->Mapel_model->get_detail_data($id_mapel);
+        $data['pengajar']       = $this->Pengajar_model->get_detail_data_with_kelas_and_mapel($id_kelas, $id_mapel);
+        $data['jenis_nilai']    = array_diff($object_jenis, $result_jenis);
+        $data['siswa']          = $this->Siswa_model->get_data_perkelas($id_kelas);
+        $data['komp_dasar']     = $this->Mapel_model->get_kd_detail($id_kd);
+        $data['menu']           = 'nilai';
+        $data['breadcrumb']     = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => 'admin/dashboard'
+            ],
+            1 => (object)[
+                'name' => 'Nilai',
+                'link' => 'admin/nilai'
+            ],
+            2 => (object)[
+                'name' => 'Detail',
+                'link' => 'admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel
+            ],
+            3 => (object)[
+                'name' => 'Input Nilai',
+                'link' => NULL
+            ]
+        ];
+
+        $this->_rules_persiswa($data['siswa']);
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('templates/header');
+            $this->load->view('templates_admin/sidebar', $data);
+            $this->load->view('admin/nilai_input', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $this->Nilai_model->input_nilai($data['siswa'], $id_kd);
+            $this->session->set_flashdata('message', 'Nilai Siswa Berhasil Ditambahkan!');
+            redirect('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel);
+        }
+    }
+
+    public function _rules_persiswa($data_siswa)
+    {
+        foreach ($data_siswa as $key => $value) {
+            $this->form_validation->set_rules('nilai' . $key, 'Nilai', 'required|numeric');
+        }
+        $this->form_validation->set_rules('jenis', 'Jenis Nilai', 'required');
     }
 }

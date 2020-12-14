@@ -26,7 +26,6 @@
                 </div>
                 <div class="form-group">
                     <label for="komp_dasar">Kompetensi Dasar</label>
-                    <!-- <input type="text" name="komp_dasar" id="komp_dasar" placeholder="Masukan Kompetensi Dasar" class="form-control"> -->
                     <div class="input-group control-group after-add-kd">
                         <input type="text" name="kd[]" class="form-control" id="komp_dasar" placeholder="Masukan Kompetensi Dasar">
                         <div class="input-group-btn">

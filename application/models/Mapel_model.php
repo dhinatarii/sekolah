@@ -28,6 +28,11 @@ class Mapel_model extends CI_Model
         return $this->db->get_where('tb_kd', ['id_mapel' => $id_mapel])->result();
     }
 
+    public function get_kd_detail($id_kd)
+    {
+        return $this->db->get_where('tb_kd', ['id_kd' => $id_kd])->row_array();
+    }
+
     public function input_kd_inmapel($id_mapel)
     {
         $komp_dasar = $this->input->post('kd', TRUE);

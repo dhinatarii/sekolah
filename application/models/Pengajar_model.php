@@ -44,6 +44,18 @@ class Pengajar_model extends CI_Model
         return $this->db->get_where('tb_pengajar', ['id_pengajar' => $id])->row_array();
     }
 
+    public function get_detail_data_with_kelas_and_mapel($id_kelas, $id_mapel)
+    {
+        $this->db->select('tp.id_pengajar, tg.id_guru, tg.nama');
+        $this->db->from('tb_guru tg');
+        $this->db->join('tb_pengajar tp', 'tp.id_guru = tg.id_guru', 'inner');
+        $this->db->join('tb_kelas tk', 'tk.id_kelas = tp.id_kelas', 'inner');
+        $this->db->join('tb_matapelajaran tm', 'tm.id_mapel = tp.id_mapel', 'inner');
+        $this->db->where('tm.id_mapel', $id_mapel);
+        $this->db->where('tk.id_kelas', $id_kelas);
+        return $this->db->get()->row_array();
+    }
+
     public function delete_data($id)
     {
         $this->db->delete('tb_pengajar', ['id_pengajar' => $id]);

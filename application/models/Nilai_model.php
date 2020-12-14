@@ -45,6 +45,18 @@ class Nilai_model extends CI_Model
 
     public function get_jenis_nilai_in_perkd($id_kelas = null, $id_mapel = null, $id_kd = null)
     {
+        $query = $this->_get_jenis_nilai_inperkd($id_kelas, $id_mapel, $id_kd);
+        return $query->result();
+    }
+
+    public function get_jenis_nilai_in_perkd_array($id_kelas = null, $id_mapel = null, $id_kd = null)
+    {
+        $query = $this->_get_jenis_nilai_inperkd($id_kelas, $id_mapel, $id_kd);
+        return $query->result_array();
+    }
+
+    public function _get_jenis_nilai_inperkd($id_kelas = null, $id_mapel = null, $id_kd = null)
+    {
         $kelas = $id_kelas != null ? $id_kelas : 'null';
         $mapel = $id_mapel != null ? $id_mapel : 'null';
         $kd = $id_kd != null ? $id_kd : 'null';
@@ -62,7 +74,19 @@ class Nilai_model extends CI_Model
                 and tk.id_kd = $kd
                 and tk2.id_kelas = $kelas
             group by tn.jenis");
+        return $query;
+    }
 
-        return $query->result();
+    public function input_nilai($data_murid, $id_kd)
+    {
+        foreach ($data_murid as $key => $value) {
+            $data = array(
+                'id_siswa'      => $value->id_siswa,
+                'id_kd'         => $id_kd,
+                'jenis'         => $this->input->post('jenis', TRUE),
+                'nilai'         => $this->input->post('nilai' . $key, TRUE),
+            );
+            $this->db->insert('tb_nilai', $data);
+        }
     }
 }

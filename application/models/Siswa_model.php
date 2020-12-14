@@ -12,6 +12,11 @@ class Siswa_model extends CI_Model
         return $this->db->get()->row_array();
     }
 
+    public function get_data_perkelas($id_kelas)
+    {
+        return $this->db->get_where('tb_siswa', ['id_kelas' => $id_kelas])->result();
+    }
+
     public function get_count_allsiswa()
     {
         $this->db->select('*');
