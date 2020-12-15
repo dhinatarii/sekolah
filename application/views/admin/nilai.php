@@ -57,34 +57,35 @@
     });
 
     function searchNilai() {
-        const kelas = $('#kelas').val()
-        const mapel = $('#mapel').val()
-        const href = '<?= base_url('admin/nilai/kd?id_kelas=') ?>' + kelas + '&id_mapel=' + mapel;
-        const htmlResult = `
-            <div class="card">
-                <div class="card-header bg-behance">
-                    <h6 class="text-white"> Matemtaik / Kelas 1A</h6>
-                </div>
-                <div class="card-body">
-                    <a href="${href}" class="btn btn-primary mb-3">Cek Selengkapnya</i></a>
-                    <h4 class="text-center">Data Nilai Belum Tersedia</h4>
-                </div>
-            </div>`
-        console.log(kelas + "------" + mapel);
+        const idKelas = $('#kelas').val()
+        const idMapel = $('#mapel').val()
+        // const href = '<?= base_url('admin/nilai/kd?id_kelas=') ?>' + kelas + '&id_mapel=' + mapel;
+        // const htmlResult = `
+        //     <div class="card">
+        //         <div class="card-header bg-behance">
+        //             <h6 class="text-white"> Matemtaik / Kelas 1A</h6>
+        //         </div>
+        //         <div class="card-body">
+        //             <a href="${href}" class="btn btn-primary mb-3">Cek Selengkapnya</i></a>
+        //             <h4 class="text-center">Data Nilai Belum Tersedia</h4>
+        //         </div>
+        //     </div>`
         if (kelas !== '' && mapel !== '') {
-            $('#table-result').html(htmlResult);
+            // $('#table-result').html(htmlResult);
+            $.ajax({
+                type: 'POST',
+                url: '<?= base_url('admin/nilai/data_nilai_permapel') ?>',
+                data: {
+                    id_kelas: idKelas,
+                    id_mapel: idMapel
+                },
+                success: function(response) {
+                    $('#table-result').html(response);
+                },
+                error: function(response) {
+                    $('#table-result').html(response);
+                }
+            });
         }
     }
-
-    // $(document).ready(function() {
-    //     $(document).on('click', '#detail-nilai', function() {
-
-    //     });
-    // });
-
-    // function detailNilai() {
-    //     const idKelas = $(this).data('idkelas');
-    //     const idMapel = $(this).data('idmapel');
-    //     console.log(idKelas + idMapel);
-    // }
 </script>

@@ -94,9 +94,81 @@ class Nilai extends CI_Controller
         $this->load->view('templates_admin/sidebar', $data);
         $this->load->view('admin/nilai_perkd', $data);
         $this->load->view('templates/footer');
-        // $data = $this->Nilai_model->get_nilai_perkd($id_kelas, $id_mapel, 114, null);
-        // var_dump($data);
-        // die();
+    }
+
+    public function data_nilai_permapel()
+    {
+        $id_kelas       = $this->input->post('id_kelas', TRUE);
+        $id_mapel       = $this->input->post('id_mapel', TRUE);
+        $kelas          = $this->Kelas_model->get_detail_data($id_kelas);
+        $mapel          = $this->Mapel_model->get_detail_data($id_mapel);
+        $data_default   = $this->Nilai_model->get_nilai_permapel($id_mapel, $id_kelas, 'default');
+        $data_min       = $this->Nilai_model->get_nilai_permapel($id_mapel, $id_kelas, 'min');
+        $data_max       = $this->Nilai_model->get_nilai_permapel($id_mapel, $id_kelas, 'max');
+        $data_jumlah    = $this->Nilai_model->get_nilai_permapel($id_mapel, $id_kelas, 'jumlah');
+        $data_rerata    = $this->Nilai_model->get_nilai_permapel($id_mapel, $id_kelas, 'rerata');
+        $daftar_kd      = $this->Nilai_model->get_kd_permapel_result($id_mapel);
+        $html           = '';
+
+        if ($id_mapel == null || $id_kelas == null) {
+            //id not found
+            $html = $html . '<div class="card">
+                                <div class="card-body">
+                                    <h6 class="text-center">Data Nilai Tidak Dapat Ditampilkan, Silahkan Cek Selengkapnya</h6>
+                                </div>
+                            </div>';
+        } else if ($data_default != null) {
+            //awal table
+            $html = $html . '<div class="card">
+                    <div class="card-header bg-behance">
+                        <h6 class="text-white"> ' . $mapel['nama_mapel'] . ' / Kelas ' . $kelas['kelas'] . '</h6>
+                    </div>
+                    <div class="card-body">
+                        <a href="' . base_url('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel) . '" class="btn btn-primary mb-3">Cek Selengkapnya</i></a>
+                        <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>';
+
+            //heading table
+            foreach ($daftar_kd as $key => $value) {
+                $html = $html . '<th>' . $value->nama_kd . '</th>';
+            }
+
+            //jumlah dan rata-rata
+            $html = $html . '<th>Jumlah</th><th>Rata-rata</th></tr></thead><tbody>';
+
+            //body table default
+            foreach ($data_default as $dt => $value_dt) {
+                $html = $html . '<tr>
+                    <td width="20px">' . ++$dt . '</td>
+                    <td>' . $value_dt['nama'] . '</td>';
+                foreach ($daftar_kd as $kd => $value_kd) {
+                    $html = $html . '<td>' . $value_dt[$value_kd->nama_kd] . '</td>';
+                }
+
+                $html = $html . "<td>{$value_dt['jumlah']}</td><td>{$value_dt['rerata']}</td></tr>";
+            }
+
+            //akhir table
+            $html = $html . '<tr><td></td></tr></tbody></table></div></div>';
+        } else {
+            $html = $html . '
+                <div class="card">
+                    <div class="card-header bg-behance">
+                        <h6 class="text-white"> ' . $mapel['nama_mapel'] . ' / Kelas ' . $kelas['kelas'] . '</h6>
+                    </div>
+                    <div class="card-body">
+                        <a href="' . base_url('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel) . '" class="btn btn-primary mb-3">Cek Selengkapnya</i></a>
+                        <h6 class="text-center">Data nilai belum lengkap, silahkan cek selengkapnya</h6>
+                    </div>
+                </div>
+            
+            ';
+        }
+
+        echo ($html);
     }
 
     public function data_nilai_perkd()
@@ -106,19 +178,21 @@ class Nilai extends CI_Controller
         $id_kd      = $this->input->post('id_kd', TRUE);
         $data       = $this->Nilai_model->get_nilai_perkd($id_kelas, $id_mapel, $id_kd);
         $jenis      = $this->Nilai_model->get_jenis_nilai_in_perkd($id_kelas, $id_mapel, $id_kd);
+        $kd         = $this->Mapel_model->get_kd_detail($id_kd);
         $html       = '';
         if ($data != null || $jenis != null) {
             //awal table
             $html = $html . '<div class="card">
                     <div class="card-body">
                         ' . anchor('admin/nilai/input?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel . '&id_kd=' . $id_kd, '<button class="btn btn-sm btn-primary mb-3 mr-2"><i class="fas fa-plus fa-sm"></i> Tambah Nilai</button>') . '
+                        <h5>' . $kd['nama_kd'] . '</h5>
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table">
                             <thead>
                                 <tr>
                                     <th rowspan="2" >No</th>
                                     <th rowspan="2" >Nama</th>';
 
-            //heading table
+            //heading button table
             foreach ($jenis as $jn => $value) {
                 $html = $html . '<th class="text-center">' .
                     anchor('admin/nilai/edit?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel . '&id_kd=' . $id_kd . '&jenis=' . $value->jenis, '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-edit fa-sm"></i></div>') .
@@ -146,7 +220,7 @@ class Nilai extends CI_Controller
                     $html = $html . '<td>' . $value_dt[$value_jn->jenis] . '</td>';
                 }
 
-                $html = $html . '<td></td><td></td></tr>';
+                $html = $html . "<td>{$value_dt['jumlah']}</td><td>{$value_dt['rerata']}</td></tr>";
             }
 
             //akhir table
@@ -163,6 +237,7 @@ class Nilai extends CI_Controller
             $html = $html . '<div class="card">
                                 <div class="card-body">
                                     ' . anchor('admin/nilai/input?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel . '&id_kd=' . $id_kd, '<button class="btn btn-sm btn-primary mb-3 mr-2"><i class="fas fa-plus fa-sm"></i> Tambah Nilai</button>') . '
+                                    <h5>' . $kd['nama_kd'] . '</h5>
                                     <h4 class="text-center">Data Nilai Belum Tersedia</h4>
                                 </div>
                             </div>';
