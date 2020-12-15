@@ -121,7 +121,7 @@ class Nilai extends CI_Controller
             //heading table
             foreach ($jenis as $jn => $value) {
                 $html = $html . '<th class="text-center">' .
-                    anchor('admin/guru/edit/', '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-edit fa-sm"></i></div>') .
+                    anchor('admin/nilai/edit?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel . '&id_kd=' . $id_kd . '&jenis=' . $value->jenis, '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-edit fa-sm"></i></div>') .
                     '<a href="' . base_url('admin/nilai/delete?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel . '&id_kd=' . $id_kd . '&jenis=' . $value->jenis) . '" class="btn btn-sm btn-danger mr-1 ml-1 mb-1" onclick="return deleteNilai(event)"><i class="fa fa-trash fa-sm"></i></a>' .
                     '</th>';
             }
@@ -170,6 +170,7 @@ class Nilai extends CI_Controller
         echo ($html);
     }
 
+    // input nilai
     public function input()
     {
         $id_kelas   = $this->input->get('id_kelas', TRUE);
@@ -219,6 +220,58 @@ class Nilai extends CI_Controller
         } else {
             $this->Nilai_model->input_nilai($data['siswa'], $id_kd);
             $this->session->set_flashdata('message', 'Nilai Siswa Berhasil Ditambahkan!');
+            redirect('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel);
+        }
+    }
+
+    //edit nilai
+    public function edit()
+    {
+        $id_kelas   = $this->input->get('id_kelas', TRUE);
+        $id_mapel   = $this->input->get('id_mapel', TRUE);
+        $id_kd      = $this->input->get('id_kd', TRUE);
+        $jenis      = $this->input->get('jenis', TRUE);
+
+        if (!isset($id_kelas) || !isset($id_mapel) || !isset($id_kd) || !isset($jenis)) {
+            redirect('error_404');
+        }
+
+        $data['kelas']          = $this->Kelas_model->get_detail_data($id_kelas);
+        $data['mapel']          = $this->Mapel_model->get_detail_data($id_mapel);
+        $data['pengajar']       = $this->Pengajar_model->get_detail_data_with_kelas_and_mapel($id_kelas, $id_mapel);
+        $data['komp_dasar']     = $this->Mapel_model->get_kd_detail($id_kd);
+        $data['nilai']          = $this->Nilai_model->detail_nilai_perkd($id_kelas, $id_mapel, $id_kd, $jenis);
+        $data['jenis_nilai']    = $jenis;
+        $data['menu']           = 'nilai';
+        $data['breadcrumb']     = [
+            0 => (object)[
+                'name' => 'Dashboard',
+                'link' => 'admin/dashboard'
+            ],
+            1 => (object)[
+                'name' => 'Nilai',
+                'link' => 'admin/nilai'
+            ],
+            2 => (object)[
+                'name' => 'Detail',
+                'link' => 'admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel
+            ],
+            3 => (object)[
+                'name' => 'Input Nilai',
+                'link' => NULL
+            ]
+        ];
+
+        $this->_rules_persiswa($data['nilai']);
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('templates/header');
+            $this->load->view('templates_admin/sidebar', $data);
+            $this->load->view('admin/nilai_edit', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $this->Nilai_model->update_nilai($data['nilai'], $id_kd, $jenis);
+            $this->session->set_flashdata('message', 'Nilai Siswa Berhasil Diupdate!');
             redirect('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel);
         }
     }

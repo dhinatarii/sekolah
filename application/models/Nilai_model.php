@@ -90,6 +90,19 @@ class Nilai_model extends CI_Model
         }
     }
 
+    public function update_nilai($data_murid, $id_kd, $jenis)
+    {
+        foreach ($data_murid as $key => $value) {
+            $data = array(
+                'nilai'         => $this->input->post('nilai' . $key, TRUE),
+            );
+            $this->db->where('id_siswa', $value->id_siswa);
+            $this->db->where('id_kd', $id_kd);
+            $this->db->where('jenis', $jenis);
+            $this->db->update('tb_nilai', $data);
+        }
+    }
+
     public function delete_nilai($id_kelas, $id_kd, $jenis)
     {
         $this->db->query("delete tn from tb_nilai tn 
@@ -97,5 +110,26 @@ class Nilai_model extends CI_Model
             where tn.id_kd = $id_kd
             and ts.id_kelas = $id_kelas
             and tn.jenis = '$jenis'");
+    }
+
+    public function detail_nilai_perkd($id_kelas, $id_mapel, $id_kd, $jenis)
+    {
+        $query = $this->db->query("select ts.id_siswa, ts.nis, ts.nama, tn.nilai, tn.jenis 
+            from tb_nilai tn  
+                left join tb_kd tk 
+                    on tn.id_kd = tk.id_kd 
+                left join tb_matapelajaran tm 
+                    on tk.id_mapel = tm.id_mapel
+                left join tb_siswa ts 
+                    on tn.id_siswa = ts.id_siswa
+                left join tb_kelas tk2 
+                    on ts.id_kelas = tk2.id_kelas 
+            where 
+                tm.id_mapel = $id_mapel
+                and tk.id_kd = $id_kd
+                and tk2.id_kelas = $id_kelas
+                and tn.jenis = '$jenis'");
+
+        return $query->result();
     }
 }
