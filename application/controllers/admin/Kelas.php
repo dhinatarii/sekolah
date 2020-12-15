@@ -21,17 +21,23 @@ class Kelas extends CI_Controller
 
     public function index()
     {
-        $data['menu'] = 'kelas';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Kelas',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'level'     => $data['level'],
+            'menu'      => 'kelas',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Kelas',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -67,22 +73,28 @@ class Kelas extends CI_Controller
 
     public function input()
     {
-        $data['guru'] = $this->Guru_model->get_data_only_name();
-        $data['menu'] = 'kelas';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Kelas',
-                'link' => 'admin/kelas'
-            ],
-            2 => (object)[
-                'name' => 'Input',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'level'     => $data['level'],
+            'guru'      => $this->Guru_model->get_data_only_name(),
+            'menu'      => 'kelas',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Kelas',
+                    'link' => 'admin/kelas'
+                ],
+                2 => (object)[
+                    'name' => 'Input',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->_rules();
 
@@ -105,23 +117,29 @@ class Kelas extends CI_Controller
             redirect('admin/kelas');
         }
 
-        $data['kelas'] = $this->Kelas_model->get_detail_data($id);
-        $data['guru'] = $this->Guru_model->get_data_only_name();
-        $data['menu'] = 'kelas';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Kelas',
-                'link' => 'admin/kelas'
-            ],
-            2 => (object)[
-                'name' => 'Edit',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'level'     => $data['level'],
+            'guru'      => $this->Guru_model->get_data_only_name(),
+            'kelas'     => $this->Kelas_model->get_detail_data($id),
+            'menu'      => 'kelas',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Kelas',
+                    'link' => 'admin/kelas'
+                ],
+                2 => (object)[
+                    'name' => 'Edit',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->_rules();
 

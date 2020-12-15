@@ -23,17 +23,23 @@ class Guru extends CI_Controller
 
     public function index()
     {
-        $data['menu'] = 'guru';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Guru',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'level'     => $data['level'],
+            'menu'      => 'guru',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Guru',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -74,21 +80,27 @@ class Guru extends CI_Controller
 
     public function input()
     {
-        $data['menu'] = 'guru';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Guru',
-                'link' => 'admin/guru'
-            ],
-            2 => (object)[
-                'name' => 'Input',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'level'     => $data['level'],
+            'menu'      => 'guru',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Guru',
+                    'link' => 'admin/guru'
+                ],
+                2 => (object)[
+                    'name' => 'Input',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->_rules();
 
@@ -111,24 +123,29 @@ class Guru extends CI_Controller
             redirect('admin/guru');
         }
 
-        $data['guru'] = $this->Guru_model->get_detail_data($id);
-        $data['menu'] = 'guru';
-        $data['jenis_kelamin'] = ['Laki-laki', 'Perempuan'];
-
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Guru',
-                'link' => 'admin/guru'
-            ],
-            2 => (object)[
-                'name' => 'Edit',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'level'         => $data['level'],
+            'guru'          => $this->Guru_model->get_detail_data($id),
+            'jenis_kelamin' => ['Laki-laki', 'Perempuan'],
+            'menu'          => 'guru',
+            'breadcrumb'    => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Guru',
+                    'link' => 'admin/guru'
+                ],
+                2 => (object)[
+                    'name' => 'Edit',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->_rules();
 

@@ -2,7 +2,7 @@
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-users"></i> Data user <?= $level ?></h1>
+        <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-users"></i> Data user <?= $levels ?></h1>
     </div>
     <?php if ($this->session->flashdata('message')) : ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -12,7 +12,7 @@
             </button>
         </div>
     <?php endif; ?>
-    <?php if ($level == 'admin') echo anchor('admin/user/input', '<button class="btn btn-sm btn-primary mb-3"><i class="fas fa-plus fa-sm"></i> Tambah Data</button>') ?>
+    <?php if ($levels == 'admin') echo anchor('admin/user/input', '<button class="btn btn-sm btn-primary mb-3"><i class="fas fa-plus fa-sm"></i> Tambah Data</button>') ?>
 
     <div class="card">
         <div class="card-body">
@@ -25,7 +25,7 @@
                         <th>Level</th>
                         <th width="120px" class="text-center">Status</th>
                         <th width="160px">Aksi</th>
-                        <!-- <?= ($level == 'admin') ? '<th class="text-center" colspan="3">Aksi</th>' : '<th class="text-center" colspan="2">Aksi</th>'; ?> -->
+                        <!-- <?= ($levels == 'admin') ? '<th class="text-center" colspan="3">Aksi</th>' : '<th class="text-center" colspan="2">Aksi</th>'; ?> -->
                     </tr>
                 </thead>
 
@@ -40,7 +40,7 @@
 <script>
     //onclick hapus data user
     function confirmDelete(id) {
-        const href = '<?= site_url('admin/user/delete/' . $level . '/') ?>' + id;
+        const href = '<?= site_url('admin/user/delete/' . $levels . '/') ?>' + id;
         console.log(href);
 
         Swal.fire({

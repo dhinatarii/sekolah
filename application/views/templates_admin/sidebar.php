@@ -74,15 +74,19 @@
             <ul class="c-header-nav ml-auto mr-4">
                 <li class="c-header-nav-item d-md-down-none mx-2">
                     <svg class="c-icon">
-                    </svg>Hello, Admin</li>
+                    </svg>Hello, <?= $nama ?></li>
                 <li class="c-header-nav-item dropdown"><a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                         <div class="c-avatar"><img class="c-avatar-img" src="<?= base_url() ?>assets/img/avatars/undraw_profile.svg" alt="user@email.com"></div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right pt-0">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="<?= base_url('admin/profile?id_user=' . $id_user) ?>">
                             <svg class="c-icon mr-2">
                                 <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-user"></use>
                             </svg> Profile</a>
+                        <a class="dropdown-item" href="<?= base_url('admin/profile/password?id_user=' . $id_user) ?>">
+                            <svg class="c-icon mr-2">
+                                <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
+                            </svg> Ganti Password</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                             <svg class="c-icon mr-2">
                                 <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-account-logout"></use>

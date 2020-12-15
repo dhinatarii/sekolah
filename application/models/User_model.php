@@ -34,15 +34,6 @@ class User_model extends CI_Model
 
     public function input_data()
     {
-        // $data = array(
-        //     'username'  => $this->input->post('username', TRUE),
-        //     'password'  => MD5($this->input->post('password', TRUE)),
-        //     'level'     => 'admin',
-        //     'status'    => $this->input->post('status', TRUE)
-        // );
-
-        // $this->db->insert('tb_user', $data);
-
         $id_user = $this->_input_admin();
         $data = array(
             'nip'           => $this->input->post('nip', TRUE),

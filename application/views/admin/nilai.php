@@ -29,7 +29,7 @@
                         </select>
                         <?php echo form_error('mapel', '<div class="text-danger small ml-3">', '</div>') ?>
                     </div>
-                    <button onclick="searchNilai()" class="btn btn-primary">Cari</button>
+                    <button onclick="searchNilai()" class="btn btn-primary"><i class="fas fa-search"></i> Cari</button>
                 </div>
             </div>
         </div>
@@ -59,19 +59,8 @@
     function searchNilai() {
         const idKelas = $('#kelas').val()
         const idMapel = $('#mapel').val()
-        // const href = '<?= base_url('admin/nilai/kd?id_kelas=') ?>' + kelas + '&id_mapel=' + mapel;
-        // const htmlResult = `
-        //     <div class="card">
-        //         <div class="card-header bg-behance">
-        //             <h6 class="text-white"> Matemtaik / Kelas 1A</h6>
-        //         </div>
-        //         <div class="card-body">
-        //             <a href="${href}" class="btn btn-primary mb-3">Cek Selengkapnya</i></a>
-        //             <h4 class="text-center">Data Nilai Belum Tersedia</h4>
-        //         </div>
-        //     </div>`
+
         if (kelas !== '' && mapel !== '') {
-            // $('#table-result').html(htmlResult);
             $.ajax({
                 type: 'POST',
                 url: '<?= base_url('admin/nilai/data_nilai_permapel') ?>',

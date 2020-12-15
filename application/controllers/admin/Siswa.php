@@ -19,6 +19,32 @@ class Siswa extends CI_Controller
         }
     }
 
+    public function index()
+    {
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'level'     => $data['level'],
+            'menu'      => 'siswa',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Siswa',
+                    'link' => NULL
+                ]
+            ]
+        );
+
+        $this->load->view('templates/header');
+        $this->load->view('templates_admin/sidebar', $data);
+        $this->load->view('admin/siswa', $data);
+        $this->load->view('templates/footer');
+    }
+
     function get_result_siswa()
     {
         $list = $this->Siswa_model->get_datatables();
@@ -51,26 +77,6 @@ class Siswa extends CI_Controller
         echo json_encode($output);
     }
 
-    public function index()
-    {
-        $data['menu'] = 'siswa';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Siswa',
-                'link' => NULL
-            ]
-        ];
-
-        $this->load->view('templates/header');
-        $this->load->view('templates_admin/sidebar', $data);
-        $this->load->view('admin/siswa', $data);
-        $this->load->view('templates/footer');
-    }
-
     public function edit()
     {
         $id           = $this->uri->segment(4);
@@ -78,24 +84,30 @@ class Siswa extends CI_Controller
             redirect('admin/siswa');
         }
 
-        $data['siswa'] = $this->Siswa_model->get_detail_data($id);
-        $data['kelas'] = $this->Kelas_model->get_data();
-        $data['menu'] = 'siswa';
-        $data['jenis_kelamin'] = ['Laki-laki', 'Perempuan'];
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Siswa',
-                'link' => 'admin/siswa'
-            ],
-            2 => (object)[
-                'name' => 'Edit',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'level'         => $data['level'],
+            'siswa'         => $this->Siswa_model->get_detail_data($id),
+            'kelas'         => $this->Kelas_model->get_data(),
+            'jenis_kelamin' => ['Laki-laki', 'Perempuan'],
+            'menu'          => 'siswa',
+            'breadcrumb'    => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Siswa',
+                    'link' => 'admin/siswa'
+                ],
+                2 => (object)[
+                    'name' => 'Edit',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->_rules();
 
@@ -114,22 +126,28 @@ class Siswa extends CI_Controller
 
     public function input()
     {
-        $data['menu'] = 'siswa';
-        $data['kelas'] = $this->Kelas_model->get_data();
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Siswa',
-                'link' => 'admin/siswa'
-            ],
-            2 => (object)[
-                'name' => 'Input',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'level'         => $data['level'],
+            'kelas'         => $this->Kelas_model->get_data(),
+            'menu'          => 'siswa',
+            'breadcrumb'    => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Siswa',
+                    'link' => 'admin/siswa'
+                ],
+                2 => (object)[
+                    'name' => 'Input',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->_rules();
 
@@ -179,5 +197,4 @@ class Siswa extends CI_Controller
         $this->form_validation->set_rules('kecamatan', 'Kecamatan', 'required|max_length[50]');
         $this->form_validation->set_rules('kabupaten', 'Kabupaten', 'required|max_length[50]');
     }
-
 }

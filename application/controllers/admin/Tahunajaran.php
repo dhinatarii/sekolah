@@ -21,17 +21,23 @@ class Tahunajaran extends CI_Controller
 
     public function index()
     {
-        $data['menu'] = 'tahun ajaran';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Tahun Ajaran',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'level'     => $data['level'],
+            'menu'      => 'tahun ajaran',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Tahun Ajaran',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -67,21 +73,27 @@ class Tahunajaran extends CI_Controller
 
     public function input()
     {
-        $data['menu'] = 'tahun ajaran';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Tahun Ajaran',
-                'link' => 'admin/tahunajaran'
-            ],
-            2 => (object)[
-                'name' => 'Input',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'level'     => $data['level'],
+            'menu'      => 'tahun ajaran',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Tahun Ajaran',
+                    'link' => 'admin/tahunajaran'
+                ],
+                2 => (object)[
+                    'name' => 'Input',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->_rules();
 
@@ -104,23 +116,29 @@ class Tahunajaran extends CI_Controller
             redirect('admin/tahunajaran');
         }
 
-        $data['tahun'] = $this->Tahun_model->get_detail_data($id);
-        $data['status'] = ['0', '1'];
-        $data['menu'] = 'tahun ajaran';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Tahun Ajaran',
-                'link' => 'admin/tahunajaran'
-            ],
-            2 => (object)[
-                'name' => 'Edit',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'level'     => $data['level'],
+            'tahun'     => $this->Tahun_model->get_detail_data($id),
+            'status'    => ['0', '1'],
+            'menu'      => 'tahun ajaran',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Tahun Ajaran',
+                    'link' => 'admin/tahunajaran'
+                ],
+                2 => (object)[
+                    'name' => 'Edit',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->_rules();
 

@@ -22,21 +22,27 @@ class User extends CI_Controller
 
     public function index()
     {
-        $data['menu']           = 'user';
-        $data['count_admin']    = $this->User_model->count_user('admin');
-        $data['count_guru']     = $this->User_model->count_user('guru');
-        $data['count_wali']     = $this->User_model->count_user('wali kelas');
-        $data['count_siswa']    = $this->User_model->count_user('siswa');
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Users',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'level'         => $data['level'],
+            'count_admin'   => $this->User_model->count_user('admin'),
+            'count_guru'    => $this->User_model->count_user('guru'),
+            'count_wali'    => $this->User_model->count_user('wali kelas'),
+            'count_siswa'   => $this->User_model->count_user('siswa'),
+            'menu'          => 'user',
+            'breadcrumb'    => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Users',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -50,12 +56,19 @@ class User extends CI_Controller
 
         if ($id < '1' || $id > '4') {
             redirect('admin/user');
-        } else {
-            $data['id']     = $id;
-            $data['level']  = $id == 1 ? 'admin' : ($id == 2 ? 'guru' : ($id == 3 ? 'wali kelas' : ($id == 4 ? 'siswa' : null)));
-            $data['menu']   = 'user';
-            $data['users']  = $this->User_model->get_user($data['level']);
-            $data['breadcrumb'] = [
+        }
+
+        $level = $id == 1 ? 'admin' : ($id == 2 ? 'guru' : ($id == 3 ? 'wali kelas' : ($id == 4 ? 'siswa' : null)));
+        $data  = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data  = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'level'         => $data['level'],
+            'id'            => $id,
+            'levels'        => $level,
+            'user'          => $this->User_model->get_user($data['level']),
+            'menu'          => 'user',
+            'breadcrumb'    => [
                 0 => (object)[
                     'name' => 'Dashboard',
                     'link' => 'admin/dashboard'
@@ -65,16 +78,16 @@ class User extends CI_Controller
                     'link' => 'admin/user'
                 ],
                 2 => (object)[
-                    'name' => $data['level'],
+                    'name' => $level,
                     'link' => NULL
                 ]
-            ];
+            ]
+        );
 
-            $this->load->view('templates/header');
-            $this->load->view('templates_admin/sidebar', $data);
-            $this->load->view('admin/user_detail', $data);
-            $this->load->view('templates/footer');
-        }
+        $this->load->view('templates/header');
+        $this->load->view('templates_admin/sidebar', $data);
+        $this->load->view('admin/user_detail', $data);
+        $this->load->view('templates/footer');
     }
 
     function get_result_user($id)
@@ -115,25 +128,31 @@ class User extends CI_Controller
 
     public function input()
     {
-        $data['menu']   = 'user';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Users',
-                'link' => 'admin/user'
-            ],
-            2 => (object)[
-                'name' => 'admin',
-                'link' => 'admin/user/detail/1'
-            ],
-            3 => (object)[
-                'name' => 'input',
-                'link' => NULL
-            ],
-        ];
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'level'         => $data['level'],
+            'menu'          => 'user',
+            'breadcrumb'    => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Users',
+                    'link' => 'admin/user'
+                ],
+                2 => (object)[
+                    'name' => 'admin',
+                    'link' => 'admin/user/detail/1'
+                ],
+                3 => (object)[
+                    'name' => 'input',
+                    'link' => NULL
+                ],
+            ]
+        );
 
         $this->_rules();
 
@@ -157,34 +176,41 @@ class User extends CI_Controller
 
     public function edit()
     {
-        $data['id']     = $this->input->get('id', TRUE);
-        $data['level']  = $this->input->get('level', TRUE);
-        $data['user']   = $this->User_model->get_detail_user($data['id'], $data['level']);
-        $data['admin']  = $this->User_model->get_detail_admin($data['id'], $data['level']);
-        $data['status'] = ['0', '1'];
-        $data['jenis_kelamin'] = ['Laki-laki', 'Perempuan'];
-        $detail         = $data['level'] == 'admin' ? '1' : ($data['level'] == 'guru' ? '2' : ($data['level'] == 'wali kelas' ? '3' : ($data['level'] == 'siswa' ? '4' : NULL)));
-        $data['menu']   = 'user';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Users',
-                'link' => 'admin/user'
-            ],
-            2 => (object)[
-                'name' => $data['level'],
-                'link' => 'admin/user/detail/' . $detail
-            ],
-            3 => (object)[
-                'name' => 'edit',
-                'link' => NULL
-            ],
-        ];
+        $id     = $this->input->get('id', TRUE);
+        $level  = $this->input->get('level', TRUE);
+        $detail = $level == 'admin' ? '1' : ($level == 'guru' ? '2' : ($level == 'wali kelas' ? '3' : ($level == 'siswa' ? '4' : NULL)));
+        $data   = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data   = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'level'         => $data['level'],
+            'levels'        => $level,
+            'user'          => $this->User_model->get_detail_user($id, $level),
+            'admin'         => $this->User_model->get_detail_admin($id, $level),
+            'status'        => ['0', '1'],
+            'jenis_kelamin' => ['Laki-laki', 'Perempuan'],
+            'menu'          => 'user',
+            'breadcrumb'    => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Users',
+                    'link' => 'admin/user'
+                ],
+                2 => (object)[
+                    'name' => $level,
+                    'link' => 'admin/user/detail/' . $detail
+                ],
+                3 => (object)[
+                    'name' => 'edit',
+                    'link' => NULL
+                ],
+            ]
+        );
 
-        if ($data['level'] == 'admin') {
+        if ($level == 'admin') {
             $this->_rules_data();
 
             if ($this->form_validation->run() == FALSE) {
@@ -193,7 +219,7 @@ class User extends CI_Controller
                 $this->load->view('admin/user_admin', $data);
                 $this->load->view('templates/footer');
             } else {
-                $this->User_model->edit_admin($data['id']);
+                $this->User_model->edit_admin($id);
                 $this->session->set_flashdata('message', 'Data Berhasil Diupdate!');
                 redirect('admin/user/detail/' . $detail);
             }
@@ -206,7 +232,7 @@ class User extends CI_Controller
                 $this->load->view('admin/user_edit', $data);
                 $this->load->view('templates/footer');
             } else {
-                $this->User_model->edit_data($data['id']);
+                $this->User_model->edit_data($id);
                 $this->session->set_flashdata('message', 'Data Berhasil Diupdate!');
                 redirect('admin/user/detail/' . $detail);
             }
@@ -215,29 +241,34 @@ class User extends CI_Controller
 
     public function change_password()
     {
-        $data['menu']   = 'user';
-        $data['id']     = $this->input->get('id', TRUE);
-        $data['level']  = $this->input->get('level', TRUE);
-        $detail         = $data['level'] == 'admin' ? '1' : ($data['level'] == 'guru' ? '2' : ($data['level'] == 'wali kelas' ? '3' : ($data['level'] == 'siswa' ? '4' : NULL)));
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Users',
-                'link' => 'admin/user'
-            ],
-            2 => (object)[
-                'name' => $data['level'],
-                'link' => 'admin/user/detail/' . $detail
-            ],
-            3 => (object)[
-                'name' => 'password',
-                'link' => NULL
-            ],
-        ];
-
+        $id     = $this->input->get('id', TRUE);
+        $level  = $this->input->get('level', TRUE);
+        $detail = $level == 'admin' ? '1' : ($level == 'guru' ? '2' : ($level == 'wali kelas' ? '3' : ($level == 'siswa' ? '4' : NULL)));
+        $data   = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data   = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'level'         => $data['level'],
+            'menu'          => 'user',
+            'breadcrumb'    => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Users',
+                    'link' => 'admin/user'
+                ],
+                2 => (object)[
+                    'name' => $level,
+                    'link' => 'admin/user/detail/' . $detail
+                ],
+                3 => (object)[
+                    'name' => 'password',
+                    'link' => NULL
+                ],
+            ]
+        );
 
         $this->_rules_password();
 
@@ -247,7 +278,7 @@ class User extends CI_Controller
             $this->load->view('admin/user_password', $data);
             $this->load->view('templates/footer');
         } else {
-            $this->User_model->edit_password($data['id']);
+            $this->User_model->edit_password($id);
             $this->session->set_flashdata('message', 'Password Berhasil Diupdate!');
             redirect('admin/user/detail/' . $detail);
         }
