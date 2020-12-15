@@ -96,8 +96,8 @@ class Nilai_model extends CI_Model
     {
         $kelas          = $id_kelas != null ? $id_kelas : 'null';
         $mapel          = $id_mapel != null ? $id_mapel : 'null';
-        $kd             = $this->get_kd_permapel_result($mapel);
-        $kd_row         = $this->get_kd_permapel_numrow($mapel);
+        $kd             = $this->get_kd_permapel_result($mapel, $kelas);
+        $kd_row         = $this->get_kd_permapel_numrow($mapel, $kelas);
         $query_select   = "";
         $inner_join     = "";
 
@@ -180,24 +180,31 @@ class Nilai_model extends CI_Model
         }
     }
 
-    public function get_kd_permapel_numrow($id_mapel = null)
+    public function get_kd_permapel_numrow($id_mapel = null, $id_kelas = null)
     {
-        return $this->_get_kd_permapel($id_mapel)->num_rows();
+        return $this->_get_kd_permapel($id_mapel, $id_kelas)->num_rows();
     }
 
-    public function get_kd_permapel_result($id_mapel = null)
+    public function get_kd_permapel_result($id_mapel = null, $id_kelas = null)
     {
-        return $this->_get_kd_permapel($id_mapel)->result();
+        return $this->_get_kd_permapel($id_mapel, $id_kelas)->result();
     }
 
-    public function get_kd_permapel_array($id_mapel = null)
+    public function get_kd_permapel_array($id_mapel = null, $id_kelas = null)
     {
-        return $this->_get_kd_permapel($id_mapel)->result_array();;
+        return $this->_get_kd_permapel($id_mapel, $id_kelas)->result_array();;
     }
 
-    private function _get_kd_permapel($id_mapel = null)
+    private function _get_kd_permapel($id_mapel = null, $id_kelas = null)
     {
-        return $this->db->get_where('tb_kd', ['id_mapel' => $id_mapel]);
+        $this->db->select('tk.*');
+        $this->db->from('tb_kd tk');
+        $this->db->join('tb_nilai tn', 'tk.id_kd = tn.id_kd', 'inner');
+        $this->db->join('tb_siswa ts', 'tn.id_siswa = ts.id_siswa', 'inner');
+        $this->db->where('tk.id_mapel', $id_mapel);
+        $this->db->where('ts.id_kelas', $id_kelas);
+        $this->db->group_by('tk.id_kd');
+        return $this->db->get();
     }
 
     public function input_nilai($data_murid, $id_kd)

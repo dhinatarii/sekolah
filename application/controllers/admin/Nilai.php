@@ -107,7 +107,7 @@ class Nilai extends CI_Controller
         $data_max       = $this->Nilai_model->get_nilai_permapel($id_mapel, $id_kelas, 'max');
         $data_jumlah    = $this->Nilai_model->get_nilai_permapel($id_mapel, $id_kelas, 'jumlah');
         $data_rerata    = $this->Nilai_model->get_nilai_permapel($id_mapel, $id_kelas, 'rerata');
-        $daftar_kd      = $this->Nilai_model->get_kd_permapel_result($id_mapel);
+        $daftar_kd      = $this->Nilai_model->get_kd_permapel_result($id_mapel, $id_kelas);
         $html           = '';
 
         if ($id_mapel == null || $id_kelas == null) {
@@ -151,8 +151,65 @@ class Nilai extends CI_Controller
                 $html = $html . "<td>{$value_dt['jumlah']}</td><td>{$value_dt['rerata']}</td></tr>";
             }
 
+            //body table min
+            foreach ($data_min as $dt => $value_dt) {
+                $html = $html . '<tr>
+                    <td width="20px"></td>
+                    <td></td>';
+                foreach ($daftar_kd as $kd => $value_kd) {
+                    $html = $html . '<td></td>';
+                }
+
+                $html = $html . "<td></td><td></td></tr>";
+
+                $html = $html . '<tr>
+                    <td width="20px"></td>
+                    <td>MIN</td>';
+                foreach ($daftar_kd as $kd => $value_kd) {
+                    $html = $html . '<td>' . $value_dt[$value_kd->nama_kd] . '</td>';
+                }
+
+                $html = $html . "<td>{$value_dt['jumlah']}</td><td>{$value_dt['rerata']}</td></tr>";
+            }
+
+            //body table max
+            foreach ($data_max as $dt => $value_dt) {
+                $html = $html . '<tr>
+                    <td width="20px"></td>
+                    <td>MAX</td>';
+                foreach ($daftar_kd as $kd => $value_kd) {
+                    $html = $html . '<td>' . $value_dt[$value_kd->nama_kd] . '</td>';
+                }
+
+                $html = $html . "<td>{$value_dt['jumlah']}</td><td>{$value_dt['rerata']}</td></tr>";
+            }
+
+            //body table jumlah
+            foreach ($data_jumlah as $dt => $value_dt) {
+                $html = $html . '<tr>
+                    <td width="20px"></td>
+                    <td>JUMLAH</td>';
+                foreach ($daftar_kd as $kd => $value_kd) {
+                    $html = $html . '<td>' . $value_dt[$value_kd->nama_kd] . '</td>';
+                }
+
+                $html = $html . "<td>{$value_dt['jumlah']}</td><td>{$value_dt['rerata']}</td></tr>";
+            }
+
+            //body table rerata
+            foreach ($data_rerata as $dt => $value_dt) {
+                $html = $html . '<tr>
+                    <td width="20px"></td>
+                    <td>RATA-RATA</td>';
+                foreach ($daftar_kd as $kd => $value_kd) {
+                    $html = $html . '<td>' . $value_dt[$value_kd->nama_kd] . '</td>';
+                }
+
+                $html = $html . "<td>{$value_dt['jumlah']}</td><td>{$value_dt['rerata']}</td></tr>";
+            }
+
             //akhir table
-            $html = $html . '<tr><td></td></tr></tbody></table></div></div>';
+            $html = $html . '</tbody></table></div></div>';
         } else {
             $html = $html . '
                 <div class="card">
