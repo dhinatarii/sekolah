@@ -89,4 +89,13 @@ class Nilai_model extends CI_Model
             $this->db->insert('tb_nilai', $data);
         }
     }
+
+    public function delete_nilai($id_kelas, $id_kd, $jenis)
+    {
+        $this->db->query("delete tn from tb_nilai tn 
+            inner join tb_siswa ts on tn.id_siswa = ts.id_siswa
+            where tn.id_kd = $id_kd
+            and ts.id_kelas = $id_kelas
+            and tn.jenis = '$jenis'");
+    }
 }

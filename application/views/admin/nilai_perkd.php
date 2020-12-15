@@ -55,4 +55,26 @@
             });
         })
     });
+
+    function deleteNilai(e) {
+        const href = e.target.href;
+        e.preventDefault();
+        if (href !== undefined) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "data nilai akan dihapus",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Hapus Data',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.location.href = href;
+                }
+            });
+        }
+
+    }
 </script>

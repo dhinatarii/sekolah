@@ -111,7 +111,7 @@ class Nilai extends CI_Controller
             //awal table
             $html = $html . '<div class="card">
                     <div class="card-body">
-                        ' . anchor('admin/nilai/nilai_input?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel . '&id_kd=' . $id_kd, '<button class="btn btn-sm btn-primary mb-3 mr-2"><i class="fas fa-plus fa-sm"></i> Tambah Nilai</button>') . '
+                        ' . anchor('admin/nilai/input?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel . '&id_kd=' . $id_kd, '<button class="btn btn-sm btn-primary mb-3 mr-2"><i class="fas fa-plus fa-sm"></i> Tambah Nilai</button>') . '
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table">
                             <thead>
                                 <tr>
@@ -122,8 +122,8 @@ class Nilai extends CI_Controller
             foreach ($jenis as $jn => $value) {
                 $html = $html . '<th class="text-center">' .
                     anchor('admin/guru/edit/', '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-edit fa-sm"></i></div>') .
-                    anchor('admin/guru/edit/', '<div class="btn btn-sm btn-danger mr-1 ml-1 mb-1"><i class="fa fa-trash fa-sm"></i></div>')
-                    . '</th>';
+                    '<a href="' . base_url('admin/nilai/delete?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel . '&id_kd=' . $id_kd . '&jenis=' . $value->jenis) . '" class="btn btn-sm btn-danger mr-1 ml-1 mb-1" onclick="return deleteNilai(event)"><i class="fa fa-trash fa-sm"></i></a>' .
+                    '</th>';
             }
 
             $html = $html . '<th rowspan="2">Jumlah</th>
@@ -162,7 +162,7 @@ class Nilai extends CI_Controller
             //data not found
             $html = $html . '<div class="card">
                                 <div class="card-body">
-                                    ' . anchor('admin/nilai/nilai_input?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel . '&id_kd=' . $id_kd, '<button class="btn btn-sm btn-primary mb-3 mr-2"><i class="fas fa-plus fa-sm"></i> Tambah Nilai</button>') . '
+                                    ' . anchor('admin/nilai/input?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel . '&id_kd=' . $id_kd, '<button class="btn btn-sm btn-primary mb-3 mr-2"><i class="fas fa-plus fa-sm"></i> Tambah Nilai</button>') . '
                                     <h4 class="text-center">Data Nilai Belum Tersedia</h4>
                                 </div>
                             </div>';
@@ -170,7 +170,7 @@ class Nilai extends CI_Controller
         echo ($html);
     }
 
-    public function nilai_input()
+    public function input()
     {
         $id_kelas   = $this->input->get('id_kelas', TRUE);
         $id_mapel   = $this->input->get('id_mapel', TRUE);
@@ -221,6 +221,22 @@ class Nilai extends CI_Controller
             $this->session->set_flashdata('message', 'Nilai Siswa Berhasil Ditambahkan!');
             redirect('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel);
         }
+    }
+
+    public function delete()
+    {
+        $id_kelas   = $this->input->get('id_kelas', TRUE);
+        $id_kd      = $this->input->get('id_kd', TRUE);
+        $jenis      = $this->input->get('jenis', TRUE);
+        $id_mapel   = $this->input->get('id_mapel', TRUE);
+
+        if (!isset($id_kelas) || !isset($id_kd) || !isset($jenis) || !isset($id_mapel)) {
+            redirect('error_404');
+        }
+
+        $this->Nilai_model->delete_nilai($id_kelas, $id_kd, $jenis);
+        $this->session->set_flashdata('message', 'Data Nilai Berhasil Dihapus!');
+        redirect('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel);
     }
 
     public function _rules_persiswa($data_siswa)
