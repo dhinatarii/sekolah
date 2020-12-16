@@ -25,8 +25,9 @@
                         <th>Tanggal Lahir</th>
                         <th>No Handphone</th>
                         <th>Email</th>
+                        <th>Foto</th>
                         <th>Alamat</th>
-                        <th class="text-center">Aksi</th>
+                        <th class="text-center" width="100px">Aksi</th>
                     </tr>
                 </thead>
 

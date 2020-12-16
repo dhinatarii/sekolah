@@ -97,7 +97,9 @@ class User extends CI_Controller
         $data = array();
         $no = @$_POST['start'];
         foreach ($list as $item) {
-            $isDelete = $level == 'admin' ? '<a href="javascript:;" onclick="confirmDelete(' . $item->id_user . ')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>' : '';
+            $dataAdmin  = $level == 'admin' ? $this->User_model->get_detail_admin($item->id_user, $level) : NULL;
+            $isDelete   = $level == 'admin' ? '<a href="javascript:;" onclick="confirmDelete(' . $item->id_user . ')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>' : '';
+            $isDetail   = $level == 'admin' ? '<div id="set_detailModal" class="btn btn-sm btn-info mr-1 ml-1 mb-1" data-toggle="modal" data-target="#detailModal" data-level="' . $level . '" data-idadmin="' . $item->id_user . '" data-nip="' . $dataAdmin['nip'] . '" data-nama="' . $dataAdmin['nama'] . '" data-jeniskelamin="' . $dataAdmin['jenis_kelamin'] . '"data-tanggallahir="' . $dataAdmin['tanggal_lahir'] . '" data-nohp="' . $dataAdmin['no_hp'] . '" data-email="' . $dataAdmin['email'] . '"  data-alamat="' . $dataAdmin['alamat'] . '" data-photo="' . $dataAdmin['photo'] . '"><i class="fa fa-eye"></i></div>' : '';
             $no++;
             $row = array();
             $row[] = $no;
@@ -105,10 +107,11 @@ class User extends CI_Controller
             $row[] = $item->username;
             $row[] = $item->level;
             $row[] = ($item->status == 1) ? '<strong class="badge badge-success">aktif</strong>' : '<strong class="badge badge-danger">tidak aktif</strong>';
-            $row[] = anchor(
-                'admin/user/edit?level=' . $level . '&id=' . $item->id_user,
-                '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>'
-            )
+            $row[] = $isDetail
+                . anchor(
+                    'admin/user/edit?level=' . $level . '&id=' . $item->id_user,
+                    '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>'
+                )
                 . anchor(
                     'admin/user/change_password?level=' . $level . '&id=' . $item->id_user,
                     '<div class="btn btn-sm btn-success  mr-1 ml-1 mb-1"><i class="fa fa-lock"></i></div>'

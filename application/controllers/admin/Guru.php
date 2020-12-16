@@ -62,6 +62,7 @@ class Guru extends CI_Controller
             $row[] = $item->tanggal_lahir;
             $row[] = $item->no_hp;
             $row[] = $item->email;
+            $row[] = '<img src="' . base_url('assets/photos/' . $item->photo) . ' " alt="photo ' . $item->nama . '" style="width: auto; height: auto;max-width: 100px;max-height: 150px; border-radius: 10px;">';
             $row[] = $item->alamat;
             $row[] = anchor('admin/guru/edit/' . $item->id_guru, '<div class="btn btn-sm btn-primary btn-xs mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>')
                 . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_guru . ')" class="btn btn-sm btn-danger btn-delete-guru btn-xs mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';

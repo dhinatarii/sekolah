@@ -40,7 +40,7 @@
 
 <!-- Detal Modal -->
 <div class="modal fade detailModal" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detalModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-dark font-weight-bold">Siswa : <span id="namasiswa"></span></h5>
@@ -51,7 +51,11 @@
             <div class="modal-body">
                 <div class="container">
                     <div class="row">
-                        <div class="col-sm">
+                        <div class="col-sm-3" class="text-center">
+                            <h6 class="text-dark font-weight-bold">Foto Siswa</h6>
+                            <div id="photo"></div>
+                        </div>
+                        <div class="col-sm-5">
                             <h6 class="text-dark font-weight-bold">Orang Tua</h6>
                             <div class="card">
                                 <div class="card-body">
@@ -88,7 +92,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm">
+                        <div class="col-sm-4">
                             <h6 class="text-dark font-weight-bold">Alamat</h6>
                             <div class="card">
                                 <div class="card-body">
@@ -163,7 +167,9 @@
             const desa = $(this).data('desa');
             const kecamatan = $(this).data('kecamatan');
             const kabupaten = $(this).data('kabupaten');
+            const photo = $(this).data('photo');
             const href = '<?php echo base_url('admin/siswa/edit/') ?>' + idsiswa;
+            const url_photo = '<?= base_url('assets/photos/') ?>' + photo;
 
             $('#namasiswa').text(namaSiswa);
             $('#namaibu').text(namaIbu);
@@ -177,6 +183,7 @@
             $('#desa').text(desa);
             $('#kecamatan').text(kecamatan);
             $('#kabupaten').text(kabupaten);
+            $('#photo').html(`<img src="${url_photo}" alt="photo siswa" style="width: 200px; height: 300px; border-radius: 15px;">`)
 
             $(document).on('click', '#edit-siswa', function() {
                 document.location.href = href;

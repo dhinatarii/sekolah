@@ -38,7 +38,7 @@ class Nilai_model extends CI_Model
         if ($query_select != null || $inner_join != null) {
             $query = $this->db->query("select ts.nis, ts.nisn ,ts.nama, $query_select, jm.jumlah, jm.rerata from tb_siswa ts $inner_join
                 inner join (
-                    select ts.id_siswa, ts.nis, ts.nama, sum(tn.nilai) as jumlah, ceil(avg(tn.nilai)) as rerata 
+                    select ts.id_siswa, ts.nis, ts.nama, sum(tn.nilai) as jumlah, avg(tn.nilai) as rerata 
                     from tb_nilai tn 
                         inner join tb_siswa ts 
                             on tn.id_siswa = ts.id_siswa 
