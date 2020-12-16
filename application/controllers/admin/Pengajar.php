@@ -26,6 +26,7 @@ class Pengajar extends CI_Controller
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
+            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'pengajar'  => $this->Pengajar_model->get_data(),
             'menu'      => 'pengajar',
@@ -83,6 +84,7 @@ class Pengajar extends CI_Controller
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
+            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'guru'      => $this->Guru_model->get_data(),
             'mapel'     => $this->Mapel_model->get_data(),
@@ -131,6 +133,7 @@ class Pengajar extends CI_Controller
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
+            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'guru'      => $this->Guru_model->get_data(),
             'mapel'     => $this->Mapel_model->get_data(),

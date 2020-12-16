@@ -26,6 +26,7 @@ class User extends CI_Controller
         $data = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'count_admin'   => $this->User_model->count_user('admin'),
             'count_guru'    => $this->User_model->count_user('guru'),
@@ -63,6 +64,7 @@ class User extends CI_Controller
         $data  = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'id'            => $id,
             'levels'        => $level,
@@ -135,6 +137,7 @@ class User extends CI_Controller
         $data = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'menu'          => 'user',
             'breadcrumb'    => [
@@ -167,9 +170,43 @@ class User extends CI_Controller
         } else {
             $cek = $this->User_model->cek_user();
             if ($cek == 0) {
-                $this->User_model->input_data();
-                $this->session->set_flashdata('message', 'Data Admin Berhasil Ditambahkan!');
-                redirect('admin/user/detail/1');
+                $config['upload_path']          = './assets/photos/';
+                $config['allowed_types']        = 'gif|jpg|png|jpeg';
+                $config['max_size']             = 5000;
+                $config['file_name']            = 'photo-admin-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
+                $this->upload->initialize($config);
+
+                if (@$_FILES['photo']['name'] != null) {
+
+                    if ($this->upload->do_upload('photo')) {
+                        $gbr = $this->upload->data();
+                        //Compress Image
+                        $config['image_library'] = 'gd2';
+                        $config['source_image'] = './assets/photos/' . $gbr['file_name'];
+                        $config['create_thumb'] = FALSE;
+                        $config['maintain_ratio'] = FALSE;
+                        $config['quality'] = '50%';
+                        $config['width'] = 400;
+                        $config['height'] = 600;
+                        $config['new_image'] = './assets/photos/' . $gbr['file_name'];
+                        $this->image_lib->initialize($config);
+                        $this->image_lib->resize();
+
+                        $photo = $gbr['file_name'];
+                        $this->User_model->input_data($photo);
+                        $this->session->set_flashdata('message', 'Data Admin Berhasil Ditambahkan!');
+                        redirect('admin/user/detail/1');
+                    } else {
+                        $error = $this->upload->display_errors();
+                        $this->session->set_flashdata('message_error', $error);
+                        redirect('admin/user/input');
+                    }
+                } else {
+                    $photo = NULL;
+                    $this->User_model->input_data($photo);
+                    $this->session->set_flashdata('message', 'Data Admin Berhasil Ditambahkan!');
+                    redirect('admin/user/detail/1');
+                }
             } else {
                 $this->session->set_flashdata('message_error', 'Username telah ada');
                 redirect('admin/user/input');
@@ -186,6 +223,7 @@ class User extends CI_Controller
         $data   = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'levels'        => $level,
             'user'          => $this->User_model->get_detail_user($id, $level),
@@ -251,6 +289,7 @@ class User extends CI_Controller
         $data   = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
+            'photo'         => $data['photo'],
             'level'         => $data['level'],
             'menu'          => 'user',
             'breadcrumb'    => [

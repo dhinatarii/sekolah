@@ -25,6 +25,7 @@ class Mapel extends CI_Controller
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
+            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'menu'      => 'mata pelajaran',
             'breadcrumb' => [
@@ -56,7 +57,7 @@ class Mapel extends CI_Controller
             $row[] = $no;
             $row[] = $item->nama_mapel;
             $row[] = $item->level;
-            $row[] = anchor('admin/mapel/kd?id_mapel=' . $item->id_mapel, '<div class="btn btn-sm btn-success btn-xs mr-1 ml-1 mb-1"><i class="fa fa-eye"></i></div>') .
+            $row[] = anchor('admin/mapel/kd?id_mapel=' . $item->id_mapel, '<div class="btn btn-sm btn-info btn-xs mr-1 ml-1 mb-1"><i class="fa fa-edit"></i> <strong>KD</strong></div>') .
                 anchor('admin/mapel/edit/' . $item->id_mapel, '<div class="btn btn-sm btn-primary btn-xs mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>')
                 . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_mapel . ')" class="btn btn-sm btn-danger btn-xs mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';
             $data[] = $row;
@@ -83,6 +84,7 @@ class Mapel extends CI_Controller
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'mapel'     => $this->Mapel_model->get_detail_data($id),
             'komp_dasar' => $this->Mapel_model->get_kd_permapel($id),
@@ -125,6 +127,7 @@ class Mapel extends CI_Controller
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'menu'      => 'mata pelajaran',
             'breadcrumb' => [
@@ -168,6 +171,7 @@ class Mapel extends CI_Controller
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'mapel'     => $this->Mapel_model->get_detail_data($id),
             'levels'    => [1, 2, 3, 4, 5, 6],

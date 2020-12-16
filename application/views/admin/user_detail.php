@@ -157,8 +157,11 @@
             const email = $(this).data('email');
             const alamat = $(this).data('alamat');
             const photo = $(this).data('photo');
+            const isPhoto = photo !== '' ? photo : 'user-placeholder.jpg';
             const href = '<?= base_url('admin/user/edit?level=') ?>' + level + '&id=' + idadmin;
-            const url_photo = '<?= base_url('assets/photos/') ?>' + photo;
+            const url_photo = '<?= base_url('assets/photos/') ?>' + isPhoto;
+
+            console.log(photo)
 
             $('#nip').text(nip);
             $('#nama').text(nama);
@@ -167,7 +170,7 @@
             $('#no-hp').text(nohp);
             $('#email').text(email);
             $('#alamat').text(alamat);
-            $('#photo').html(`<img src="${url_photo}" alt="photo ${nama}" style="width: 200px; height: 300px; border-radius: 15px;">`)
+            $('#photo').html(`<img src="${url_photo}" alt="photo ${nama}" style="max-width:200px; max-height:300px; object-fit: scale-down; object-position: center; border-radius: 15px;">`)
 
             $(document).on('click', '#edit-siswa', function() {
                 document.location.href = href;

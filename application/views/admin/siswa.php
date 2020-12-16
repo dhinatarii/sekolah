@@ -168,8 +168,9 @@
             const kecamatan = $(this).data('kecamatan');
             const kabupaten = $(this).data('kabupaten');
             const photo = $(this).data('photo');
+            const isPhoto = photo !== '' ? photo : 'user-placeholder.jpg';
             const href = '<?php echo base_url('admin/siswa/edit/') ?>' + idsiswa;
-            const url_photo = '<?= base_url('assets/photos/') ?>' + photo;
+            const url_photo = '<?= base_url('assets/photos/') ?>' + isPhoto;
 
             $('#namasiswa').text(namaSiswa);
             $('#namaibu').text(namaIbu);

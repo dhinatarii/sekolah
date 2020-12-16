@@ -32,7 +32,7 @@ class User_model extends CI_Model
         return $this->db->get()->row_array();
     }
 
-    public function input_data()
+    public function input_data($photo)
     {
         $id_user = $this->_input_admin();
         $data = array(
@@ -43,6 +43,7 @@ class User_model extends CI_Model
             'no_hp'         => $this->input->post('no_hp', TRUE),
             'email'         => $this->input->post('email', TRUE),
             'alamat'        => $this->input->post('alamat', TRUE),
+            'photo'         => $photo,
             'id_user'       => $id_user
         );
 

@@ -76,7 +76,7 @@
                     <svg class="c-icon">
                     </svg>Hello, <?= $nama ?></li>
                 <li class="c-header-nav-item dropdown"><a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        <div class="c-avatar"><img class="c-avatar-img" src="<?= base_url() ?>assets/img/avatars/undraw_profile.svg" alt="user@email.com"></div>
+                        <div class="c-avatar"><img class="c-avatar-img" style="max-width:36px; max-height:36px; object-fit: scale-down; object-position: center; " src="<?= base_url('assets/photos/' . $photo) ?>" alt="user@email.com"></div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right pt-0">
                         <a class="dropdown-item" href="<?= base_url('admin/profile?id_user=' . $id_user) ?>">
