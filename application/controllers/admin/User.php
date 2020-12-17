@@ -111,7 +111,7 @@ class User extends CI_Controller
             $row[] = ($item->status == 1) ? '<strong class="badge badge-success">aktif</strong>' : '<strong class="badge badge-danger">tidak aktif</strong>';
             $row[] = $isDetail
                 . anchor(
-                    'admin/user/edit?level=' . $level . '&id=' . $item->id_user,
+                    'admin/user/edit/' . $level . '/' . $item->id_user,
                     '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>'
                 )
                 . anchor(
@@ -216,8 +216,8 @@ class User extends CI_Controller
 
     public function edit()
     {
-        $id     = $this->input->get('id', TRUE);
-        $level  = $this->input->get('level', TRUE);
+        $level  = $this->uri->segment(4);
+        $id     = $this->uri->segment(5);
         $detail = $level == 'admin' ? '1' : ($level == 'guru' ? '2' : ($level == 'wali kelas' ? '3' : ($level == 'siswa' ? '4' : NULL)));
         $data   = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data   = array(
@@ -260,9 +260,50 @@ class User extends CI_Controller
                 $this->load->view('admin/user_admin', $data);
                 $this->load->view('templates/footer');
             } else {
-                $this->User_model->edit_admin($id);
-                $this->session->set_flashdata('message', 'Data Berhasil Diupdate!');
-                redirect('admin/user/detail/' . $detail);
+                $config['upload_path']          = './assets/photos/';
+                $config['allowed_types']        = 'gif|jpg|png|jpeg';
+                $config['max_size']             = 5000;
+                $config['file_name']            = 'photo-admin-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
+                $this->upload->initialize($config);
+
+                if (@$_FILES['photo']['name'] != null) {
+
+                    if ($this->upload->do_upload('photo')) {
+
+                        $item = $this->User_model->get_detail_admin($id, $level);
+                        if ($item['photo'] != null) {
+                            $target_delete = './assets/photos/' . $item['photo'];
+                            unlink($target_delete);
+                        }
+
+                        $gbr = $this->upload->data();
+                        //Compress Image
+                        $config['image_library'] = 'gd2';
+                        $config['source_image'] = './assets/photos/' . $gbr['file_name'];
+                        $config['create_thumb'] = FALSE;
+                        $config['maintain_ratio'] = FALSE;
+                        $config['quality'] = '50%';
+                        $config['width'] = 400;
+                        $config['height'] = 600;
+                        $config['new_image'] = './assets/photos/' . $gbr['file_name'];
+                        $this->image_lib->initialize($config);
+                        $this->image_lib->resize();
+
+                        $photo = $gbr['file_name'];
+                        $this->User_model->edit_admin($id, $photo);
+                        $this->session->set_flashdata('message', 'Data Berhasil Diupdate!');
+                        redirect('admin/user/detail/' . $detail);
+                    } else {
+                        $error = $this->upload->display_errors();
+                        $this->session->set_flashdata('message_error', $error);
+                        redirect('admin/user/input');
+                    }
+                } else {
+                    $photo = NULL;
+                    $this->User_model->edit_admin($id, $photo);
+                    $this->session->set_flashdata('message', 'Data Berhasil Diupdate!');
+                    redirect('admin/user/detail/' . $detail);
+                }
             }
         } else {
             $this->_rules_data();
@@ -331,6 +372,12 @@ class User extends CI_Controller
         $level      = $this->uri->segment(4);
         $id         = $this->uri->segment(5);
         $detail     = $level == 'admin' ? '1' : ($level == 'guru' ? '2' : ($level == 'wali kelas' ? '3' : ($level == 'siswa' ? '4' : NULL)));
+
+        $item = $this->User_model->get_detail_admin($id, $level);
+        if ($item['photo'] != null) {
+            $target_delete = './assets/photos/' . $item['photo'];
+            unlink($target_delete);
+        }
 
         $this->User_model->delete_data($id);
         $this->session->set_flashdata('message', 'Data User Berhasil Dihapus!');

@@ -78,7 +78,7 @@ class User_model extends CI_Model
         $this->db->update('tb_user', $data);
     }
 
-    public function edit_admin($id)
+    public function edit_admin($id, $photo)
     {
         $data_admin = array(
             'nip'           => $this->input->post('nip', TRUE),
@@ -89,6 +89,10 @@ class User_model extends CI_Model
             'email'         => $this->input->post('email', TRUE),
             'alamat'        => $this->input->post('alamat', TRUE)
         );
+
+        if ($photo != null) {
+            $data_admin['photo'] = $photo;
+        }
 
         $data_account = array(
             'username'  => $this->input->post('username', TRUE),

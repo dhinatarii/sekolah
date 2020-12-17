@@ -158,7 +158,7 @@
             const alamat = $(this).data('alamat');
             const photo = $(this).data('photo');
             const isPhoto = photo !== '' ? photo : 'user-placeholder.jpg';
-            const href = '<?= base_url('admin/user/edit?level=') ?>' + level + '&id=' + idadmin;
+            const href = '<?= base_url('admin/user/edit/') ?>' + level + '/' + idadmin;
             const url_photo = '<?= base_url('assets/photos/') ?>' + isPhoto;
 
             console.log(photo)

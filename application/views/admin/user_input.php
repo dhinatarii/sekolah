@@ -14,7 +14,7 @@
             <i class="fas fa-users mr-3"></i>Form Tambah Data Admin
         </div>
         <div class="card-body">
-            <?= form_open_multipart('admin/user/input') ?>
+            <?= form_open_multipart() ?>
             <div class="row">
                 <div class="col-sm-6 mb-3">
                     <div class="card">
