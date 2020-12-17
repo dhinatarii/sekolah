@@ -141,7 +141,7 @@
                             </a>
                         </div>
                         <div class="col-md-3 text-info text-center">
-                            <a href="<?php echo base_url() ?>" style="text-decoration:none">
+                            <a href="<?php echo base_url('admin/nilai') ?>" style="text-decoration:none">
                                 <i class="text-info fas fa-4x fa-sort-numeric-down"></i>
                                 <p class="nav-link small text-info">Input Nilai</p>
                             </a>
@@ -149,7 +149,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3 text-info text-center">
-                            <a href="<?php echo base_url() ?>" style="text-decoration:none">
+                            <a href="<?php echo base_url('admin/laporanguru') ?>" style="text-decoration:none">
                                 <i class="text-info far fa-4x  fa-clipboard"></i>
                                 <p class="nav-link small text-info">Laporan Daftar Guru</p>
                             </a>
@@ -169,7 +169,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

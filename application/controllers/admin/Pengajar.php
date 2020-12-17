@@ -122,6 +122,21 @@ class Pengajar extends CI_Controller
         }
     }
 
+    public function get_kelas()
+    {
+        $id_mapel   = $this->input->post('id_mapel', TRUE);
+        $mapel      = $this->Mapel_model->get_detail_data($id_mapel);
+        $kelas      = $this->Kelas_model->get_like_data($mapel['level']);
+        if ($kelas->num_rows() > 0) {
+            echo '<option value="">--Pilih Kelas--</option>';
+            foreach ($kelas->result() as $kl) {
+                echo "<option value=$kl->id_kelas>$kl->kelas</option>";
+            }
+        } else {
+            echo '<option value="">--Tidak Tersedia--</option>';
+        }
+    }
+
     public function edit()
     {
         $id           = $this->uri->segment(4);

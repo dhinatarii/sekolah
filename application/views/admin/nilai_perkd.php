@@ -24,6 +24,8 @@
                 </select>
                 <?php echo form_error('komp_dasar', '<div class="text-danger small ml-3">', '</div>') ?>
             </div>
+
+            <button onclick="lihathNilai()" class="btn btn-primary"><i class="fas fa-search"></i> Lihat</button>
         </div>
     </div>
     <div id="nilai-detail">
@@ -33,28 +35,49 @@
 </main>
 
 <script>
-    $(document).ready(function() {
-        $('#komp_dasar').change(function() {
-            const idKd = $(this).val();
-            const idMapel = '<?= $id_mapel ?>';
-            const idKelas = '<?= $id_kelas ?>';
-            $.ajax({
-                type: 'POST',
-                url: '<?= base_url('admin/nilai/data_nilai_perkd') ?>',
-                data: {
-                    id_kelas: idKelas,
-                    id_mapel: idMapel,
-                    id_kd: idKd
-                },
-                success: function(response) {
-                    $('#nilai-detail').html(response);
-                },
-                error: function(response) {
-                    $('#nilai-detail').html(response);
-                }
-            });
-        })
-    });
+    // $(document).ready(function() {
+    //     $('#komp_dasar').change(function() {
+    //         const idKd = $(this).val();
+    //         const idMapel = '<?= $id_mapel ?>';
+    //         const idKelas = '<?= $id_kelas ?>';
+    //         $.ajax({
+    //             type: 'POST',
+    //             url: '<?= base_url('admin/nilai/data_nilai_perkd') ?>',
+    //             data: {
+    //                 id_kelas: idKelas,
+    //                 id_mapel: idMapel,
+    //                 id_kd: idKd
+    //             },
+    //             success: function(response) {
+    //                 $('#nilai-detail').html(response);
+    //             },
+    //             error: function(response) {
+    //                 $('#nilai-detail').html(response);
+    //             }
+    //         });
+    //     })
+    // });
+
+    function lihatNilai() {
+        const idKd = $('#komp_dasar').val();
+        const idMapel = '<?= $id_mapel ?>';
+        const idKelas = '<?= $id_kelas ?>';
+        $.ajax({
+            type: 'POST',
+            url: '<?= base_url('admin/nilai/data_nilai_perkd') ?>',
+            data: {
+                id_kelas: idKelas,
+                id_mapel: idMapel,
+                id_kd: idKd
+            },
+            success: function(response) {
+                $('#nilai-detail').html(response);
+            },
+            error: function(response) {
+                $('#nilai-detail').html(response);
+            }
+        });
+    }
 
     function deleteNilai(e) {
         const href = e.target.href;

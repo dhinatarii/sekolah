@@ -63,7 +63,7 @@ class Pengajar_model extends CI_Model
 
     var $column_order = array(null, 'guru', 'jabatan', 'mapel', 'kelas', 'tahun'); //Sesuaikan dengan field
     var $column_search = array('guru', 'jabatan', 'mapel', 'kelas', 'tahun'); //field yang diizin untuk pencarian 
-    var $order = array('guru' => 'asc'); // default order 
+    var $order = array('kelas' => 'asc'); // default order 
 
     private function _get_datatables_query()
     {
@@ -73,6 +73,8 @@ class Pengajar_model extends CI_Model
         $this->db->join('tb_matapelajaran tm', 'tp.id_mapel = tm.id_mapel', 'left');
         $this->db->join('tb_kelas tk', 'tp.id_kelas  = tk.id_kelas', 'left');
         $this->db->join('tb_tahunajaran tt', 'tp.id_tahun = tt.id_tahun', 'left');
+        $this->db->order_by('tk.kelas', 'asc');
+
 
         $i = 0;
 

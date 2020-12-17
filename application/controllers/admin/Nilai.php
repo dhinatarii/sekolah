@@ -231,7 +231,7 @@ class Nilai extends CI_Controller
                         <h6 class="text-white"> ' . $mapel['nama_mapel'] . ' / Kelas ' . $kelas['kelas'] . '</h6>
                     </div>
                     <div class="card-body">
-                        <a href="' . base_url('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel) . '" class="btn btn-primary mb-3">Cek Selengkapnya</i></a>
+                        <a href="' . base_url('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel) . '" class="btn btn-primary mb-3"><i class="fas fa-info-circle"></i> Cek Selengkapnya</i></a>
                         <h6 class="text-center">Data nilai belum lengkap, silahkan cek selengkapnya</h6>
                     </div>
                 </div>

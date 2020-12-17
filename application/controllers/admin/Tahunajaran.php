@@ -1,5 +1,5 @@
 <?php
-class Tahunajaran extends CI_Controller
+class TahunAjaran extends CI_Controller
 {
     function __construct()
     {

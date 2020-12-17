@@ -6,6 +6,12 @@ class Kelas_model extends CI_Model
         return $this->db->get('tb_kelas')->result();
     }
 
+    public function get_like_data($query)
+    {
+        $this->db->like('kelas', $query, 'both');
+        return $this->db->get('tb_kelas');
+    }
+
     public function get_count()
     {
         return $this->db->get('tb_kelas')->num_rows();
