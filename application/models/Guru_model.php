@@ -35,7 +35,7 @@ class Guru_model extends CI_Model
         return $this->db->insert_id();
     }
 
-    public function input_data()
+    public function input_data($photo)
     {
         $id_user = $this->_input_user();
         $data = array(
@@ -46,13 +46,14 @@ class Guru_model extends CI_Model
             'no_hp'         => $this->input->post('no_hp', TRUE),
             'email'         => $this->input->post('email', TRUE),
             'alamat'        => $this->input->post('alamat', TRUE),
+            'photo'         => $photo,
             'id_user'       => $id_user
         );
 
         $this->db->insert('tb_guru', $data);
     }
 
-    public function edit_data($id)
+    public function edit_data($id, $photo)
     {
         $data = array(
             'nip'       => $this->input->post('nip', TRUE),
@@ -63,6 +64,10 @@ class Guru_model extends CI_Model
             'email'     => $this->input->post('email', TRUE),
             'alamat'    => $this->input->post('alamat', TRUE)
         );
+
+        if ($photo != null) {
+            $data['photo'] = $photo;
+        }
 
         $this->db->where('id_guru', $id);
         $this->db->update('tb_guru', $data);

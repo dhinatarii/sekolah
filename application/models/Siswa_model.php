@@ -27,7 +27,7 @@ class Siswa_model extends CI_Model
         return $this->db->get()->num_rows();
     }
 
-    public function input_data_siswa($id_kelas)
+    public function input_data_siswa($id_kelas, $photo)
     {
         $id_user = $this->_input_user();
         $id_orangtua = $this->_input_data_orangtua();
@@ -38,6 +38,7 @@ class Siswa_model extends CI_Model
             'tanggal_lahir' => $this->input->post('tanggal_lahir', TRUE),
             'agama'         => $this->input->post('agama', TRUE),
             'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
+            'photo'         => $photo,
             'id_orangtua'   => $id_orangtua,
             'id_kelas'      => $id_kelas,
             'id_user'       => $id_user
@@ -46,7 +47,7 @@ class Siswa_model extends CI_Model
         $this->db->insert('tb_siswa', $data);
     }
 
-    public function edit_data($id, $id_kelas)
+    public function edit_data($id, $id_kelas, $photo)
     {
         $id_orangtua = $this->db->get_where('tb_siswa', ['id_siswa' => $id])->row()->id_orangtua;
         $id_alamat = $this->db->get_where('tb_orangtua', ['id_orangtua' => $id_orangtua])->row()->id_alamat;
@@ -60,6 +61,10 @@ class Siswa_model extends CI_Model
             'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
             'id_kelas'      => $id_kelas
         );
+
+        if ($photo != null) {
+            $data_siswa['photo'] = $photo;
+        }
 
         $data_orangtua = array(
             'nama_ibu'          => $this->input->post('nama_ibu', TRUE),

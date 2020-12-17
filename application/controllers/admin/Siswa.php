@@ -89,8 +89,8 @@ class Siswa extends CI_Controller
         $data = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
-            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'siswa'         => $this->Siswa_model->get_detail_data($id),
             'kelas'         => $this->Kelas_model->get_data(),
             'jenis_kelamin' => ['Laki-laki', 'Perempuan'],
@@ -119,10 +119,50 @@ class Siswa extends CI_Controller
             $this->load->view('admin/siswa_edit', $data);
             $this->load->view('templates/footer');
         } else {
+            $config['upload_path']          = './assets/photos/';
+            $config['allowed_types']        = 'gif|jpg|png|jpeg';
+            $config['max_size']             = 5000;
+            $config['file_name']            = 'photo-siswa-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
+            $this->upload->initialize($config);
             $id_kelas = $this->Kelas_model->get_id_kelas();
-            $this->Siswa_model->edit_data($id, $id_kelas);
-            $this->session->set_flashdata('message', 'Data Siswa Berhasil Diupdate!');
-            redirect('admin/siswa');
+
+            if (@$_FILES['photo']['name'] != null) {
+
+                if ($this->upload->do_upload('photo')) {
+                    $item = $this->Siswa_model->get_detail_data($id);
+                    if ($item['photo'] != null) {
+                        $target_delete = './assets/photos/' . $item['photo'];
+                        unlink($target_delete);
+                    }
+
+                    $gbr = $this->upload->data();
+                    //Compress Image
+                    $config['image_library'] = 'gd2';
+                    $config['source_image'] = './assets/photos/' . $gbr['file_name'];
+                    $config['create_thumb'] = FALSE;
+                    $config['maintain_ratio'] = FALSE;
+                    $config['quality'] = '50%';
+                    $config['width'] = 400;
+                    $config['height'] = 600;
+                    $config['new_image'] = './assets/photos/' . $gbr['file_name'];
+                    $this->image_lib->initialize($config);
+                    $this->image_lib->resize();
+
+                    $photo = $gbr['file_name'];
+                    $this->Siswa_model->edit_data($id, $id_kelas, $photo);
+                    $this->session->set_flashdata('message', 'Data Siswa Berhasil Diupdate!');
+                    redirect('admin/siswa');
+                } else {
+                    $error = $this->upload->display_errors();
+                    $this->session->set_flashdata('message_error', $error);
+                    redirect('admin/siswa/input');
+                }
+            } else {
+                $photo = NULL;
+                $this->Siswa_model->edit_data($id, $id_kelas, $photo);
+                $this->session->set_flashdata('message', 'Data Siswa Berhasil Diupdate!');
+                redirect('admin/siswa');
+            }
         }
     }
 
@@ -160,15 +200,56 @@ class Siswa extends CI_Controller
             $this->load->view('admin/siswa_input', $data);
             $this->load->view('templates/footer');
         } else {
+
+            $config['upload_path']          = './assets/photos/';
+            $config['allowed_types']        = 'gif|jpg|png|jpeg';
+            $config['max_size']             = 5000;
+            $config['file_name']            = 'photo-siswa-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
+            $this->upload->initialize($config);
             $id_kelas = $this->Kelas_model->get_id_kelas();
-            $this->Siswa_model->input_data_siswa($id_kelas);
-            $this->session->set_flashdata('message', 'Data Siswa Berhasil Ditambahkan!');
-            redirect('admin/siswa');
+
+            if (@$_FILES['photo']['name'] != null) {
+
+                if ($this->upload->do_upload('photo')) {
+                    $gbr = $this->upload->data();
+                    //Compress Image
+                    $config['image_library'] = 'gd2';
+                    $config['source_image'] = './assets/photos/' . $gbr['file_name'];
+                    $config['create_thumb'] = FALSE;
+                    $config['maintain_ratio'] = FALSE;
+                    $config['quality'] = '50%';
+                    $config['width'] = 400;
+                    $config['height'] = 600;
+                    $config['new_image'] = './assets/photos/' . $gbr['file_name'];
+                    $this->image_lib->initialize($config);
+                    $this->image_lib->resize();
+
+                    $photo = $gbr['file_name'];
+                    $this->Siswa_model->input_data_siswa($id_kelas, $photo);
+                    $this->session->set_flashdata('message', 'Data Siswa Berhasil Ditambahkan!');
+                    redirect('admin/siswa');
+                } else {
+                    $error = $this->upload->display_errors();
+                    $this->session->set_flashdata('message_error', $error);
+                    redirect('admin/siswa/input');
+                }
+            } else {
+                $photo = NULL;
+                $this->Siswa_model->input_data_siswa($id_kelas, $photo);
+                $this->session->set_flashdata('message', 'Data Siswa Berhasil Ditambahkan!');
+                redirect('admin/siswa');
+            }
         }
     }
 
     public function delete($id)
     {
+        $item = $this->Siswa_model->get_detail_data($id);
+        if ($item['photo'] != null) {
+            $target_delete = './assets/photos/' . $item['photo'];
+            unlink($target_delete);
+        }
+
         $this->Siswa_model->delete_data($id);
         $this->session->set_flashdata('message', 'Data Siswa Berhasil Dihapus!');
         redirect('admin/siswa');

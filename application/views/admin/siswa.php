@@ -53,7 +53,7 @@
                     <div class="row">
                         <div class="col-sm-3" class="text-center">
                             <h6 class="text-dark font-weight-bold">Foto Siswa</h6>
-                            <div id="photo"></div>
+                            <div id="photo" class="mb-3"></div>
                         </div>
                         <div class="col-sm-5">
                             <h6 class="text-dark font-weight-bold">Orang Tua</h6>
@@ -184,7 +184,7 @@
             $('#desa').text(desa);
             $('#kecamatan').text(kecamatan);
             $('#kabupaten').text(kabupaten);
-            $('#photo').html(`<img src="${url_photo}" alt="photo siswa" style="width: 200px; height: 300px; border-radius: 15px;">`)
+            $('#photo').html(`<img src="${url_photo}" alt="photo siswa" style="max-width:200px; max-height:300px; object-fit: scale-down; object-position: center; border-radius: 15px;">`)
 
             $(document).on('click', '#edit-siswa', function() {
                 document.location.href = href;

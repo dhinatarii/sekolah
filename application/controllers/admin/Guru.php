@@ -64,7 +64,7 @@ class Guru extends CI_Controller
             $row[] = $item->tanggal_lahir;
             $row[] = $item->no_hp;
             $row[] = $item->email;
-            $row[] = '<img src="' . base_url('assets/photos/' . $photo) . ' " alt="photo ' . $item->nama . '" style="width: auto; height: auto;max-width: 100px;max-height: 150px; border-radius: 10px;">';
+            $row[] = '<img src="' . base_url('assets/photos/' . $photo) . ' " alt="photo ' . $item->nama . '" style="max-width:100px; max-height:150px; object-fit: scale-down; object-position: center; border-radius: 10px;">';
             $row[] = $item->alamat;
             $row[] = anchor('admin/guru/edit/' . $item->id_guru, '<div class="btn btn-sm btn-primary btn-xs mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>')
                 . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_guru . ')" class="btn btn-sm btn-danger btn-delete-guru btn-xs mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';
@@ -87,7 +87,7 @@ class Guru extends CI_Controller
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
-            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'menu'      => 'guru',
             'breadcrumb' => [
@@ -114,9 +114,43 @@ class Guru extends CI_Controller
             $this->load->view('admin/guru_input');
             $this->load->view('templates/footer');
         } else {
-            $this->Guru_model->input_data();
-            $this->session->set_flashdata('message', 'Data Guru Berhasil Ditambahkan!');
-            redirect('admin/guru');
+            $config['upload_path']          = './assets/photos/';
+            $config['allowed_types']        = 'gif|jpg|png|jpeg';
+            $config['max_size']             = 5000;
+            $config['file_name']            = 'photo-guru-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
+            $this->upload->initialize($config);
+
+            if (@$_FILES['photo']['name'] != null) {
+
+                if ($this->upload->do_upload('photo')) {
+                    $gbr = $this->upload->data();
+                    //Compress Image
+                    $config['image_library'] = 'gd2';
+                    $config['source_image'] = './assets/photos/' . $gbr['file_name'];
+                    $config['create_thumb'] = FALSE;
+                    $config['maintain_ratio'] = FALSE;
+                    $config['width'] = 400;
+                    $config['height'] = 600;
+                    $config['quality'] = '50%';
+                    $config['new_image'] = './assets/photos/' . $gbr['file_name'];
+                    $this->image_lib->initialize($config);
+                    $this->image_lib->resize();
+
+                    $photo = $gbr['file_name'];
+                    $this->Guru_model->input_data($photo);
+                    $this->session->set_flashdata('message', 'Data Guru Berhasil Ditambahkan!');
+                    redirect('admin/guru');
+                } else {
+                    $error = $this->upload->display_errors();
+                    $this->session->set_flashdata('message_error', $error);
+                    redirect('admin/guru/input');
+                }
+            } else {
+                $photo = NULL;
+                $this->Guru_model->input_data($photo);
+                $this->session->set_flashdata('message', 'Data Guru Berhasil Ditambahkan!');
+                redirect('admin/guru');
+            }
         }
     }
 
@@ -160,15 +194,61 @@ class Guru extends CI_Controller
             $this->load->view('admin/guru_edit', $data);
             $this->load->view('templates/footer');
         } else {
-            $this->Guru_model->edit_data($id);
-            $this->session->set_flashdata('message', 'Data Guru Berhasil Diupdate!');
-            redirect('admin/guru');
+            $config['upload_path']          = './assets/photos/';
+            $config['allowed_types']        = 'gif|jpg|png|jpeg';
+            $config['max_size']             = 5000;
+            $config['file_name']            = 'photo-guru-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
+            $this->upload->initialize($config);
+
+            if (@$_FILES['photo']['name'] != null) {
+
+                if ($this->upload->do_upload('photo')) {
+                    $item =  $this->Guru_model->get_detail_data($id);
+                    if ($item['photo'] != null) {
+                        $target_delete = './assets/photos/' . $item['photo'];
+                        unlink($target_delete);
+                    }
+
+                    $gbr = $this->upload->data();
+                    //Compress Image
+                    $config['image_library'] = 'gd2';
+                    $config['source_image'] = './assets/photos/' . $gbr['file_name'];
+                    $config['create_thumb'] = FALSE;
+                    $config['maintain_ratio'] = FALSE;
+                    $config['width'] = 400;
+                    $config['height'] = 600;
+                    $config['quality'] = '50%';
+                    $config['new_image'] = './assets/photos/' . $gbr['file_name'];
+                    $this->image_lib->initialize($config);
+                    $this->image_lib->resize();
+
+                    $photo = $gbr['file_name'];
+                    $this->Guru_model->edit_data($id, $photo);
+                    $this->session->set_flashdata('message', 'Data Guru Berhasil Diupdate!');
+                    redirect('admin/guru');
+                } else {
+                    $error = $this->upload->display_errors();
+                    $this->session->set_flashdata('message_error', $error);
+                    redirect('admin/guru/input');
+                }
+            } else {
+                $photo = NULL;
+                $this->Guru_model->edit_data($id, $photo);
+                $this->session->set_flashdata('message', 'Data Guru Berhasil Diupdate!');
+                redirect('admin/guru');
+            }
         }
     }
 
     public function delete()
     {
         $id           = $this->uri->segment(4);
+        $item         = $this->Guru_model->get_detail_data($id);
+        if ($item['photo'] != null) {
+            $target_delete = './assets/photos/' . $item['photo'];
+            unlink($target_delete);
+        }
+
         $this->Guru_model->delete_data($id);
         $this->session->set_flashdata('message', 'Data Guru Berhasil Dihapus!');
         redirect('admin/guru');
