@@ -20,6 +20,20 @@ class Laporan_model extends CI_Model
         return $this->db->get()->result();
     }
 
+    public function get_detail_lap_guru($id_guru)
+    {
+        $this->db->select('tp.id_pengajar, tm.nama_mapel, tk.kelas, count(tk2.id_kd) as kd ,tt.nama as tahun');
+        $this->db->from('tb_pengajar tp');
+        $this->db->join('tb_guru tg', 'tp.id_guru = tg.id_guru', 'left');
+        $this->db->join('tb_matapelajaran tm', 'tp.id_mapel = tm.id_mapel', 'left');
+        $this->db->join('tb_kelas tk', 'tp.id_kelas = tk.id_kelas', 'left');
+        $this->db->join('tb_kd tk2', 'tm.id_mapel = tk2.id_mapel', 'left');
+        $this->db->join('tb_tahunajaran tt', 'tp.id_tahun = tt.id_tahun', 'left');
+        $this->db->where('tg.id_guru', $id_guru);
+        $this->db->group_by('tp.id_pengajar');
+        return $this->db->get()->result();
+    }
+
     var $column_order = array(null, 'nama', 'nip', 'jenis_kelamin', 'tanggal_lahir', 'jabatan', 'kelas', 'alamat'); //Sesuaikan dengan field
     var $column_search = array('nama', 'nip', 'jenis_kelamin', 'jabatan', 'kelas'); //field yang diizin untuk pencarian 
     var $order = array('kelas' => 'asc'); // default order 

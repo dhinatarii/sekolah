@@ -24,8 +24,7 @@
                 </select>
                 <?php echo form_error('komp_dasar', '<div class="text-danger small ml-3">', '</div>') ?>
             </div>
-
-            <button onclick="lihathNilai()" class="btn btn-primary"><i class="fas fa-search"></i> Lihat</button>
+            <button onclick="lihatNilai()" class="btn btn-primary"><i class="fas fa-search"></i> Lihat</button>
         </div>
     </div>
     <div id="nilai-detail">

@@ -43,21 +43,62 @@ class LaporanGuru extends CI_Controller
         $this->load->view('templates/footer');
     }
 
+    public function detail()
+    {
+        $id           = $this->uri->segment(4);
+        if (!$id) {
+            redirect('admin/laporanguru');
+        }
+
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'guru'      => $this->Guru_model->get_detail_data($id),
+            'data'      => $this->Laporan_model->get_detail_lap_guru($id),
+            'id_guru'   => $id,
+            'level'     => $data['level'],
+            'tahun'     => $this->Tahun_model->get_data(),
+            'menu'      => 'laporan_guru',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin/dashboard'
+                ],
+                1 => (object)[
+                    'name' => 'Laporan Daftar Guru',
+                    'link' => 'admin/laporanguru'
+                ],
+                2 => (object)[
+                    'name' => 'Detail',
+                    'link' => NULL
+                ]
+            ]
+        );
+
+        $this->load->view('templates/header');
+        $this->load->view('templates_admin/sidebar', $data);
+        $this->load->view('admin/laporan_gurudetail', $data);
+        $this->load->view('templates/footer');
+    }
+
     public function data_all_guru()
     {
         $id_tahun   = $this->input->post('id_tahun', TRUE);
         $cek_data   = $this->Laporan_model->cek_datatahun($id_tahun);
+        $tahun      = $this->Tahun_model->get_detail_data($id_tahun);
         $html       = '';
 
         if ($cek_data->num_rows() > 0) {
             $html = $html . '
                 <div class="card">
                     <div class="card-body">
-                        <button class="btn btn-info mb-2"><i class="fas fa-print"></i> Print</button>
+                        <a href="' . base_url('admin/laporanguru/pdf_laporan?q=alldata&tahun=' . $id_tahun) . '" class="btn btn-info mb-2"><i class="fas fa-print"></i> Print</a>
                         <div>
                             <h1 class="h1 text-center">LAPORAN DAFTAR GURU</h1>
                             <h2 class="text-center">SD MUHAMMADIYAH TRINI</h2>
-                            <h3 class="text-center">Tahun Ajaran 2020 / 2021</h3>
+                            <h3 class="text-center">Tahun Ajaran ' . $tahun['nama'] . '</h3>
                         </div>
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-laporanguru">
                             <thead>
@@ -70,7 +111,7 @@ class LaporanGuru extends CI_Controller
                                     <th>Jabatan</th>
                                     <th>Kelas Mengajar</th>
                                     <th>Alamat</th>
-                                    <th class="text-center" width="50px">Aksi</th>
+                                    <th class="text-center" width="80px">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -133,7 +174,8 @@ class LaporanGuru extends CI_Controller
             $row[] = $item->jabatan;
             $row[] = $new_kelas;
             $row[] = $item->alamat;
-            $row[] = anchor('admin/laporanguru/detail/' . $item->id_guru, '<div class="btn btn-sm btn-success mr-1 ml-1 mb-1"><i class="fa fa-eye"></i></div>');
+            $row[] = anchor('admin/laporanguru/detail/' . $item->id_guru, '<div class="btn btn-sm btn-success mr-1 ml-1 mb-1"><i class="fa fa-eye"></i></div>') .
+                '<a href="' . base_url('admin/laporanguru/pdf_laporan?q=detaildata&id=' . $item->id_guru) . '" class="btn btn-sm btn-info mb-2"><i class="fa fa-print"></i></a>';
             $data[] = $row;
         }
 
@@ -145,5 +187,24 @@ class LaporanGuru extends CI_Controller
         );
 
         echo json_encode($output);
+    }
+
+    public function pdf_laporan()
+    {
+        $query   = $this->input->get('q');
+        $tahun   = $this->input->get('tahun');
+        $id_guru = $this->input->get('id');
+
+        if ($query == 'alldata' || $id_guru == null) {
+            $data['data'] = $this->Laporan_model->get_all_lap_guru($tahun);
+            $this->mypdf->generate('pdf/laporan_allguru', $data, 'Laporan Data Guru', 'A4', 'landscape');
+        } else {
+            $data = array(
+                'guru'  => $this->Guru_model->get_detail_data($id_guru),
+                'data'  => $this->Laporan_model->get_detail_lap_guru($id_guru)
+            );
+
+            $this->mypdf->generate('pdf/laporan_detailguru', $data, 'Laporan Data Guru', 'A4', 'portrait');
+        }
     }
 }
