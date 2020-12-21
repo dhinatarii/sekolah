@@ -40,71 +40,45 @@
 
     <hr class="line-title">
     <p align="center">
-        <span style="font-size: 20px">LAPORAN DATA GURU</span>
+        <span style="font-size: 20px">LAPORAN DATA SISWA</span>
+        <br>
+        <b>Tahun Ajaran 2020/2021</b>
+        <br>
+        <?= 'Kelas ' . $kelas['kelas'] ?>
     </p>
-    <center>
-        <table class="mt-3">
-            <tr>
-                <td>NIP</td>
-                <td> : <?= $guru['nip'] ?></td>
-            </tr>
-            <tr>
-                <td>Nama</td>
-                <td> : <?= $guru['nama'] ?></td>
-            </tr>
-            <tr>
-                <td>Jenis Kelamin</td>
-                <td> : <?= $guru['jenis_kelamin'] ?></td>
-            </tr>
-            <tr>
-                <td>Tanggal Lahir</td>
-                <td> : <?= $guru['tanggal_lahir'] ?></td>
-            </tr>
-            <tr>
-                <td>No. Handphone</td>
-                <td> : <?= $guru['no_hp'] ?></td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td> : <?= $guru['email'] ?></td>
-            </tr>
-            <tr>
-                <td>Alamat</td>
-                <td> : <?= $guru['alamat'] ?></td>
-            </tr>
-        </table>
-        <legend class="mt-3">
-            <h5>Mata Pelajaran Yang Diampu</h5>
-        </legend>
-    </center>
-    <table class="table table-bordered">
+    <table class="table table-bordered" id="table-laporansiswa">
         <thead>
             <tr class="text-center">
-                <th width=50px>No</th>
-                <th>Mata Pelajaran</th>
-                <th>Kelas</th>
-                <th>Jumlah KD</th>
-                <th>Tahun Ajaran</th>
+                <th width="10px" rowspan="2" style="vertical-align : middle;text-align:center;">No</th>
+                <th width="10px" rowspan="2" style="vertical-align : middle;text-align:center;">NIS</th>
+                <th rowspan="2" style="vertical-align : middle;text-align:center;">NISN</th>
+                <th rowspan="2" style="vertical-align : middle;text-align:center;">Nama</th>
+                <th width="20px" rowspan="2" style="vertical-align : middle;text-align:center;">L/P</th>
+                <th rowspan="2" style="vertical-align : middle;text-align:center;">Tanggal Lahir</th>
+                <th rowspan="2" style="vertical-align : middle;text-align:center;">Agama</th>
+                <th colspan="4">Alamat</th>
+            </tr>
+            <tr class="text-center">
+                <th>Dusun</th>
+                <th>Desa</th>
+                <th>Kecamatan</th>
+                <th>Kabupaten</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($data as $key => $value) : ?>
+            <?php foreach ($data as $key => $value) :  ?>
                 <tr>
-                    <td class="text-center">
-                        <?= ++$key ?>
-                    </td>
-                    <td>
-                        <?= $value->nama_mapel ?>
-                    </td>
-                    <td>
-                        <?= $value->kelas ?>
-                    </td>
-                    <td>
-                        <?= $value->kd ?>
-                    </td>
-                    <td>
-                        <?= $value->tahun ?>
-                    </td>
+                    <td widtd="10px"><?= ++$key ?></td>
+                    <td widtd="10px"><?= $value->nis ?></td>
+                    <td><?= $value->nisn ?></td>
+                    <td><?= $value->nama ?></td>
+                    <td width="20px"><?= $value->jenis_kelamin == 'Perempuan' ? 'P' : 'L' ?></td>
+                    <td><?= $value->tanggal_lahir ?></td>
+                    <td><?= $value->agama ?></td>
+                    <td><?= $value->dusun ?></td>
+                    <td><?= $value->desa ?></td>
+                    <td><?= $value->kecamatan ?></td>
+                    <td><?= $value->kabupaten ?></td>
                 </tr>
             <?php endforeach ?>
         </tbody>

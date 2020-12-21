@@ -142,16 +142,18 @@ class Nilai extends CI_Controller
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Nama</th>';
+                                    <th style="vertical-align : middle;text-align:center;">No</th>
+                                    <th style="vertical-align : middle;text-align:center;">Nama</th>';
 
             //heading table
             foreach ($daftar_kd as $key => $value) {
-                $html = $html . '<th>' . $value->nama_kd . '</th>';
+                $html = $html . '<th style="vertical-align : middle;text-align:center;">' . $value->nama_kd . '</th>';
             }
 
             //jumlah dan rata-rata
-            $html = $html . '<th>Jumlah</th><th>Rata-rata</th></tr></thead><tbody>';
+            $html = $html . '<th style="vertical-align : middle;text-align:center;">Jumlah</th>
+                            <th style="vertical-align : middle;text-align:center;">Rata-rata</th>
+                            </tr></thead><tbody>';
 
             //body table default
             foreach ($data_default as $dt => $value_dt) {
@@ -260,8 +262,8 @@ class Nilai extends CI_Controller
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table">
                             <thead>
                                 <tr>
-                                    <th rowspan="2" >No</th>
-                                    <th rowspan="2" >Nama</th>';
+                                    <th rowspan="2" style="vertical-align : middle;text-align:center;" >No</th>
+                                    <th rowspan="2" style="vertical-align : middle;text-align:center;" >Nama</th>';
 
             //heading button table
             foreach ($jenis as $jn => $value) {
@@ -271,8 +273,8 @@ class Nilai extends CI_Controller
                     '</th>';
             }
 
-            $html = $html . '<th rowspan="2">Jumlah</th>
-                            <th rowspan="2">Rata-rata</th>
+            $html = $html . '<th rowspan="2" style="vertical-align : middle;text-align:center;">Jumlah</th>
+                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Rata-rata</th>
                             </tr><tr>';
 
             //heading table

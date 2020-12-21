@@ -39,6 +39,20 @@ class Pengajar_model extends CI_Model
         return $this->db->get()->result();
     }
 
+    public function get_data_with_tahun($id_tahun)
+    {
+        $this->db->select('tk.*, tt.nama as tahun');
+        $this->db->from('tb_pengajar tp');
+        $this->db->join('tb_guru tg', 'tp.id_guru = tg.id_guru', 'left');
+        $this->db->join('tb_matapelajaran tm', 'tp.id_mapel = tm.id_mapel', 'left');
+        $this->db->join('tb_kelas tk', 'tp.id_kelas  = tk.id_kelas', 'left');
+        $this->db->join('tb_tahunajaran tt', 'tp.id_tahun = tt.id_tahun', 'left');
+        $this->db->where('tt.id_tahun', $id_tahun);
+        $this->db->group_by('tk.id_kelas');
+        
+        return $this->db->get();
+    }
+
     public function get_detail_data($id)
     {
         return $this->db->get_where('tb_pengajar', ['id_pengajar' => $id])->row_array();

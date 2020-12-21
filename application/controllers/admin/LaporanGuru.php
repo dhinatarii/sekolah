@@ -103,15 +103,15 @@ class LaporanGuru extends CI_Controller
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-laporanguru">
                             <thead>
                                 <tr class="text-center">
-                                    <th>No</th>
-                                    <th>Nama</th>
-                                    <th>NIP</th>
-                                    <th>Jenis Kelamin</th>
-                                    <th>Tanggal Lahir</th>
-                                    <th>Jabatan</th>
-                                    <th>Kelas Mengajar</th>
-                                    <th>Alamat</th>
-                                    <th class="text-center" width="80px">Aksi</th>
+                                    <th style="vertical-align : middle;text-align:center;">No</th>
+                                    <th style="vertical-align : middle;text-align:center;">Nama</th>
+                                    <th style="vertical-align : middle;text-align:center;">NIP</th>
+                                    <th style="vertical-align : middle;text-align:center;">Jenis Kelamin</th>
+                                    <th style="vertical-align : middle;text-align:center;">Tanggal Lahir</th>
+                                    <th style="vertical-align : middle;text-align:center;">Jabatan</th>
+                                    <th style="vertical-align : middle;text-align:center;">Kelas Mengajar</th>
+                                    <th style="vertical-align : middle;text-align:center;">Alamat</th>
+                                    <th class="text-center" width="80px" style="vertical-align : middle;text-align:center;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -156,7 +156,7 @@ class LaporanGuru extends CI_Controller
     function get_result_guru()
     {
         $id_tahun = $this->input->post('id_tahun', TRUE);
-        $list = $this->Laporan_model->get_datatables($id_tahun);
+        $list = $this->Laporan_model->get_datatables_guru($id_tahun);
         $data = array();
         $no = @$_POST['start'];
         foreach ($list as $item) {
@@ -174,15 +174,15 @@ class LaporanGuru extends CI_Controller
             $row[] = $item->jabatan;
             $row[] = $new_kelas;
             $row[] = $item->alamat;
-            $row[] = anchor('admin/laporanguru/detail/' . $item->id_guru, '<div class="btn btn-sm btn-success mr-1 ml-1 mb-1"><i class="fa fa-eye"></i></div>') .
-                '<a href="' . base_url('admin/laporanguru/pdf_laporan?q=detaildata&id=' . $item->id_guru) . '" class="btn btn-sm btn-info mb-2"><i class="fa fa-print"></i></a>';
+            $row[] = anchor('admin/laporanguru/detail/' . $item->id_guru, '<div class="btn btn-sm btn-success mr-1 ml-1 mb-1 mt-1"><i class="fa fa-eye"></i></div>') .
+                '<a href="' . base_url('admin/laporanguru/pdf_laporan?q=detaildata&id=' . $item->id_guru) . '" class="btn btn-sm btn-info mr-1 ml-1 mb-1 mt-1"><i class="fa fa-print"></i></a>';
             $data[] = $row;
         }
 
         $output = array(
             "draw" => @$_POST['draw'],
-            "recordsTotal" => $this->Laporan_model->count_all($id_tahun),
-            "recordsFiltered" => $this->Laporan_model->count_filtered($id_tahun),
+            "recordsTotal" => $this->Laporan_model->count_all_guru($id_tahun),
+            "recordsFiltered" => $this->Laporan_model->count_filtered_guru($id_tahun),
             "data" => $data,
         );
 
@@ -195,10 +195,10 @@ class LaporanGuru extends CI_Controller
         $tahun   = $this->input->get('tahun');
         $id_guru = $this->input->get('id');
 
-        if ($query == 'alldata' || $id_guru == null) {
+        if ($query == 'alldata') {
             $data['data'] = $this->Laporan_model->get_all_lap_guru($tahun);
             $this->mypdf->generate('pdf/laporan_allguru', $data, 'Laporan Data Guru', 'A4', 'landscape');
-        } else {
+        } elseif ($query == 'detaildata') {
             $data = array(
                 'guru'  => $this->Guru_model->get_detail_data($id_guru),
                 'data'  => $this->Laporan_model->get_detail_lap_guru($id_guru)

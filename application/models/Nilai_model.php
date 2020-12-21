@@ -83,9 +83,14 @@ class Nilai_model extends CI_Model
             left join tb_siswa ts 
                 on tn.id_siswa = ts.id_siswa
             left join tb_kelas tk2 
-                on ts.id_kelas = tk2.id_kelas 
-            where 
-                tm.id_mapel = $mapel
+                on ts.id_kelas = tk2.id_kelas
+            left join tb_pengajar tp 
+                on tk2.id_kelas = tp.id_kelas
+            left join tb_tahunajaran tt 
+                on tp.id_tahun = tt.id_tahun  
+            where
+                tt.status = 1 
+                and tm.id_mapel = $mapel
                 and tk.id_kd = $kd
                 and tk2.id_kelas = $kelas
             group by tn.jenis");
@@ -113,7 +118,7 @@ class Nilai_model extends CI_Model
                     $query_select = $query_select . "sum(kd$key.rerata) as '$value->nama_kd', ";
                     break;
                 case 'rerata':
-                    $query_select = $query_select . "avg(kd$key.rerata) as '$value->nama_kd', ";
+                    $query_select = $query_select . "round(avg(kd$key.rerata)) as '$value->nama_kd', ";
                     break;
 
                 default:
@@ -131,8 +136,13 @@ class Nilai_model extends CI_Model
                         on tn.id_kd = tk.id_kd
                     inner join tb_matapelajaran tm 
                         on tk.id_mapel = tm.id_mapel
+                    inner join tb_pengajar tp 
+                        on tm.id_mapel = tp.id_mapel
+                    inner join tb_tahunajaran tt 
+                        on tp.id_tahun = tt.id_tahun 
                     where 
-                        tm.id_mapel = $mapel
+                        tt.status = 1
+                        and tm.id_mapel = $mapel
                         and tk.id_kd = {$value->id_kd}
                         and ts.id_kelas = $kelas
                     group by ts.id_siswa ) kd$key on ts.id_siswa = kd$key.id_siswa";
@@ -149,7 +159,7 @@ class Nilai_model extends CI_Model
                 $query_select = $query_select . "sum(nm.jumlah) as jumlah, sum(nm.rerata) as rerata";
                 break;
             case 'rerata':
-                $query_select = $query_select . "avg(nm.jumlah) as jumlah, avg(nm.rerata) as rerata";
+                $query_select = $query_select . "round(avg(nm.jumlah),2) as jumlah, round(avg(nm.rerata),2) as rerata";
                 break;
 
             default:
@@ -160,7 +170,7 @@ class Nilai_model extends CI_Model
         if ($query_select != null || $inner_join != null) {
             $inner_join = $inner_join . "
                 inner join(
-                        select ts.id_siswa, ts.nis, ts.nama, sum(tn.nilai)/$kd_row as jumlah, avg(tn.nilai) as rerata 
+                        select ts.id_siswa, ts.nis, ts.nama, sum(tn.nilai)/$kd_row as jumlah, round(avg(tn.nilai), 2) as rerata 
                         from tb_nilai tn 
                         inner join tb_siswa ts 
                             on tn.id_siswa = ts.id_siswa 
