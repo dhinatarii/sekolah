@@ -14,7 +14,9 @@
             <div class="row mr-5">
                 <div class="col-sm-3" class="text-center">
                     <div id="photo" class="mb-3 mt-3 text-center">
-                        <img src="<?= $siswa['photo'] != null ? base_url('assets/photos/' . $siswa['photo']) : base_url('assets/photos/user-placeholder.jpg');  ?>" alt="photo <?= $siswa['nama'] ?>" style="width: 200px; height: 300px; border-radius: 15px;">
+                        <?php if ($siswa['photo']) : ?>
+                            <img src="<?= base_url('assets/photos/' . $siswa['photo']) ?>" alt="photo <?= $siswa['nama'] ?>" style="width: 200px; height: 300px; border-radius: 15px;">
+                        <?php endif ?>
                     </div>
                 </div>
                 <div class="col-sm-9">

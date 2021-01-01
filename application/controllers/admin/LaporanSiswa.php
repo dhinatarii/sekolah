@@ -28,7 +28,7 @@ class LaporanSiswa extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Laporan Daftar Siswa',
@@ -55,7 +55,6 @@ class LaporanSiswa extends CI_Controller
         } else {
             echo '<option value="">--Tidak Tersedia--</option>';
         }
-        echo $id_tahun;
     }
 
     public function data_all_siswa()
@@ -197,7 +196,7 @@ class LaporanSiswa extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Laporan Daftar Siswa',

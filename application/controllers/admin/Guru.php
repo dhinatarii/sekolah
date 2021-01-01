@@ -33,7 +33,7 @@ class Guru extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Guru',
@@ -93,7 +93,7 @@ class Guru extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Guru',
@@ -173,7 +173,7 @@ class Guru extends CI_Controller
             'breadcrumb'    => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Guru',

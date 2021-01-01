@@ -14,6 +14,11 @@ class Pengajar_model extends CI_Model
         $this->db->insert('tb_pengajar', $data);
     }
 
+    public function get_count_perpengajar($id)
+    {
+        return $this->db->get_where('tb_pengajar', ['id_guru' => $id])->num_rows();
+    }
+
     public function edit_data($id)
     {
         $data = array(
@@ -49,7 +54,7 @@ class Pengajar_model extends CI_Model
         $this->db->join('tb_tahunajaran tt', 'tp.id_tahun = tt.id_tahun', 'left');
         $this->db->where('tt.id_tahun', $id_tahun);
         $this->db->group_by('tk.id_kelas');
-        
+
         return $this->db->get();
     }
 

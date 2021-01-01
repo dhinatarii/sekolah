@@ -195,4 +195,51 @@ class Laporan_model extends CI_Model
         $this->db->group_by('tg.nama');
         return $this->db->count_all_results();
     }
+
+
+    public function get_data_nilai($id_tahun, $id_kelas)
+    {
+        $id_tahun       = $id_tahun != null ? $id_tahun : 'null';
+        $id_kelas       = $id_kelas != null ? $id_kelas : 'null';
+        $get_mapel      = $this->get_mapel_pertahun($id_tahun, $id_kelas);
+        $mapel          = ($get_mapel->num_rows() > 0) ? $get_mapel->result() : 'null';
+        $query_select   = "";
+        $query_join     = "";
+        foreach ($mapel as $key => $value) {
+            $query_select = $query_select . "nilai$key.nilai as '$value->nama_mapel', ";
+            $query_join   = $query_join . "
+                inner join (
+                    select ts.id_siswa, ts.nis, ts.nama, avg(tn.nilai) as nilai,tm.id_mapel, tm.nama_mapel 
+                    from tb_nilai tn 
+                    inner join tb_siswa ts 
+                        on tn.id_siswa = ts.id_siswa 
+                    inner join tb_kd tk 
+                        on tn.id_kd = tk.id_kd
+                    inner join tb_matapelajaran tm 
+                        on tk.id_mapel = tm.id_mapel
+                    where ts.id_kelas = $id_kelas
+                        and tm.id_mapel = $value->id_mapel
+                    group by ts.nis, tm.id_mapel) nilai$key on nilai$key.id_siswa = ts.id_siswa
+                ";
+        }
+
+        $query_select = substr($query_select, 0, -2);
+
+        if ($query_select != null || $query_join != null) {
+            $query = $this->db->query("select ts.nis, ts.nisn ,ts.nama, $query_select from tb_siswa ts $query_join");
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function get_mapel_pertahun($id_tahun, $id_kelas)
+    {
+        $this->db->select('tm.*');
+        $this->db->from('tb_matapelajaran tm');
+        $this->db->join('tb_pengajar tp', 'tm.id_mapel = tp.id_mapel', 'left');
+        $this->db->where('tp.id_tahun', $id_tahun);
+        $this->db->where('tp.id_kelas', $id_kelas);
+        return $this->db->get();
+    }
 }

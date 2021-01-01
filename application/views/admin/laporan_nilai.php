@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"> <i class="fas fa-sticky-note"></i> Laporan Daftar Siswa</h1>
+        <h1 class="h3 mb-0 text-gray-800"> <i class="fas fa-sticky-note"></i> Laporan Daftar Nilai</h1>
     </div>
     <div class="card">
         <div class="card-header bg-behance">
@@ -25,10 +25,10 @@
                 </select>
                 <?php echo form_error('kelas', '<div class="text-danger small ml-3">', '</div>') ?>
             </div>
-            <button onclick="lihatSiswa()" class="btn btn-primary"><i class="fas fa-search"></i> Lihat</button>
+            <button onclick="lihatNilai()" class="btn btn-primary"><i class="fas fa-search"></i> Lihat</button>
         </div>
     </div>
-    <div id="data-all-siswa"></div>
+    <div id="data-all-nilai"></div>
 </div>
 </main>
 
@@ -38,7 +38,7 @@
             const tahun = $(this).val();
             $.ajax({
                 type: 'POST',
-                url: '<?= base_url('admin/laporansiswa/get_kelas') ?>',
+                url: '<?= base_url('admin/laporannilai/get_kelas') ?>',
                 data: {
                     id_tahun: tahun,
                 },
@@ -49,22 +49,22 @@
         })
     });
 
-    function lihatSiswa() {
+    function lihatNilai() {
         const thnAjaran = $('#thn_ajaran').val();
         const kelas = $('#kelas').val();
 
         $.ajax({
             type: 'POST',
-            url: '<?= base_url('admin/laporansiswa/data_all_siswa') ?>',
+            url: '<?= base_url('admin/laporannilai/data_all_nilai') ?>',
             data: {
                 id_tahun: thnAjaran,
                 id_kelas: kelas
             },
             success: function(response) {
-                $('#data-all-siswa').html(response);
+                $('#data-all-nilai').html(response);
             },
             error: function(response) {
-                $('#data-all-siswa').html(response);
+                $('#data-all-nilai').html(response);
             }
         });
     }

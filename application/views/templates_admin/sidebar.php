@@ -14,7 +14,7 @@
             </svg>
         </div>
         <ul class="c-sidebar-nav">
-            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'dashboard') echo 'c-active' ?>" href="<?= base_url('admin/dashboard') ?>">
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'dashboard') echo 'c-active' ?>" href="<?= base_url('admin') ?>">
                     <svg class="c-sidebar-nav-icon">
                         <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-speedometer"></use>
                     </svg><b> Dashboard</b></a></li>

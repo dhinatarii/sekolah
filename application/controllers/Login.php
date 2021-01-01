@@ -43,6 +43,8 @@ class Login extends CI_Controller
                             redirect('admin/dashboard');
                         } elseif ($sess_data['level'] == 'guru') {
                             redirect('guru/dashboard');
+                        } elseif ($sess_data['level'] == 'wali kelas') {
+                            redirect('walikelas/dashboard');
                         } elseif ($sess_data['level'] == 'siswa') {
                             redirect('siswa/dashboard');
                         } else {

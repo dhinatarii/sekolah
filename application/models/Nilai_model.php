@@ -8,13 +8,16 @@ class Nilai_model extends CI_Model
         $kd = $id_kd != null ? $id_kd : 'null';
         $jenis_nilai = $this->get_jenis_nilai_in_perkd($id_kelas, $id_mapel, $id_kd);
         $query_select = "";
-        $inner_join = "";
 
         foreach ($jenis_nilai as $jn => $value) {
-            $query_select = $query_select . "nilai$jn.nilai as '$value->jenis', ";
-            $inner_join = $inner_join . "
-            inner join (
-                    select tn.id_siswa, tn.nilai from tb_nilai tn  
+            $query_select = $query_select . "sum( if ( nilai.jenis = '$value->jenis', nilai.nilai, 0)) as '$value->jenis', ";
+        }
+
+        $query_select = substr($query_select, 0, -2);
+        if ($query_select != null) {
+            $query = $this->db->query("select ts.nis, ts.nisn ,ts.nama, $query_select, jm.jumlah, jm.rerata from tb_siswa ts
+                inner join (
+                    select tn.id_siswa, tn.nilai, tn.jenis from tb_nilai tn  
                         left join tb_kd tk 
                             on tn.id_kd = tk.id_kd 
                         left join tb_matapelajaran tm 
@@ -28,15 +31,7 @@ class Nilai_model extends CI_Model
                     where tt.status = 1
                         and tm.id_mapel = $mapel
                         and tk.id_kd = $kd
-                        and tk2.id_kelas = $kelas
-                        and tn.jenis = '$value->jenis') nilai$jn on nilai$jn.id_siswa = ts.id_siswa ";
-        }
-
-
-        $query_select = substr($query_select, 0, -2);
-
-        if ($query_select != null || $inner_join != null) {
-            $query = $this->db->query("select ts.nis, ts.nisn ,ts.nama, $query_select, jm.jumlah, jm.rerata from tb_siswa ts $inner_join
+                        and tk2.id_kelas = $kelas) nilai on nilai.id_siswa = ts.id_siswa    
                 inner join (
                     select ts.id_siswa, ts.nis, ts.nama, sum(tn.nilai) as jumlah, avg(tn.nilai) as rerata 
                     from tb_nilai tn 
@@ -50,8 +45,9 @@ class Nilai_model extends CI_Model
                         tm.id_mapel = $mapel
                         and tk.id_kd = $kd
                         and ts.id_kelas = $kelas
-                    group by ts.id_siswa) jm on jm.id_siswa = ts.id_siswa");
-
+                    group by ts.id_siswa) jm on jm.id_siswa = ts.id_siswa
+                where ts.id_kelas = $kelas
+                group by ts.nis");
             return $query->result_array();
         } else {
             return null;
@@ -104,7 +100,7 @@ class Nilai_model extends CI_Model
         $kd             = $this->get_kd_permapel_result($mapel, $kelas);
         $kd_row         = $this->get_kd_permapel_numrow($mapel, $kelas);
         $query_select   = "";
-        $inner_join     = "";
+        $query_join     = "";
 
         foreach ($kd as $key => $value) {
             switch ($view) {
@@ -126,7 +122,7 @@ class Nilai_model extends CI_Model
                     break;
             }
 
-            $inner_join = $inner_join . "
+            $query_join = $query_join . "
                 inner join (
                     select ts.id_siswa, ts.nis, ts.nama, sum(tn.nilai) as jumlah, avg(tn.nilai) as rerata 
                     from tb_nilai tn 
@@ -167,8 +163,8 @@ class Nilai_model extends CI_Model
                 break;
         }
 
-        if ($query_select != null || $inner_join != null) {
-            $inner_join = $inner_join . "
+        if ($query_select != null || $query_join != null) {
+            $query_join = $query_join . "
                 inner join(
                         select ts.id_siswa, ts.nis, ts.nama, sum(tn.nilai)/$kd_row as jumlah, round(avg(tn.nilai), 2) as rerata 
                         from tb_nilai tn 
@@ -183,7 +179,7 @@ class Nilai_model extends CI_Model
                             and ts.id_kelas = $kelas
                         group by ts.id_siswa) nm on ts.id_siswa = nm.id_siswa";
 
-            $query = $this->db->query("select ts.id_siswa, ts.nis, ts.nama, $query_select from tb_siswa ts $inner_join");
+            $query = $this->db->query("select ts.id_siswa, ts.nis, ts.nama, $query_select from tb_siswa ts $query_join");
             return $query->result_array();
         } else {
             return null;

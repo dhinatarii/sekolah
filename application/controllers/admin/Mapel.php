@@ -31,7 +31,7 @@ class Mapel extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Mata Pelajaran',
@@ -92,7 +92,7 @@ class Mapel extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Mata Pelajaran',
@@ -133,7 +133,7 @@ class Mapel extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Mata Pelajaran',
@@ -179,7 +179,7 @@ class Mapel extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Mata Pelajaran',
