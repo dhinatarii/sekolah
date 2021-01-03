@@ -116,7 +116,6 @@ class Nilai_model extends CI_Model
                 case 'rerata':
                     $query_select = $query_select . "round(avg(kd$key.rerata)) as '$value->nama_kd', ";
                     break;
-
                 default:
                     $query_select = $query_select . "kd$key.rerata as '$value->nama_kd', ";
                     break;
@@ -157,7 +156,6 @@ class Nilai_model extends CI_Model
             case 'rerata':
                 $query_select = $query_select . "round(avg(nm.jumlah),2) as jumlah, round(avg(nm.rerata),2) as rerata";
                 break;
-
             default:
                 $query_select = $query_select . "nm.jumlah as jumlah, nm.rerata as rerata";
                 break;

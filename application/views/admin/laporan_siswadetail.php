@@ -16,6 +16,8 @@
                     <div id="photo" class="mb-3 mt-3 text-center">
                         <?php if ($siswa['photo']) : ?>
                             <img src="<?= base_url('assets/photos/' . $siswa['photo']) ?>" alt="photo <?= $siswa['nama'] ?>" style="width: 200px; height: 300px; border-radius: 15px;">
+                        <?php else : ?>
+                            <img src="<?= base_url('assets/photos/user-placeholder.jpg') ?>" alt="photo <?= $siswa['nama'] ?>" style="width: 200px; height: 300px; border-radius: 15px;">
                         <?php endif ?>
                     </div>
                 </div>

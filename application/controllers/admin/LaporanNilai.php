@@ -65,7 +65,11 @@ class LaporanNilai extends CI_Controller
         $tahun          = $this->Tahun_model->get_detail_data($id_tahun);
         $kelas          = $this->Kelas_model->get_detail_data($id_kelas);
         $daftar_mapel   = $this->Laporan_model->get_mapel_pertahun($id_tahun, $id_kelas)->result();
-        $result         = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas);
+        $result         = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'default');
+        $result_min     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'min');
+        $result_max     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'max');
+        $result_jumlah  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'jumlah');
+        $result_rerata  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'rerata');
         $html           = '';
 
         if ($result != null) {
@@ -97,6 +101,7 @@ class LaporanNilai extends CI_Controller
                             <th>Rata-rata</th>
                             </tr></thead><tbody>';
 
+            // body table default
             foreach ($result as $key => $value) {
                 $html = $html . '
                     <tr>
@@ -109,8 +114,72 @@ class LaporanNilai extends CI_Controller
                     $html = $html . '<td>' . $value[$mapel->nama_mapel] . '</td>';
                 }
 
-                $html = $html . '<td></td><td></td></tr>';
+                $html = $html . '
+                        <td>'. $value['jumlah'] .'</td>
+                        <td>'. $value['rerata'] .'</td>
+                    </tr>';
             }
+
+            // body table min
+            foreach ($result_min as $key => $value) {
+                $html = $html . '<tr>
+                    <td width="20px"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>';
+                foreach ($daftar_mapel as $kd => $mapel) {
+                    $html = $html . '<td></td>';
+                }
+
+                $html = $html . "<td></td><td></td></tr>";
+
+                $html = $html . '<tr>
+                    <td width="20px"></td>
+                    <td colspan="3">MIN</td>';
+                foreach ($daftar_mapel as $kd => $mapel) {
+                    $html = $html . '<td>' . $value[$mapel->nama_mapel] . '</td>';
+                }
+
+                $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
+            }
+
+            // body table max
+            foreach ($result_max as $key => $value) {
+                $html = $html . '<tr>
+                    <td width="20px"></td>
+                    <td colspan="3">MAX</td>';
+                foreach ($daftar_mapel as $kd => $mapel) {
+                    $html = $html . '<td>' . $value[$mapel->nama_mapel] . '</td>';
+                }
+
+                $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
+            }
+
+            // body table jumlah
+            foreach ($result_jumlah as $key => $value) {
+                $html = $html . '<tr>
+                    <td width="20px"></td>
+                    <td colspan="3">Jumlah</td>';
+                foreach ($daftar_mapel as $kd => $mapel) {
+                    $html = $html . '<td>' . $value[$mapel->nama_mapel] . '</td>';
+                }
+
+                $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
+            }
+
+            // body table rerata
+            foreach ($result_rerata as $key => $value) {
+                $html = $html . '<tr>
+                    <td width="20px"></td>
+                    <td colspan="3">Rata-Rata</td>';
+                foreach ($daftar_mapel as $kd => $mapel) {
+                    $html = $html . '<td>' . $value[$mapel->nama_mapel] . '</td>';
+                }
+
+                $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
+            }
+
+            $html = $html . '<tr></tr>';
 
             $html = $html . '
                             </tbody>

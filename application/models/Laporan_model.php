@@ -197,19 +197,61 @@ class Laporan_model extends CI_Model
     }
 
 
-    public function get_data_nilai($id_tahun, $id_kelas)
+    public function get_data_nilai($id_tahun, $id_kelas, $view = 'default')
     {
-        $id_tahun       = $id_tahun != null ? $id_tahun : 'null';
-        $id_kelas       = $id_kelas != null ? $id_kelas : 'null';
-        $get_mapel      = $this->get_mapel_pertahun($id_tahun, $id_kelas);
-        $mapel          = ($get_mapel->num_rows() > 0) ? $get_mapel->result() : 'null';
-        $query_select   = "";
-        $query_join     = "";
+        $id_tahun               = $id_tahun != null ? $id_tahun : 'null';
+        $id_kelas               = $id_kelas != null ? $id_kelas : 'null';
+        $get_mapel              = $this->get_mapel_pertahun($id_tahun, $id_kelas);
+        $mapel                  = ($get_mapel->num_rows() > 0) ? $get_mapel->result() : 'null';
+        $query_join             = "";
+        $query_select           = "";
+        $query_select_injoin    = "";
+
+
+
         foreach ($mapel as $key => $value) {
-            $query_select = $query_select . "nilai$key.nilai as '$value->nama_mapel', ";
-            $query_join   = $query_join . "
+            $query_select_injoin = $query_select_injoin . "sum(if ( nilai.nama_mapel = '$value->nama_mapel', nilai.nilai, 0)) as nilai$key, ";
+
+            switch ($view) {
+                case 'min':
+                    $query_select = $query_select . "min(hasil.nilai$key) as '$value->nama_mapel', ";
+                    break;
+                case 'max':
+                    $query_select = $query_select . "max(hasil.nilai$key) as '$value->nama_mapel', ";
+                    break;
+                case 'jumlah':
+                    $query_select = $query_select . "sum(hasil.nilai$key) as '$value->nama_mapel', ";
+                    break;
+                case 'rerata':
+                    $query_select = $query_select . "avg(hasil.nilai$key) as '$value->nama_mapel', ";
+                    break;
+                default:
+                    $query_select = $query_select . "hasil.nilai$key as '$value->nama_mapel', ";
+                    break;
+            }
+        }
+
+        switch ($view) {
+            case 'min':
+                $query_select = $query_select . "min(hasil.jumlah) as 'jumlah', min(hasil.rerata) as 'rerata'";
+                break;
+            case 'max':
+                $query_select = $query_select . "max(hasil.jumlah) as 'jumlah', max(hasil.rerata) as 'rerata'";
+                break;
+            case 'jumlah':
+                $query_select = $query_select . "sum(hasil.jumlah) as 'jumlah', sum(hasil.rerata) as 'rerata'";
+                break;
+            case 'rerata':
+                $query_select = $query_select . "avg(hasil.jumlah) as 'jumlah', avg(hasil.rerata) as 'rerata'";
+                break;
+            default:
+                $query_select = $query_select . "hasil.jumlah as 'jumlah', hasil.rerata as 'rerata'";
+                break;
+        }
+
+        $query_join = "select ts.nis, ts.nisn ,ts.nama, $query_select_injoin sum(nilai.nilai) as 'jumlah', avg(nilai.nilai) as 'rerata' from tb_siswa ts 
                 inner join (
-                    select ts.id_siswa, ts.nis, ts.nama, avg(tn.nilai) as nilai,tm.id_mapel, tm.nama_mapel 
+                    select ts.id_siswa, ts.nis, ts.nama, avg(tn.nilai) as nilai, tm.id_mapel, tm.nama_mapel 
                     from tb_nilai tn 
                     inner join tb_siswa ts 
                         on tn.id_siswa = ts.id_siswa 
@@ -218,16 +260,17 @@ class Laporan_model extends CI_Model
                     inner join tb_matapelajaran tm 
                         on tk.id_mapel = tm.id_mapel
                     where ts.id_kelas = $id_kelas
-                        and tm.id_mapel = $value->id_mapel
-                    group by ts.nis, tm.id_mapel) nilai$key on nilai$key.id_siswa = ts.id_siswa
-                ";
-        }
-
-        $query_select = substr($query_select, 0, -2);
+                    group by ts.nis, tm.id_mapel) nilai on nilai.id_siswa = ts.id_siswa
+                    group by ts.nis";
 
         if ($query_select != null || $query_join != null) {
-            $query = $this->db->query("select ts.nis, ts.nisn ,ts.nama, $query_select from tb_siswa ts $query_join");
-            return $query->result_array();
+
+            $query = "select ts.nis, ts.nisn, ts.nama, $query_select from
+                        tb_siswa ts
+                    inner join($query_join) hasil on
+                    hasil.nis = ts.nis";
+
+            return $this->db->query($query)->result_array();
         } else {
             return null;
         }
