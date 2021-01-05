@@ -310,22 +310,23 @@ class Nilai extends CI_Controller
 
         $result_jenis = array_column($this->Nilai_model->get_jenis_nilai_in_perkd_array($id_kelas, $id_mapel, $id_kd), 'jenis');
         $object_jenis = ['Tugas Harian 1', 'Tugas Harian 2', 'Tugas Harian 3', 'Tugas Harian 4', 'Ulangan Harian 1', 'Ulangan Harian 2', 'Ulangan Harian 3', 'Ulangan Harian 4', 'UTS', 'UAS'];
-        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+
+        $data = $this->User_model->get_detail_guru($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
-            'id_user'   => $data['id_user'],
-            'nama'      => $data['nama'],
-            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
-            'level'     => $data['level'],
-            'id_kelas'  => $id_kelas,
-            'id_mapel'  => $id_mapel,
-            'kelas'     => $this->Kelas_model->get_detail_data($id_kelas),
-            'mapel'     => $this->Mapel_model->get_detail_data($id_mapel),
-            'komp_dasar' => $this->Mapel_model->get_kd_detail($id_kd),
-            'pengajar'  => $this->Pengajar_model->get_detail_data_with_kelas_and_mapel($id_kelas, $id_mapel),
-            'siswa'     => $this->Siswa_model->get_data_perkelas($id_kelas),
-            'jenis_nilai' => array_diff($object_jenis, $result_jenis),
-            'menu'      => 'nilai',
-            'breadcrumb' => [
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'         => $data['level'],
+            'id_kelas'      => $id_kelas,
+            'id_mapel'      => $id_mapel,
+            'kelas'         => $this->Kelas_model->get_detail_data($id_kelas),
+            'mapel'         => $this->Mapel_model->get_detail_data($id_mapel),
+            'komp_dasar'    => $this->Mapel_model->get_kd_detail($id_kd),
+            'pengajar'      => $this->Pengajar_model->get_detail_data_with_kelas_and_mapel($id_kelas, $id_mapel),
+            'siswa'         => $this->Siswa_model->get_data_perkelas($id_kelas),
+            'jenis_nilai'   => array_diff($object_jenis, $result_jenis),
+            'menu'          => 'nilai',
+            'breadcrumb'    => [
                 0 => (object)[
                     'name' => 'Dashboard',
                     'link' => 'walikelas'
@@ -355,6 +356,66 @@ class Nilai extends CI_Controller
         } else {
             $this->Nilai_model->input_nilai($data['siswa'], $id_kd);
             $this->session->set_flashdata('message', 'Nilai Siswa Berhasil Ditambahkan!');
+            redirect('walikelas/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel);
+        }
+    }
+
+    //edit nilai
+    public function edit()
+    {
+        $id_kelas   = $this->input->get('id_kelas', TRUE);
+        $id_mapel   = $this->input->get('id_mapel', TRUE);
+        $id_kd      = $this->input->get('id_kd', TRUE);
+        $jenis      = $this->input->get('jenis', TRUE);
+
+        if (!isset($id_kelas) || !isset($id_mapel) || !isset($id_kd) || !isset($jenis)) {
+            redirect('error_404');
+        }
+
+        $data = $this->User_model->get_detail_guru($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'         => $data['level'],
+            'kelas'         => $this->Kelas_model->get_detail_data($id_kelas),
+            'mapel'         => $this->Mapel_model->get_detail_data($id_mapel),
+            'komp_dasar'    => $this->Mapel_model->get_kd_detail($id_kd),
+            'pengajar'      => $this->Pengajar_model->get_detail_data_with_kelas_and_mapel($id_kelas, $id_mapel),
+            'siswa'         => $this->Siswa_model->get_data_perkelas($id_kelas),
+            'nilai'         => $this->Nilai_model->detail_nilai_perkd($id_kelas, $id_mapel, $id_kd, $jenis),
+            'jenis_nilai'   => $jenis,
+            'menu'          => 'nilai',
+            'breadcrumb'    => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Nilai',
+                    'link' => 'admin/nilai'
+                ],
+                2 => (object)[
+                    'name' => 'Detail',
+                    'link' => 'admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel
+                ],
+                3 => (object)[
+                    'name' => 'Input Nilai',
+                    'link' => NULL
+                ]
+            ]
+        );
+
+        $this->_rules_persiswa($data['nilai']);
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('templates/header');
+            $this->load->view('templates_guruwali/sidebar', $data);
+            $this->load->view('guru_wali/nilai_edit', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $this->Nilai_model->update_nilai($data['nilai'], $id_kd, $jenis);
+            $this->session->set_flashdata('message', 'Nilai Siswa Berhasil Diupdate!');
             redirect('walikelas/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel);
         }
     }

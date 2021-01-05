@@ -169,14 +169,7 @@ class Nilai extends CI_Controller
 
             //body table min
             foreach ($data_min as $dt => $value_dt) {
-                $html = $html . '<tr>
-                    <td width="20px"></td>
-                    <td></td>';
-                foreach ($daftar_kd as $kd => $value_kd) {
-                    $html = $html . '<td></td>';
-                }
-
-                $html = $html . "<td></td><td></td></tr>";
+                $html = $html . '<tr><td colspan="100%"></td></tr>';
 
                 $html = $html . '<tr>
                     <td width="20px"></td>

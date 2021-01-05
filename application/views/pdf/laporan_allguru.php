@@ -43,7 +43,7 @@
     <p align="center">
         <span style="font-size: 20px">LAPORAN DATA GURU</span>
         <br>
-        <b>Tahun Ajaran 2020/2021</b>
+        <b>TAHUN AJARAN 2020/2021</b>
     </p>
     <table class="table table-bordered" id="table-laporanguru">
         <thead>

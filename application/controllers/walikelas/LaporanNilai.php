@@ -1,5 +1,4 @@
 <?php
-
 class LaporanNilai extends CI_Controller
 {
     function __construct()
@@ -10,7 +9,7 @@ class LaporanNilai extends CI_Controller
             redirect('login');
         }
 
-        if ($this->session->userdata['level'] != 'admin') {
+        if ($this->session->userdata['level'] != 'wali kelas') {
             $this->session->set_flashdata('message', 'Anda Belum Login!');
             redirect('login');
         }
@@ -18,18 +17,20 @@ class LaporanNilai extends CI_Controller
 
     public function index()
     {
-        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = $this->User_model->get_detail_guru($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $kelas = $this->Kelas_model->get_like_walikelas($data['nama']);
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
             'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
+            'kelas'     => $kelas,
             'tahun'     => $this->Tahun_model->get_data(),
             'menu'      => 'laporan_nilai',
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin'
+                    'link' => 'walikelas'
                 ],
                 1 => (object)[
                     'name' => 'Laporan Daftar Nilai',
@@ -39,23 +40,9 @@ class LaporanNilai extends CI_Controller
         );
 
         $this->load->view('templates/header');
-        $this->load->view('templates_admin/sidebar', $data);
-        $this->load->view('admin/laporan_nilai', $data);
+        $this->load->view('templates_guruwali/sidebar', $data);
+        $this->load->view('guru_wali/laporan_nilai', $data);
         $this->load->view('templates/footer');
-    }
-
-    public function get_kelas()
-    {
-        $id_tahun   = $this->input->post('id_tahun', TRUE);
-        $data       =  $this->Pengajar_model->get_data_with_tahun($id_tahun);
-        if ($data->num_rows() > 0) {
-            echo '<option value="">--Pilih Kelas--</option>';
-            foreach ($data->result() as $pe) {
-                echo "<option value=$pe->id_kelas>$pe->kelas</option>";
-            }
-        } else {
-            echo '<option value="">--Tidak Tersedia--</option>';
-        }
     }
 
     public function data_all_nilai()
@@ -76,8 +63,8 @@ class LaporanNilai extends CI_Controller
             $html = $html . '
                 <div class="card">
                     <div class="card-body">
-                        <a href="' . base_url('admin/laporannilai/pdf_laporan?q=alldata&tahun=' . $id_tahun . '&kelas=' . $id_kelas) . '" class="btn btn-info mb-2"><i class="fas fa-print"></i> Print PDF</a>
-                        <a href="' . base_url('admin/laporannilai/pdf_laporan?q=alldata&tahun=' . $id_tahun . '&kelas=' . $id_kelas) . '" class="btn btn-success mb-2"><i class="fas fa-file-excel"></i> Print Excel</a>
+                        <a href="' . base_url('walikelas/laporannilai/pdf_laporan?q=alldata&tahun=' . $id_tahun . '&kelas=' . $id_kelas) . '" class="btn btn-info mb-2"><i class="fas fa-print"></i> Print PDF</a>
+                        <a href="' . base_url('walikelas/laporannilai/pdf_laporan?q=alldata&tahun=' . $id_tahun . '&kelas=' . $id_kelas) . '" class="btn btn-success mb-2"><i class="fas fa-file-excel"></i> Print Excel</a>
                         <div>
                             <h1 class="h1 text-center">LAPORAN DAFTAR NILAI SISWA</h1>
                             <h2 class="text-center">SD MUHAMMADIYAH TRINI</h2>

@@ -196,7 +196,6 @@ class Laporan_model extends CI_Model
         return $this->db->count_all_results();
     }
 
-
     public function get_data_nilai($id_tahun, $id_kelas, $view = 'default')
     {
         $id_tahun               = $id_tahun != null ? $id_tahun : 'null';
@@ -206,8 +205,6 @@ class Laporan_model extends CI_Model
         $query_join             = "";
         $query_select           = "";
         $query_select_injoin    = "";
-
-
 
         foreach ($mapel as $key => $value) {
             $query_select_injoin = $query_select_injoin . "sum(if ( nilai.nama_mapel = '$value->nama_mapel', nilai.nilai, 0)) as nilai$key, ";
@@ -223,7 +220,7 @@ class Laporan_model extends CI_Model
                     $query_select = $query_select . "sum(hasil.nilai$key) as '$value->nama_mapel', ";
                     break;
                 case 'rerata':
-                    $query_select = $query_select . "avg(hasil.nilai$key) as '$value->nama_mapel', ";
+                    $query_select = $query_select . "round(avg(hasil.nilai$key)) as '$value->nama_mapel', ";
                     break;
                 default:
                     $query_select = $query_select . "hasil.nilai$key as '$value->nama_mapel', ";
@@ -242,16 +239,16 @@ class Laporan_model extends CI_Model
                 $query_select = $query_select . "sum(hasil.jumlah) as 'jumlah', sum(hasil.rerata) as 'rerata'";
                 break;
             case 'rerata':
-                $query_select = $query_select . "avg(hasil.jumlah) as 'jumlah', avg(hasil.rerata) as 'rerata'";
+                $query_select = $query_select . "round(avg(hasil.jumlah)) as 'jumlah', round(avg(hasil.rerata)) as 'rerata'";
                 break;
             default:
                 $query_select = $query_select . "hasil.jumlah as 'jumlah', hasil.rerata as 'rerata'";
                 break;
         }
 
-        $query_join = "select ts.nis, ts.nisn ,ts.nama, $query_select_injoin sum(nilai.nilai) as 'jumlah', avg(nilai.nilai) as 'rerata' from tb_siswa ts 
+        $query_join = "select ts.nis, ts.nisn ,ts.nama, $query_select_injoin round(sum(nilai.nilai)) as 'jumlah', round(avg(nilai.nilai)) as 'rerata' from tb_siswa ts 
                 inner join (
-                    select ts.id_siswa, ts.nis, ts.nama, avg(tn.nilai) as nilai, tm.id_mapel, tm.nama_mapel 
+                    select ts.id_siswa, ts.nis, ts.nama, round(avg(tn.nilai)) as nilai, tm.id_mapel, tm.nama_mapel 
                     from tb_nilai tn 
                     inner join tb_siswa ts 
                         on tn.id_siswa = ts.id_siswa 

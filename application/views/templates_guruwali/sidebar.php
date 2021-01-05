@@ -1,4 +1,4 @@
-<title>Admin</title>
+<title>Wali kelas</title>
 </head>
 
 <body class="c-app">
@@ -31,7 +31,6 @@
                         <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-description"></use>
                     </svg> Laporan</a>
                 <ul class="c-sidebar-nav-dropdown-items">
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'laporan_guru') echo 'c-active' ?>" href="<?= base_url('walikelas/laporanguru') ?>"> Laporan Daftar Guru</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'laporan_siswa') echo 'c-active' ?>" href="<?= base_url('walikelas/laporansiswa') ?>"> Laporan Daftar Siswa</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'laporan_nilai') echo 'c-active' ?>" href="<?= base_url('walikelas/laporannilai') ?>"> Laporan Daftar Nilai</a></li>
                 </ul>
@@ -65,11 +64,11 @@
                         <div class="c-avatar"><img class="c-avatar-img" style="max-width:36px; max-height:36px; object-fit: scale-down; object-position: center; " src="<?= base_url('assets/photos/' . $photo) ?>" alt="user@email.com"></div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right pt-0">
-                        <a class="dropdown-item" href="<?= base_url('admin/profile?id_user=' . $id_user) ?>">
+                        <a class="dropdown-item" href="<?= base_url('walikelas/profile?id_user=' . $id_user) ?>">
                             <svg class="c-icon mr-2">
                                 <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-user"></use>
                             </svg> Profile</a>
-                        <a class="dropdown-item" href="<?= base_url('admin/profile/password?id_user=' . $id_user) ?>">
+                        <a class="dropdown-item" href="<?= base_url('walikelas/profile/password?id_user=' . $id_user) ?>">
                             <svg class="c-icon mr-2">
                                 <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
                             </svg> Ganti Password</a>
