@@ -1,11 +1,10 @@
-<!-- Begin Page Content -->
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-sort-numeric-down"></i> Data Nilai <?= $thn = ($tahun['nama'] != null) ? '(Tahun Ajaran ' . $tahun['nama'] . ')' : '(Tidak Ada Tahun Ajaran Yang Aktif)';  ?></h1>
     </div>
-    <div class="row">
 
+    <div class="row">
         <div class="col-sm-3">
             <div class="card">
                 <div class="card-header bg-behance">
@@ -16,7 +15,7 @@
                         <label for="kelas">Kelas</label>
                         <select class="form-control" id="kelas" name="kelas">
                             <option value="">--Pilih Kelas--</option>
-                            <?php foreach ($kelas as $kl) : ?>
+                            <?php foreach ($pengampu as $kl) : ?>
                                 <option value="<?php echo $kl->id_kelas ?>"><?= $kl->kelas ?></option>
                             <?php endforeach; ?>
                         </select>
@@ -38,17 +37,20 @@
         </div>
     </div>
 </div>
-
 </main>
 
 <script>
     $(document).ready(function() {
         $('#kelas').change(function() {
-            const kelas = $(this).val();
+            const idkelas = $(this).val();
+            const idGuru = '<?= $id_guru ?>';
             $.ajax({
                 type: 'POST',
-                url: '<?= base_url('admin/nilai/get_mapel') ?>',
-                data: 'id_kelas=' + kelas,
+                url: '<?= base_url('guru/nilai/get_mapel') ?>',
+                data: {
+                    id_kelas: idkelas,
+                    id_guru: idGuru
+                },
                 success: function(response) {
                     $('#mapel').html(response);
                 }
@@ -59,11 +61,12 @@
     function searchNilai() {
         const idKelas = $('#kelas').val()
         const idMapel = $('#mapel').val()
+        const idGuru = '<?= $id_guru ?>';
 
         // if (idKelas !== '' && idMapel !== '') {
         $.ajax({
             type: 'POST',
-            url: '<?= base_url('admin/nilai/data_nilai_permapel') ?>',
+            url: '<?= base_url('guru/nilai/data_nilai_permapel') ?>',
             data: {
                 id_kelas: idKelas,
                 id_mapel: idMapel

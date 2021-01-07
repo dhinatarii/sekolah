@@ -49,13 +49,17 @@ class Mapel_model extends CI_Model
         }
     }
 
-    public function get_mapel_with_kelas($id_kelas)
+    public function get_mapel_with_kelas($id_kelas, $id_guru = NULL)
     {
         $this->db->select('tm.id_mapel, tm.nama_mapel, tm.level');
         $this->db->from('tb_matapelajaran tm');
         $this->db->join('tb_pengajar tp', 'tm.id_mapel = tp.id_mapel', 'left');
         $this->db->join('tb_kelas tk', 'tp.id_kelas = tk.id_kelas', 'left');
         $this->db->where('tk.id_kelas', $id_kelas);
+        if ($id_guru) {
+            $this->db->where('tp.id_guru', $id_guru);
+        }
+
         return $this->db->get();
     }
 

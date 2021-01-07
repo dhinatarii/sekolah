@@ -90,21 +90,11 @@
         <tbody>
             <?php foreach ($data as $key => $value) : ?>
                 <tr>
-                    <td class="text-center">
-                        <?= ++$key ?>
-                    </td>
-                    <td>
-                        <?= $value->nama_mapel ?>
-                    </td>
-                    <td>
-                        <?= $value->kelas ?>
-                    </td>
-                    <td>
-                        <?= $value->kd ?>
-                    </td>
-                    <td>
-                        <?= $value->tahun ?>
-                    </td>
+                    <td class="text-center"><?= ++$key ?></td>
+                    <td><?= $value->nama_mapel ?></td>
+                    <td><?= $value->kelas ?></td>
+                    <td><?= $value->kd ?></td>
+                    <td><?= $value->tahun ?></td>
                 </tr>
             <?php endforeach ?>
         </tbody>

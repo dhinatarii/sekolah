@@ -83,6 +83,51 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="controlpanelModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-landmark"></i> Menu</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-3 text-center">
+                            <a href="<?php echo base_url('walikelas/profile') ?>" style="text-decoration:none">
+                                <i class="fas fa-4x fa-user-circle text-info"></i>
+                                <p class="nav-link small text-info">Profile</p>
+                            </a>
+                        </div>
+                        <div class="col-md-3 text-info text-center">
+                            <a href="<?php echo base_url('walikelas/nilai') ?>" style="text-decoration:none">
+                                <i class="text-info fas fa-4x fa-sort-numeric-down"></i>
+                                <p class="nav-link small text-info">Input Nilai</p>
+                            </a>
+                        </div>
+                        <div class="col-md-3 text-info text-center">
+                            <a href="<?php echo base_url('walikelas/laporansiswa') ?>" style="text-decoration:none">
+                                <i class="text-info far fa-4x  fa-clipboard"></i>
+                                <p class="nav-link small text-info">Laporan Daftar Siswa</p>
+                            </a>
+                        </div>
+                        <div class="col-md-3 text-info text-center">
+                            <a href="<?php echo base_url('walikelas/laporannilai') ?>" style="text-decoration:none">
+                                <i class="text-info far fa-4x  fa-clipboard"></i>
+                                <p class="nav-link small text-info">Laporan Daftar Nilai</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 </main>

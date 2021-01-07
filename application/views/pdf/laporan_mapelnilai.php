@@ -58,6 +58,8 @@
         <br>
         <b>TAHUN AJARAN <?= $tahun['nama'] ?></b>
         <br>
+        <b>MATA PELAJARAN <?= $mapel['nama_mapel'] ?></b>
+        <br>
         <?= 'KELAS ' . $kelas['kelas'] ?>
     </p>
     <table class="table table-bordered" id="table-laporansiswa" style="width: 100%;">
@@ -67,72 +69,73 @@
                 <th width="10px" style="vertical-align : middle;text-align:center;">NIS</th>
                 <th style="vertical-align : middle;text-align:center;">NISN</th>
                 <th style="vertical-align : middle;text-align:center;">Nama</th>
-                <?php
-                //heading mapel
-                foreach ($mapel as $key => $value) {
-                    echo "<th>$value->nama_mapel</th>";
-                }
-                ?>
+                <?php foreach ($daftar_kd as $key => $value) : ?>
+                    <th style="vertical-align : middle;text-align:center;"><?= $value->nama_kd ?></th>
+                <?php endforeach; ?>
                 <th>Jumlah</th>
                 <th>Rata-rata</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($result as $key => $value) : ?>
+            <?php foreach ($data_default as $dt => $value_dt) : ?>
                 <tr>
-                    <td class="text-center"><?= ++$key ?></td>
-                    <td><?= $value['nis'] ?></td>
-                    <td><?= $value['nisn'] ?></td>
-                    <td><?= $value['nama'] ?></td>
-                    <?php foreach ($mapel as $kd => $value_mp) : ?>
-                        <td><?= $value[$value_mp->nama_mapel] ?></td>
+                    <td width="20px"><?= ++$dt ?></td>
+                    <td width="20px"><?= $value_dt['nis'] ?></td>
+                    <td width="20px"><?= $value_dt['nisn'] ?></td>
+                    <td><?= $value_dt['nama'] ?></td>
+                    <?php foreach ($daftar_kd as $kd => $value_kd) : ?>
+                        <td><?= $value_dt[$value_kd->nama_kd] ?></td>
                     <?php endforeach; ?>
-                    <td><?= $value['jumlah'] ?></td>
-                    <td><?= $value['rerata'] ?></td>
+                    <td><?= $value_dt['jumlah'] ?></td>
+                    <td><?= $value_dt['rerata'] ?></td>
                 </tr>
             <?php endforeach; ?>
 
-            <?php foreach ($min as $key => $value) : ?>
+            <?php foreach ($data_min as $dt => $value_dt) : ?>
                 <tr>
                     <td colspan="4">MIN</td>
-                    <?php foreach ($mapel as $kd => $value_mp) : ?>
-                        <td><?= $value[$value_mp->nama_mapel] ?></td>
+                    <?php foreach ($daftar_kd as $kd => $value_kd) : ?>
+                        <td><?= $value_dt[$value_kd->nama_kd] ?></td>
                     <?php endforeach; ?>
-                    <td><?= $value['jumlah'] ?></td>
-                    <td><?= $value['rerata'] ?></td>
+                    <td><?= $value_dt['jumlah'] ?></td>
+                    <td><?= $value_dt['rerata'] ?></td>
+                </tr>
                 </tr>
             <?php endforeach; ?>
 
-            <?php foreach ($max as $key => $value) : ?>
+            <?php foreach ($data_max as $dt => $value_dt) : ?>
                 <tr>
                     <td colspan="4">MAX</td>
-                    <?php foreach ($mapel as $kd => $value_mp) : ?>
-                        <td><?= $value[$value_mp->nama_mapel] ?></td>
+                    <?php foreach ($daftar_kd as $kd => $value_kd) : ?>
+                        <td><?= $value_dt[$value_kd->nama_kd] ?></td>
                     <?php endforeach; ?>
-                    <td><?= $value['jumlah'] ?></td>
-                    <td><?= $value['rerata'] ?></td>
+                    <td><?= $value_dt['jumlah'] ?></td>
+                    <td><?= $value_dt['rerata'] ?></td>
+                </tr>
                 </tr>
             <?php endforeach; ?>
 
-            <?php foreach ($jumlah as $key => $value) : ?>
+            <?php foreach ($data_jumlah as $dt => $value_dt) : ?>
                 <tr>
                     <td colspan="4">JUMLAH</td>
-                    <?php foreach ($mapel as $kd => $value_mp) : ?>
-                        <td><?= $value[$value_mp->nama_mapel] ?></td>
+                    <?php foreach ($daftar_kd as $kd => $value_kd) : ?>
+                        <td><?= $value_dt[$value_kd->nama_kd] ?></td>
                     <?php endforeach; ?>
-                    <td><?= $value['jumlah'] ?></td>
-                    <td><?= $value['rerata'] ?></td>
+                    <td><?= $value_dt['jumlah'] ?></td>
+                    <td><?= $value_dt['rerata'] ?></td>
+                </tr>
                 </tr>
             <?php endforeach; ?>
 
-            <?php foreach ($rerata as $key => $value) : ?>
+            <?php foreach ($data_rerata as $dt => $value_dt) : ?>
                 <tr>
                     <td colspan="4">RATA-RATA</td>
-                    <?php foreach ($mapel as $kd => $value_mp) : ?>
-                        <td><?= $value[$value_mp->nama_mapel] ?></td>
+                    <?php foreach ($daftar_kd as $kd => $value_kd) : ?>
+                        <td><?= $value_dt[$value_kd->nama_kd] ?></td>
                     <?php endforeach; ?>
-                    <td><?= $value['jumlah'] ?></td>
-                    <td><?= $value['rerata'] ?></td>
+                    <td><?= $value_dt['jumlah'] ?></td>
+                    <td><?= $value_dt['rerata'] ?></td>
+                </tr>
                 </tr>
             <?php endforeach; ?>
         </tbody>

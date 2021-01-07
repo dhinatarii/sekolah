@@ -75,6 +75,56 @@ class Pengajar_model extends CI_Model
         return $this->db->get()->row_array();
     }
 
+    public function get_count_pengampu($id_guru)
+    {
+        $query = $this->db->query("
+            select
+                tp.jabatan,
+                tm.jumlah_kelas,
+                count(ts.id_siswa) 'jumlah_siswa'
+            from
+                tb_pengajar tp,
+                tb_siswa ts,
+                (
+                select
+                    tp.jabatan,
+                    count(tp.id_kelas) as 'jumlah_kelas'
+                from
+                    tb_pengajar tp
+                where
+                    tp.id_guru = $id_guru) tm
+            where
+                tp.id_guru = $id_guru
+                and tp.id_kelas = ts.id_kelas");
+        return $query->row_array();
+    }
+
+    public function get_mapel_pengampu($id_guru, $id_kelas = NULL, $id_mapel = NULL, $id_tahun = NULL)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_pengajar tp');
+        $this->db->join('tb_kelas tk', 'tk.id_kelas = tp.id_kelas', 'left');
+        $this->db->join('tb_matapelajaran tm', 'tm.id_mapel = tp.id_mapel', 'left');
+        $this->db->join('tb_tahunajaran tt', 'tt.id_tahun = tp.id_tahun', 'left');
+        $this->db->where('tp.id_guru', $id_guru);
+
+        if ($id_tahun) {
+            $this->db->where('tt.id_tahun', $id_tahun);
+        } else {
+            $this->db->where('tt.status', 1);
+        }
+
+        if ($id_kelas) {
+            $this->db->where('tp.id_kelas', $id_kelas);
+        }
+
+        if ($id_mapel) {
+            $this->db->where('tp.id_mapel', $id_mapel);
+        }
+
+        return $this->db->get()->result();
+    }
+
     public function delete_data($id)
     {
         $this->db->delete('tb_pengajar', ['id_pengajar' => $id]);

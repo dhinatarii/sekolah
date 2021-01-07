@@ -64,11 +64,11 @@
                         <div class="c-avatar"><img class="c-avatar-img" style="max-width:36px; max-height:36px; object-fit: scale-down; object-position: center; " src="<?= base_url('assets/photos/' . $photo) ?>" alt="user@email.com"></div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right pt-0">
-                        <a class="dropdown-item" href="<?= base_url('walikelas/profile?id_user=' . $id_user) ?>">
+                        <a class="dropdown-item" href="<?= base_url('walikelas/profile') ?>">
                             <svg class="c-icon mr-2">
                                 <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-user"></use>
                             </svg> Profile</a>
-                        <a class="dropdown-item" href="<?= base_url('walikelas/profile/password?id_user=' . $id_user) ?>">
+                        <a class="dropdown-item" href="<?= base_url('walikelas/profile/password') ?>">
                             <svg class="c-icon mr-2">
                                 <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
                             </svg> Ganti Password</a>

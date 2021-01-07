@@ -9,7 +9,7 @@ class Profile extends CI_Controller
             redirect('login');
         }
 
-        if ($this->session->userdata['level'] != 'admin') {
+        if ($this->session->userdata['level'] != 'guru') {
             $this->session->set_flashdata('message', 'Anda Belum Login!');
             redirect('login');
         }
@@ -17,9 +17,9 @@ class Profile extends CI_Controller
 
     public function index()
     {
-        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = $this->User_model->get_detail_guru($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
-            'admin'     => $data,
+            'guru'      => $data,
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
             'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
@@ -28,7 +28,7 @@ class Profile extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin'
+                    'link' => 'guru'
                 ],
                 1 => (object)[
                     'name' => 'Profile',
@@ -38,14 +38,14 @@ class Profile extends CI_Controller
         );
 
         $this->load->view('templates/header');
-        $this->load->view('templates_admin/sidebar', $data);
-        $this->load->view('admin/profile', $data);
+        $this->load->view('templates_guru/sidebar', $data);
+        $this->load->view('guru/profile', $data);
         $this->load->view('templates/footer');
     }
 
     public function password()
     {
-        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = $this->User_model->get_detail_guru($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
@@ -55,11 +55,11 @@ class Profile extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin'
+                    'link' => 'guru'
                 ],
                 1 => (object)[
                     'name' => 'Profile',
-                    'link' => 'admin/profile'
+                    'link' => 'guru/profile'
                 ],
                 2 => (object)[
                     'name' => 'Password',
@@ -72,13 +72,13 @@ class Profile extends CI_Controller
 
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
-            $this->load->view('templates_admin/sidebar', $data);
-            $this->load->view('admin/profile_password', $data);
+            $this->load->view('templates_guru/sidebar', $data);
+            $this->load->view('guru/profile_password', $data);
             $this->load->view('templates/footer');
         } else {
             $this->User_model->edit_password($this->session->userdata['id_user']);
             $this->session->set_flashdata('message', 'Password Berhasil Diupdate!');
-            redirect('admin/profile');
+            redirect('guru/profile');
         }
     }
 

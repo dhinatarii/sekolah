@@ -17,9 +17,13 @@ class Guru_model extends CI_Model
         return $this->db->get('tb_guru')->result();
     }
 
-    public function get_detail_data($id)
+    public function get_detail_data($id, $id_user = NULL)
     {
-        return $this->db->get_where('tb_guru', ['id_guru' => $id])->row_array();
+        if ($id_user) {
+            return $this->db->get_where('tb_guru', ['id_user' => $id_user])->row_array();
+        } else {
+            return $this->db->get_where('tb_guru', ['id_guru' => $id])->row_array();
+        }
     }
 
     private function _input_user()
