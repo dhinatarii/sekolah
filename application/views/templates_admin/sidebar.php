@@ -37,7 +37,9 @@
                         <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-education"></use>
                     </svg> Pengolahan Data</a>
                 <ul class="c-sidebar-nav-dropdown-items">
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'nilai') echo 'c-active' ?>" href="<?= base_url('admin/nilai') ?>"> Nilai</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'nilai') echo 'c-active' ?>" href="<?= base_url('admin/nilai') ?>"> Nilai Harian</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'nilai') echo 'c-active' ?>" href="<?= base_url('admin/nilaiuts') ?>"> Nilai UTS</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'nilai') echo 'c-active' ?>" href="<?= base_url('admin/nilaiuas') ?>"> Nilai UAS</a></li>
                 </ul>
             </li>
             <li class="c-sidebar-nav-dropdown"><a class="c-sidebar-nav-dropdown-toggle" href="#">
@@ -74,7 +76,8 @@
             <ul class="c-header-nav ml-auto mr-4">
                 <li class="c-header-nav-item d-md-down-none mx-2">
                     <svg class="c-icon">
-                    </svg>Hello, <?= $nama ?></li>
+                    </svg>Hello, <?= $nama ?>
+                </li>
                 <li class="c-header-nav-item dropdown"><a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                         <div class="c-avatar"><img class="c-avatar-img" style="max-width:36px; max-height:36px; object-fit: scale-down; object-position: center; " src="<?= base_url('assets/photos/' . $photo) ?>" alt="user@email.com"></div>
                     </a>

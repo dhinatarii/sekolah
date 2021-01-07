@@ -147,7 +147,7 @@ class Siswa_model extends CI_Model
         return $this->db->insert_id();
     }
 
-    var $column_order = array(null, 'tb_siswa.nis', 'tb_siswa.nisn', 'tb_siswa.nama', 'tb_siswa.tanggal_lahir', 'tb_siswa.agama', 'tb_siswa.jenis_kelamin', 'tb_kelas.kelas'); //Sesuaikan dengan field
+    var $column_order = array(null, 'tb_siswa.nis', 'tb_siswa.nisn', 'tb_siswa.nama', 'tb_siswa.tanggal_lahir', 'tb_siswa.agama', 'tb_siswa.jenis_kelamin'); //Sesuaikan dengan field
     var $column_search = array('tb_siswa.nis', 'tb_siswa.nisn', 'tb_siswa.nama'); //field yang diizin untuk pencarian 
     var $order = array('tb_kelas.kelas' => 'asc'); // default order 
 
@@ -158,7 +158,6 @@ class Siswa_model extends CI_Model
         $this->db->from('tb_siswa');
         $this->db->join('tb_orangtua', 'tb_siswa.id_orangtua = tb_orangtua.id_orangtua', 'left');
         $this->db->join('tb_alamat', 'tb_orangtua.id_alamat = tb_alamat.id_alamat', 'left');
-        $this->db->join('tb_kelas', 'tb_siswa.id_kelas = tb_kelas.id_kelas', 'left');
 
         $i = 0;
 
