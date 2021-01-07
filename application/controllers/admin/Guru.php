@@ -249,6 +249,8 @@ class Guru extends CI_Controller
             unlink($target_delete);
         }
 
+        $this->User_model->delete_data($item['id_user']);
+        $this->Kelas_model->delete_walikelas($item['nama']);
         $this->Guru_model->delete_data($id);
         $this->session->set_flashdata('message', 'Data Guru Berhasil Dihapus!');
         redirect('admin/guru');

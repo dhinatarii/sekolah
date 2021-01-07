@@ -28,9 +28,11 @@ class Guru_model extends CI_Model
 
     private function _input_user()
     {
+        $date = date_create($this->input->post('tanggal_lahir', TRUE));
+        $dateFormat = date_format($date, "mY");
         $data = array(
-            'username'  => $this->input->post('email', TRUE),
-            'password'  => MD5($this->input->post('tanggal_lahir', TRUE)),
+            'username'  => $this->input->post('nip', TRUE),
+            'password'  => MD5($dateFormat),
             'level'     => 'guru',
             'status'    => '1'
         );
@@ -59,6 +61,10 @@ class Guru_model extends CI_Model
 
     public function edit_data($id, $photo)
     {
+        $dataDetail = $this->get_detail_data($id);
+        $dataUser = array(
+            'username'       => $this->input->post('nip', TRUE),
+        );
         $data = array(
             'nip'       => $this->input->post('nip', TRUE),
             'nama'      => $this->input->post('nama', TRUE),
@@ -75,6 +81,10 @@ class Guru_model extends CI_Model
 
         $this->db->where('id_guru', $id);
         $this->db->update('tb_guru', $data);
+
+        $this->db->where('username', $dataDetail['nip']);
+        $this->db->update('tb_user', $dataUser);
+        
     }
 
     public function delete_data($id)

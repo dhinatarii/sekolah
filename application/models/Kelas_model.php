@@ -63,6 +63,16 @@ class Kelas_model extends CI_Model
         $this->db->delete('tb_kelas', ['id_kelas' => $id]);
     }
 
+    public function delete_walikelas($nama)
+    {
+        $data = array(
+            'wali_kelas'    => NULL,
+        );
+
+        $this->db->where('wali_kelas', $nama);
+        $this->db->update('tb_kelas', $data);
+    }
+
     var $column_order = array(null, 'kelas', 'wali_kelas'); //Sesuaikan dengan field
     var $column_search = array('kelas', 'wali_kelas'); //field yang diizin untuk pencarian 
     var $order = array('kelas' => 'asc'); // default order 
