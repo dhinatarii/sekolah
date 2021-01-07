@@ -29,11 +29,11 @@ class Welcome extends CI_Controller
 		}
 
 		if ($level == 'admin') {
-			redirect('admin/dashboard');
+			redirect('admin');
 		} elseif ($level == 'guru') {
-			redirect('guru/dashboard');
+			redirect('guru');
 		} elseif ($level == 'siswa') {
-			redirect('siswa/dashboard');
+			redirect('siswa');
 		}
 	}
 }

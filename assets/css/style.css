@@ -248,6 +248,8 @@ caption {
 
 th {
   text-align: inherit;
+  vertical-align: middle;
+  text-align: center;
 }
 
 label {
@@ -12499,9 +12501,10 @@ html:not([dir="rtl"]) .c-switch-label .c-switch-slider::after {
 }
 
 .table thead th {
-  vertical-align: bottom;
   border-bottom: 2px solid;
   border-bottom-color: #d8dbe0;
+  vertical-align: middle;
+  text-align: center;
 }
 
 .table tbody + tbody {

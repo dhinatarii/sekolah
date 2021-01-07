@@ -15,62 +15,36 @@
     <?php echo anchor('admin/guru/input', '<button class="btn btn-sm btn-primary mb-3"><i class="fas fa-plus fa-sm"></i> Tambah Data</button>') ?>
     <div class="card">
         <div class="card-body">
-            <table class="table table-responsive table-bordered table-hover w-100 d-block d-md-table">
-                <thead class="thead-light">
+            <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-guru">
+                <thead>
                     <tr>
-                        <th>No</th>
-                        <th>NIP</th>
-                        <th>Nama</th>
-                        <th>Jenis Kelamin</th>
-                        <th>Tanggal Lahir</th>
-                        <th>No Handphone</th>
-                        <th>Email</th>
-                        <th>Alamat</th>
-                        <th colspan="2">Aksi</th>
+                        <th class="text-center" style="vertical-align : middle;text-align:center;">No</th>
+                        <th style="vertical-align : middle;text-align:center;">NIP</th>
+                        <th style="vertical-align : middle;text-align:center;">Nama</th>
+                        <th style="vertical-align : middle;text-align:center;">Jenis Kelamin</th>
+                        <th style="vertical-align : middle;text-align:center;">Tanggal Lahir</th>
+                        <th style="vertical-align : middle;text-align:center;">No Handphone</th>
+                        <th style="vertical-align : middle;text-align:center;">Email</th>
+                        <th style="vertical-align : middle;text-align:center;">Foto</th>
+                        <th style="vertical-align : middle;text-align:center;">Alamat</th>
+                        <th class="text-center" width="80px" style="vertical-align : middle;text-align:center;">Aksi</th>
                     </tr>
                 </thead>
 
-                <?php
-                $no = 1;
-                foreach ($guru as $gr) : ?>
-                    <tbody>
-                        <tr>
-                            <td width="20px"><?php echo $no++ ?></td>
-                            <td><?php echo $gr->nip ?></td>
-                            <td><?php echo $gr->nama ?></td>
-                            <td><?php echo $gr->jenis_kelamin ?></td>
-                            <td><?php echo $gr->tanggal_lahir ?></td>
-                            <td><?php echo $gr->no_hp ?></td>
-                            <td><?php echo $gr->email ?></td>
-                            <td><?php echo $gr->alamat ?></td>
-                            <td width="20px">
-                                <?php echo anchor(
-                                    'admin/guru/edit/' . $gr->id_guru,
-                                    '<div class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></div>'
-                                ) ?>
-                            </td>
-                            <td width="20px">
-                                <a href="<?php echo base_url(); ?>admin/guru/delete/<?php echo $gr->id_guru ?>" class="btn btn-sm btn-danger btn-delete-guru">
-                                    <i class="fa fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                <?php endforeach ?>
+                <tbody>
+                </tbody>
             </table>
         </div>
     </div>
 </div>
 
-</div>
-<!-- End of Main Content -->
+</main>
 
 
 <script>
-    // Hapus data guru
-    $('.btn-delete-guru').on('click', function(event) {
-        event.preventDefault();
-        const href = $(this).attr('href');
+    //onclick hapus data guru
+    function confirmDelete(id) {
+        const href = '<?= site_url('admin/guru/delete/') ?>' + id;
 
         Swal.fire({
             title: 'Apakah anda yakin?',
@@ -85,6 +59,26 @@
             if (result.isConfirmed) {
                 document.location.href = href;
             }
+        });
+    }
+
+    //datatables
+    $(document).ready(function() {
+        $('#table-guru').DataTable({
+            "serverSide": true,
+            "ajax": {
+                "url": "<?= site_url('admin/guru/get_result_guru') ?>",
+                "type": "POST"
+            },
+            "columnDefs": [{
+                    "targets": [0, -1],
+                    "className": 'text-center'
+                },
+                {
+                    "targets": [-1],
+                    "orderable": false
+                }
+            ]
         });
     });
 </script>
