@@ -16,8 +16,8 @@
 
     <div class="card">
         <div class="card-body">
-            <table class="table table-responsive table-bordered table-hover w-100 d-block d-md-table">
-                <thead class="thead-light">
+            <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-siswa">
+                <thead>
                     <tr>
                         <th>No</th>
                         <th>NIS</th>
@@ -26,51 +26,20 @@
                         <th>Tanggal Lahir</th>
                         <th>Agama</th>
                         <th>Jenis Kelamin</th>
-                        <th>Kelas</th>
-                        <th colspan="3">Aksi</th>
+                        <th width="160px" class="text-center">Aksi</th>
                     </tr>
                 </thead>
-
-                <?php
-                $no = 1;
-                foreach ($siswa as $sw) : ?>
-                    <tbody>
-                        <tr>
-                            <td width="20px"><?php echo $no++ ?></td>
-                            <td><?php echo $sw->nis ?></td>
-                            <td><?php echo $sw->nisn ?></td>
-                            <td><?php echo $sw->nama ?></td>
-                            <td><?php echo $sw->tanggal_lahir ?></td>
-                            <td><?php echo $sw->agama ?></td>
-                            <td><?php echo $sw->jenis_kelamin ?></td>
-                            <td></td>
-                            <td width="40px">
-                                <div id="set_detailModal" class="btn btn-sm btn-success" data-toggle="modal" data-target="#detailModal" data-idsiswa="<?= $sw->id_siswa ?>" data-siswa="<?= $sw->nama ?>" data-namaibu="<?= $sw->nama_ibu ?>" data-pendidikanibu="<?= $sw->pendidikan_ibu ?>" data-perkejaanibu="<?= $sw->pekerjaan_ibu ?>" data-namaayah="<?= $sw->nama_ayah ?>" data-pendidikanayah="<?= $sw->pendidikan_ayah ?>" data-pekerjaanayah="<?= $sw->pekerjaan_ayah ?>" data-nohp="<?= $sw->no_hp ?>" data-dusun="<?= $sw->dusun ?>" data-desa="<?= $sw->desa ?>" data-kecamatan="<?= $sw->kecamatan ?>" data-kabupaten="<?= $sw->kabupaten ?>">
-                                    <i class="fa fa-eye"></i></div>
-                            </td>
-                            <td width="40px">
-                                <?php echo anchor(
-                                    'admin/siswa/edit/' . $sw->id_siswa,
-                                    '<div class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></div>'
-                                ) ?>
-                            </td>
-                            <td width="40px">
-                                <a href="<?php echo base_url(); ?>admin/siswa/delete/<?php echo $sw->id_siswa ?>" class="btn btn-sm btn-danger btn-delete-siswa">
-                                    <i class="fa fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-
-                <?php endforeach ?>
+                <tbody>
+                </tbody>
             </table>
+            <!-- <?= $this->pagination->create_links(); ?> -->
         </div>
     </div>
 </div>
 
 <!-- Detal Modal -->
 <div class="modal fade detailModal" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detalModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-dark font-weight-bold">Siswa : <span id="namasiswa"></span></h5>
@@ -81,7 +50,11 @@
             <div class="modal-body">
                 <div class="container">
                     <div class="row">
-                        <div class="col-sm">
+                        <div class="col-sm-3" class="text-center">
+                            <h6 class="text-dark font-weight-bold">Foto Siswa</h6>
+                            <div id="photo" class="mb-3"></div>
+                        </div>
+                        <div class="col-sm-5">
                             <h6 class="text-dark font-weight-bold">Orang Tua</h6>
                             <div class="card">
                                 <div class="card-body">
@@ -118,7 +91,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm">
+                        <div class="col-sm-4">
                             <h6 class="text-dark font-weight-bold">Alamat</h6>
                             <div class="card">
                                 <div class="card-body">
@@ -147,18 +120,19 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-primary" id="edit-siswa">Edit</a>
+                <a class="btn btn-primary text-white" id="edit-siswa">Edit</a>
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
+</main>
+
 <script>
-    // Hapus data siswa
-    $('.btn-delete-siswa').on('click', function(event) {
-        event.preventDefault();
-        const href = $(this).attr('href');
+    //onclick hapus data siswa
+    function confirmDelete(id) {
+        const href = '<?= site_url('admin/siswa/delete/') ?>' + id;
 
         Swal.fire({
             title: 'Apakah anda yakin?',
@@ -174,7 +148,7 @@
                 document.location.href = href;
             }
         });
-    });
+    }
 
     // Detail modal siswa
     $(document).ready(function() {
@@ -192,7 +166,10 @@
             const desa = $(this).data('desa');
             const kecamatan = $(this).data('kecamatan');
             const kabupaten = $(this).data('kabupaten');
+            const photo = $(this).data('photo');
+            const isPhoto = photo !== '' ? photo : 'user-placeholder.jpg';
             const href = '<?php echo base_url('admin/siswa/edit/') ?>' + idsiswa;
+            const url_photo = '<?= base_url('assets/photos/') ?>' + isPhoto;
 
             $('#namasiswa').text(namaSiswa);
             $('#namaibu').text(namaIbu);
@@ -206,11 +183,32 @@
             $('#desa').text(desa);
             $('#kecamatan').text(kecamatan);
             $('#kabupaten').text(kabupaten);
+            $('#photo').html(`<img src="${url_photo}" alt="photo siswa" style="max-width:200px; max-height:300px; object-fit: scale-down; object-position: center; border-radius: 15px;">`)
 
             $(document).on('click', '#edit-siswa', function() {
                 document.location.href = href;
             });
 
+        });
+    });
+
+    //datatables
+    $(document).ready(function() {
+        $('#table-siswa').DataTable({
+            "serverSide": true,
+            "ajax": {
+                "url": "<?= site_url('admin/siswa/get_result_siswa') ?>",
+                "type": "POST"
+            },
+            "columnDefs": [{
+                    "targets": [0, 7, -1],
+                    "className": 'text-center'
+                },
+                {
+                    "targets": [-1],
+                    "orderable": false
+                }
+            ]
         });
     });
 </script>
