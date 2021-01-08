@@ -13,14 +13,25 @@ class Guru_model extends CI_Model
 
     public function get_data_only_name()
     {
-        $this->db->select('nama');
-        return $this->db->get('tb_guru')->result();
+        return $this->db->query("select tg.nama, tg.id_user 
+            from
+                tb_guru tg
+            where
+                tg.nama not in (
+                select
+                    tk.wali_kelas
+                from
+                    tb_kelas tk
+                where
+                    tk.wali_kelas = tg.nama)")->result();
     }
 
-    public function get_detail_data($id, $id_user = NULL)
+    public function get_detail_data($id, $id_user = NULL, $name = NULL)
     {
         if ($id_user) {
             return $this->db->get_where('tb_guru', ['id_user' => $id_user])->row_array();
+        } elseif ($name) {
+            return $this->db->get_where('tb_guru', ['nama' => $name])->row_array();
         } else {
             return $this->db->get_where('tb_guru', ['id_guru' => $id])->row_array();
         }
@@ -84,7 +95,6 @@ class Guru_model extends CI_Model
 
         $this->db->where('username', $dataDetail['nip']);
         $this->db->update('tb_user', $dataUser);
-        
     }
 
     public function delete_data($id)

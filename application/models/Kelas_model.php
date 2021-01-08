@@ -39,27 +39,62 @@ class Kelas_model extends CI_Model
 
     public function input_data()
     {
+        $guru = explode("-", $this->input->post('wali_kelas', TRUE));
+        $wali_kelas = $guru[0];
+        $id_user = $guru[1];
+
         $data = array(
             'kelas'         => $this->input->post('kelas', TRUE),
-            'wali_kelas'    => $this->input->post('wali_kelas', TRUE),
+            'wali_kelas'    => $wali_kelas,
+        );
+        $dataUser = array(
+            'level'     => 'wali kelas'
         );
 
         $this->db->insert('tb_kelas', $data);
+
+        $this->db->where('id_user', $id_user);
+        $this->db->update('tb_user', $dataUser);
     }
 
-    public function edit_data($id)
+    public function edit_data($id, $id_old_user)
     {
+        $guru = explode("-", $this->input->post('wali_kelas', TRUE));
+        $wali_kelas = $guru[0];
+        $id_user = $guru[1];
+
         $data = array(
             'kelas'         => $this->input->post('kelas', TRUE),
-            'wali_kelas'    => $this->input->post('wali_kelas', TRUE),
+            'wali_kelas'    => $wali_kelas,
         );
+
+        $dataUser = array(
+            'level'     => 'wali kelas'
+        );
+
+        $dataOldUser = array(
+            'level'     => 'guru'
+        );
+
+        $this->db->where('id_user', $id_old_user);
+        $this->db->update('tb_user', $dataOldUser);
 
         $this->db->where('id_kelas', $id);
         $this->db->update('tb_kelas', $data);
+
+        $this->db->where('id_user', $id_user);
+        $this->db->update('tb_user', $dataUser);
     }
 
     public function delete_data($id)
     {
+        $detail     = $this->get_detail_data($id);
+        $guru       = $this->db->get_where('tb_guru', ['nama' => $detail['wali_kelas']])->row_array();
+        $dataUser   = array('level' => 'guru');
+
+        $this->db->where('id_user', $guru['id_user']);
+        $this->db->update('tb_user', $dataUser);
+
         $this->db->delete('tb_kelas', ['id_kelas' => $id]);
     }
 
