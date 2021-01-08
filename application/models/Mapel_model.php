@@ -38,13 +38,20 @@ class Mapel_model extends CI_Model
         $komp_dasar = $this->input->post('kd', TRUE);
         if (!empty($komp_dasar)) {
             foreach ($komp_dasar as $kd) {
-                $data_kd = array(
-                    'nama_kd'   => $kd,
-                    'id_mapel'  => $id_mapel
-
+                $data_kd_pts = array(
+                    'nama_kd'           => $kd,
+                    'id_mapel'          => $id_mapel,
+                    'jenis_penilaian'   => 'PTS'
                 );
 
-                $this->db->insert('tb_kd', $data_kd);
+                $data_kd_pas = array(
+                    'nama_kd'           => $kd,
+                    'id_mapel'          => $id_mapel,
+                    'jenis_penilaian'   => 'PAS'
+                );
+
+                $this->db->insert('tb_kd', $data_kd_pts);
+                $this->db->insert('tb_kd', $data_kd_pas);
             }
         }
     }
@@ -76,13 +83,20 @@ class Mapel_model extends CI_Model
         $komp_dasar = $this->input->post('kd', TRUE);
         if (!empty($komp_dasar)) {
             foreach ($komp_dasar as $kd) {
-                $data_kd = array(
-                    'nama_kd'   => $kd,
-                    'id_mapel'  => $last_idmapel
-
+                $data_kd_pts = array(
+                    'nama_kd'           => $kd,
+                    'id_mapel'          => $last_idmapel,
+                    'jenis_penilaian'   => 'PTS'
                 );
 
-                $this->db->insert('tb_kd', $data_kd);
+                $data_kd_pas = array(
+                    'nama_kd'           => $kd,
+                    'id_mapel'          => $last_idmapel,
+                    'jenis_penilaian'   => 'PAS'
+                );
+
+                $this->db->insert('tb_kd', $data_kd_pts);
+                $this->db->insert('tb_kd', $data_kd_pas);
             }
         }
     }
@@ -103,9 +117,9 @@ class Mapel_model extends CI_Model
         $this->db->delete('tb_matapelajaran', ['id_mapel' => $id]);
     }
 
-    public function delete_kd($id)
+    public function delete_kd($kd, $id_mapel)
     {
-        $this->db->delete('tb_kd', ['id_kd' => $id]);
+        $this->db->delete('tb_kd', ['id_mapel' => $id_mapel, 'nama_kd' => $kd]);
     }
 
     var $column_order = array(null, 'nama_mapel', 'level'); //Sesuaikan dengan field

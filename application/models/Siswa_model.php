@@ -35,7 +35,6 @@ class Siswa_model extends CI_Model
         $this->db->from('tb_siswa');
         $this->db->join('tb_orangtua', 'tb_siswa.id_orangtua = tb_orangtua.id_orangtua', 'left');
         $this->db->join('tb_alamat', 'tb_orangtua.id_alamat = tb_alamat.id_alamat', 'left');
-        $this->db->join('tb_kelas', 'tb_siswa.id_kelas = tb_kelas.id_kelas', 'left');
         return $this->db->get()->num_rows();
     }
 

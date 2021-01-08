@@ -13,8 +13,13 @@ class Tahun_model extends CI_Model
 
     public function get_active_stats()
     {
-        $this->db->order_by('nama', 'desc');
-        return $this->db->get_where('tb_tahunajaran', ['status' => 1])->row_array();
+        $data = $this->db->get('tb_tahunajaran')->num_rows();
+        if ($data > 0) {
+            $this->db->order_by('nama', 'desc');
+            return $this->db->get_where('tb_tahunajaran', ['status' => 1])->row_array();
+        } else {
+            return NULL;
+        }
     }
 
     public function get_id_year($name)
