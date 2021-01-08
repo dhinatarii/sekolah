@@ -29,10 +29,7 @@
                 <div class="form-group">
                     <label for="kelas">Kelas</label>
                     <select class="form-control" id="kelas" name="kelas">
-                        <option value="">--Pilih Mata Pelajaran--</option>
-                        <?php foreach ($kelas as $kl) : ?>
-                            <option value="<?php echo $kl->id_kelas ?>"><?= $kl->kelas ?></option>
-                        <?php endforeach; ?>
+                        <option value="">--Pilih Kelas--</option>
                     </select>
                     <?php echo form_error('kelas', '<div class="text-danger small ml-3">', '</div>') ?>
                 </div>
@@ -58,5 +55,22 @@
     </div>
 </div>
 
-</div>
-<!-- End of Main Content -->
+</main>
+
+<script>
+    $(document).ready(function() {
+        $('#mapel').change(function() {
+            const mapel = $(this).val();
+            $.ajax({
+                type: 'POST',
+                url: '<?= base_url('admin/pengajar/get_kelas') ?>',
+                data: {
+                    id_mapel: mapel
+                },
+                success: function(response) {
+                    $('#kelas').html(response);
+                }
+            });
+        })
+    });
+</script>

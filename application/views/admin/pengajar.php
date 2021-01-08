@@ -16,58 +16,35 @@
 
     <div class="card">
         <div class="card-body">
-            <table class="table table-responsive table-bordered table-hover w-100 d-block d-md-table">
-                <thead class="thead-light">
+            <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-pengajar">
+                <thead>
                     <tr>
-                        <th>No</th>
+                        <th width="20px">No</th>
                         <th>Guru</th>
                         <th>Jabatan</th>
                         <th>Mata Pelajaran</th>
                         <th>Kelas</th>
                         <th>Tahun Ajaran</th>
-                        <th colspan="2">Aksi</th>
+                        <th width="100px">Aksi</th>
                     </tr>
                 </thead>
 
-                <?php
-                $no = 1;
-                foreach ($pengajar as $pe) : ?>
-                    <tbody>
-                        <tr>
-                            <td width="20px"><?php echo $no++ ?></td>
-                            <td><?php echo $pe->guru ?></td>
-                            <td><?php echo $pe->jabatan ?></td>
-                            <td><?php echo $pe->mapel ?> / <?php echo $pe->level ?></td>
-                            <td><?php echo $pe->kelas ?></td>
-                            <td><?php echo $pe->tahun ?></td>
-                            <td width="40px">
-                                <?php echo anchor(
-                                    'admin/pengajar/edit/' . $pe->id_pengajar,
-                                    '<div class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></div>'
-                                ) ?>
-                            </td>
-                            <td width="40px">
-                                <a href="<?php echo base_url(); ?>admin/pengajar/delete/<?php echo $pe->id_pengajar ?>" class="btn btn-sm btn-danger btn-delete-mapel">
-                                    <i class="fa fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                <?php endforeach ?>
+                <tbody>
+                </tbody>
             </table>
         </div>
     </div>
 </div>
 
+</main>
 <script>
-    // Hapus data mapel
-    $('.btn-delete-mapel').on('click', function(event) {
-        event.preventDefault();
-        const href = $(this).attr('href');
+    //onclick hapus data pengajar
+    function confirmDelete(id) {
+        const href = '<?= site_url('admin/pengajar/delete/') ?>' + id;
 
         Swal.fire({
             title: 'Apakah anda yakin?',
-            text: "data mata pelajaran akan dihapus",
+            text: "data guru pengajar akan dihapus",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -78,6 +55,26 @@
             if (result.isConfirmed) {
                 document.location.href = href;
             }
+        });
+    }
+
+    //datatables
+    $(document).ready(function() {
+        $('#table-pengajar').DataTable({
+            "serverSide": true,
+            "ajax": {
+                "url": "<?= site_url('admin/pengajar/get_result_pengajar') ?>",
+                "type": "POST"
+            },
+            "columnDefs": [{
+                    "targets": [0, -1],
+                    "className": 'text-center'
+                },
+                {
+                    "targets": [-1],
+                    "orderable": false
+                }
+            ]
         });
     });
 </script>

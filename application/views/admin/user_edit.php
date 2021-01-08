@@ -2,7 +2,7 @@
 
     <div class="card">
         <div class="card-header">
-            <i class="fas fa-users mr-3"></i>Form update data <?= $level ?>
+            <i class="fas fa-users mr-3"></i>Form update data <?= $levels ?>
         </div>
         <div class="card-body">
             <form action="" method="post">
@@ -30,3 +30,5 @@
         </div>
     </div>
 </div>
+
+</main>

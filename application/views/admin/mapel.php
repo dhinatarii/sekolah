@@ -16,50 +16,29 @@
 
     <div class="card">
         <div class="card-body">
-            <table class="table table-responsive table-bordered table-hover w-100 d-block d-md-table">
-                <thead class="thead-light">
+            <table class="table table-responsive table-striped table-bordered table-hover w-100 d-block d-md-table table-sm" id="table-mapel">
+                <thead>
                     <tr>
-                        <th>No</th>
+                        <th width="20px">No</th>
                         <th>Mata Pelajaran</th>
                         <th>Level</th>
-                        <th>Jumlah Tema</th>
-                        <th colspan="2">Aksi</th>
+                        <th width="150px">Aksi</th>
                     </tr>
                 </thead>
 
-                <?php
-                $no = 1;
-                foreach ($mapel as $mp) : ?>
-                    <tbody>
-                        <tr>
-                            <td width="20px"><?php echo $no++ ?></td>
-                            <td><?php echo $mp->nama_mapel ?></td>
-                            <td><?php echo $mp->level ?></td>
-                            <td><?php echo $mp->jum_tema ?></td>
-                            <td width="40px">
-                                <?php echo anchor(
-                                    'admin/mapel/edit/' . $mp->id_mapel,
-                                    '<div class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></div>'
-                                ) ?>
-                            </td>
-                            <td width="40px">
-                                <a href="<?php echo base_url(); ?>admin/mapel/delete/<?php echo $mp->id_mapel ?>" class="btn btn-sm btn-danger btn-delete-mapel">
-                                    <i class="fa fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                <?php endforeach ?>
+                <tbody>
+                </tbody>
             </table>
         </div>
     </div>
 </div>
 
+</main>
+
 <script>
-    // Hapus data mapel
-    $('.btn-delete-mapel').on('click', function(event) {
-        event.preventDefault();
-        const href = $(this).attr('href');
+    //onclick hapus data mapel
+    function confirmDelete(id) {
+        const href = '<?= site_url('admin/mapel/delete/') ?>' + id;
 
         Swal.fire({
             title: 'Apakah anda yakin?',
@@ -74,6 +53,26 @@
             if (result.isConfirmed) {
                 document.location.href = href;
             }
+        });
+    }
+
+    //datatables
+    $(document).ready(function() {
+        $('#table-mapel').DataTable({
+            "serverSide": true,
+            "ajax": {
+                "url": "<?= site_url('admin/mapel/get_result_mapel') ?>",
+                "type": "POST"
+            },
+            "columnDefs": [{
+                    "targets": [0, -1],
+                    "className": 'text-center'
+                },
+                {
+                    "targets": [-1],
+                    "orderable": false
+                }
+            ]
         });
     });
 </script>

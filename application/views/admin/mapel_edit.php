@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <label for="level">Level</label>
                     <select class="form-control" id="level" name="level">
-                        <?php foreach ($level as $lv) : ?>
+                        <?php foreach ($levels as $lv) : ?>
                             <?php if ($lv == $mapel['level']) : ?>
                                 <option value="<?php echo $lv ?>" selected><?php echo $lv ?></option>
                             <?php else : ?>
@@ -24,11 +24,6 @@
                     </select>
                     <?php echo form_error('level', '<div class="text-danger small ml-3">', '</div>') ?>
                 </div>
-                <div class="form-group">
-                    <label for="jum_tema">Jumlah Tema</label>
-                    <input type="number" name="jum_tema" id="jum_tema" placeholder="Masukan Jumlah Tema" class="form-control" value="<?php echo $mapel['jum_tema'] ?>">
-                    <?php echo form_error('jum_tema', '<div class="text-danger small ml-3">', '</div>') ?>
-                </div>
                 <button type="submit" class="btn btn-primary">Simpan</button>
                 <button type="reset" class="btn btn-secondary ml-1">Reset</button>
             </form>
@@ -36,5 +31,4 @@
     </div>
 </div>
 
-</div>
-<!-- End of Main Content -->
+</main>

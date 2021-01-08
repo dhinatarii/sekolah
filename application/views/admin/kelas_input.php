@@ -16,7 +16,7 @@
                     <select class="form-control" id="wali_kelas" name="wali_kelas">
                         <option value="">--Pilih Guru--</option>
                         <?php foreach ($guru as $gr) : ?>
-                            <option value="<?php echo $gr->nama ?>"><?php echo $gr->nama ?></option>
+                            <option value="<?= $gr->nama . '-' . $gr->id_user ?>"><?= $gr->nama ?></option>
                         <?php endforeach; ?>
                     </select>
                     <?php echo form_error('wali_kelas', '<div class="text-danger small ml-3">', '</div>') ?>
@@ -27,3 +27,5 @@
         </div>
     </div>
 </div>
+
+</main>
