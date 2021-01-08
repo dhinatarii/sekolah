@@ -41,6 +41,9 @@
 
     <link href="<?= base_url() ?>assets/css/styles.css" rel="stylesheet">
 
+    <!-- datatables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" />
+
     <!-- Core plugin JavaScript-->
     <script src="<?= base_url() ?>assets/vendors/jquery-easing/jquery.easing.min.js"></script>
 

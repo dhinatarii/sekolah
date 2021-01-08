@@ -16,48 +16,31 @@
 
     <div class="card">
         <div class="card-body">
-            <table class="table table-responsive table-bordered table-hover w-100 d-block d-md-table">
-                <thead class="thead-light">
+            <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-kelas">
+                <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Kelas</th>
+                        <th class="text-center" width="20px">No</th>
+                        <th width="100px">Kelas</th>
                         <th>Wali Kelas</th>
-                        <th colspan="2">Aksi</th>
+                        <th class="text-center" width="120px">Aksi</th>
                     </tr>
                 </thead>
 
-                <?php
-                $no = 1;
-                foreach ($kelas as $kl) : ?>
-                    <tbody>
-                        <tr>
-                            <td width="20px"><?php echo $no++ ?></td>
-                            <td><?php echo $kl->kelas ?></td>
-                            <td><?php echo $kl->wali_kelas ?></td>
-                            <td width="40px">
-                                <?php echo anchor(
-                                    'admin/kelas/edit/' . $kl->id_kelas,
-                                    '<div class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></div>'
-                                ) ?>
-                            </td>
-                            <td width="40px">
-                                <a href="<?php echo base_url(); ?>admin/kelas/delete/<?php echo $kl->id_kelas ?>" class="btn btn-sm btn-danger btn-delete-kelas">
-                                    <i class="fa fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                <?php endforeach ?>
+                <tbody>
+
+                </tbody>
             </table>
         </div>
     </div>
 </div>
 
+</main>
+
 <script>
-    // Hapus data kelas
-    $('.btn-delete-kelas').on('click', function(event) {
-        event.preventDefault();
-        const href = $(this).attr('href');
+    //onclick hapus data kelas
+    function confirmDelete(id) {
+        console.log(id);
+        const href = '<?= site_url('admin/kelas/delete/') ?>' + id;
 
         Swal.fire({
             title: 'Apakah anda yakin?',
@@ -72,6 +55,26 @@
             if (result.isConfirmed) {
                 document.location.href = href;
             }
+        });
+    }
+
+    //datatables
+    $(document).ready(function() {
+        $('#table-kelas').DataTable({
+            "serverSide": true,
+            "ajax": {
+                "url": "<?= site_url('admin/kelas/get_result_kelas') ?>",
+                "type": "POST"
+            },
+            "columnDefs": [{
+                    "targets": [0, -1],
+                    "className": 'text-center'
+                },
+                {
+                    "targets": [-1],
+                    "orderable": false
+                }
+            ]
         });
     });
 </script>

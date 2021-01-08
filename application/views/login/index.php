@@ -18,12 +18,12 @@
                     <?php endif; ?>
                     <div class="input-field">
                         <i class="fas fa-user"></i>
-                        <input type="text" placeholder="Username / Email / NISN" id="username" name="username" />
+                        <input type="text" placeholder="Username / Email / NIS" id="username" name="username" />
                     </div>
                     <?php echo form_error('username', '<div class="text-danger small ml-3">', '</div>') ?>
                     <div class="input-field">
                         <i class="fas fa-lock"></i>
-                        <input type="password" placeholder="Password" id="password" name="password" />
+                        <input type="password" placeholder="Password (default: dd-mm-yyyy)" id="password" name="password" />
                     </div>
                     <?php echo form_error('password', '<div class="text-danger small ml-3">', '</div>') ?>
                     <button class="btn solid">Login</button>
