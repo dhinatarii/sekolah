@@ -57,16 +57,6 @@
                                 <?php echo form_error('jenis_kelamin', '<div class="text-danger small ml-3">', '</div>') ?>
                             </div>
                             <div class="form-group">
-                                <label for="kelas">Kelas</label>
-                                <select class="form-control" id="kelas" name="kelas">
-                                    <option value="">--Pilih Kelas--</option>
-                                    <?php foreach ($kelas as $kl) : ?>
-                                        <option value="<?php echo $kl->kelas ?>"><?php echo $kl->kelas ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <?php echo form_error('kelas', '<div class="text-danger small ml-3">', '</div>') ?>
-                            </div>
-                            <div class="form-group">
                                 <label for="photo">Photo (ukuran 4x6 atau 2x3)</label>
                                 <input type="file" class="form-control-file" name="photo" id="photo">
                                 <small>(Biarkan kosong jika tidak ada)</small>
