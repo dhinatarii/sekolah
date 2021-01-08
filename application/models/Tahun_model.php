@@ -31,19 +31,26 @@ class Tahun_model extends CI_Model
 
     public function input_data()
     {
-        $data = array(
+        $data_ganjil = array(
             'nama'         => $this->input->post('nama', TRUE),
-            'status'    => $this->input->post('status', TRUE),
+            'semester'     => 'Ganjil' 
         );
 
-        $this->db->insert('tb_tahunajaran', $data);
+        $data_genap = array(
+            'nama'         => $this->input->post('nama', TRUE),
+            'semester'     => 'Genap'
+        );
+
+        $this->db->insert('tb_tahunajaran', $data_ganjil);
+        $this->db->insert('tb_tahunajaran', $data_genap);
     }
 
     public function edit_data($id)
     {
         $data = array(
-            'nama'         => $this->input->post('nama', TRUE),
+            'nama'      => $this->input->post('nama', TRUE),
             'status'    => $this->input->post('status', TRUE),
+            'shared'    => $this->input->post('shared', TRUE),
         );
 
         $this->db->where('id_tahun', $id);
@@ -55,7 +62,7 @@ class Tahun_model extends CI_Model
         $this->db->delete('tb_tahunajaran', ['id_tahun' => $id]);
     }
 
-    var $column_order = array(null, 'nama', 'status'); //Sesuaikan dengan field
+    var $column_order = array(null, 'nama', 'semester', 'shared', 'status',); //Sesuaikan dengan field
     var $column_search = array('nama'); //field yang diizin untuk pencarian 
     var $order = array('nama' => 'asc'); // default order 
 
