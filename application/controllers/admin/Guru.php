@@ -233,7 +233,7 @@ class Guru extends CI_Controller
                 }
             } else {
                 $photo = NULL;
-                $this->Guru_model->edit_data($id, $photo);
+                $this->Guru_model->edit_data($id, $photo, $data['guru']['nama']);
                 $this->session->set_flashdata('message', 'Data Guru Berhasil Diupdate!');
                 redirect('admin/guru');
             }

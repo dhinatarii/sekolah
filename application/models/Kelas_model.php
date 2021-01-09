@@ -18,6 +18,11 @@ class Kelas_model extends CI_Model
         return $this->db->get('tb_kelas')->row_array();
     }
 
+    public function get_kelas_with_name($name)
+    {
+        return $this->db->get_where('tb_kelas', ['wali_kelas' => $name])->result();
+    }
+
     public function get_count()
     {
         return $this->db->get('tb_kelas')->num_rows();

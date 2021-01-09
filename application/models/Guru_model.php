@@ -70,11 +70,16 @@ class Guru_model extends CI_Model
         $this->db->insert('tb_guru', $data);
     }
 
-    public function edit_data($id, $photo)
+    public function edit_data($id, $photo, $name_guru)
     {
         $dataDetail = $this->get_detail_data($id);
+        $dataWali = $this->db->get_where('tb_kelas', ['wali_kelas' => $name_guru])->num_rows();
+
         $dataUser = array(
             'username'       => $this->input->post('nip', TRUE),
+        );
+        $dataWali = array(
+            'wali_kelas'     => $this->input->post('nama', TRUE),
         );
         $data = array(
             'nip'       => $this->input->post('nip', TRUE),
@@ -95,6 +100,11 @@ class Guru_model extends CI_Model
 
         $this->db->where('username', $dataDetail['nip']);
         $this->db->update('tb_user', $dataUser);
+
+        if ($dataWali > 0) {
+            $this->db->where('wali_kelas', $name_guru);
+            $this->db->update('tb_kelas', $dataWali);
+        }
     }
 
     public function delete_data($id)
