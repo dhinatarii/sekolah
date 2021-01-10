@@ -29,9 +29,14 @@ class Siswa_model extends CI_Model
         return $this->db->get()->row_array()['id_alamat'];
     }
 
-    public function get_data_perkelas($id_kelas)
+    public function get_data_perkelas($id_kelas, $tahun)
     {
-        return $this->db->get_where('tb_siswa', ['id_kelas' => $id_kelas])->result();
+        $this->db->select('*');
+        $this->db->from('tb_siswa ts');
+        $this->db->join('tb_datasiswa td', 'ts.id_siswa = td.id_siswa', 'left');
+        $this->db->where('td.id_kelas', $id_kelas);
+        $this->db->where('td.tahun_ajaran', $tahun);
+        return $this->db->get()->result();
     }
 
     public function get_count_perkelas($id_kelas)

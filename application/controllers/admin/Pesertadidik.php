@@ -120,7 +120,7 @@ class PesertaDidik extends CI_Controller
                 $html = $html . '<tr>
                                 <td class="text-center" style="vertical-align : middle;text-align:center;" widtd="20px">' . ++$key . '</td>
                                 <td style="vertical-align : middle;text-align:center;">' . $value->nis . '</td>
-                                <td style="vertical-align : middle;text-align:center;">' . $value->nis . '</td>
+                                <td style="vertical-align : middle;text-align:center;">' . $value->nisn . '</td>
                                 <td style="vertical-align : middle;text-align:left;">' . $value->nama . '</td>
                                 <td style="vertical-align : middle;text-align:center;">' . $value->jenis_kelamin . '</td>
                                 <td style="vertical-align : middle;text-align:center;">' . $value->agama . '</td>

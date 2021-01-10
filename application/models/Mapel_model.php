@@ -23,6 +23,18 @@ class Mapel_model extends CI_Model
         return $this->db->get()->result();
     }
 
+    public function get_mapel_with_kd_nilai($id_mapel, $id_kelas, $jenis_nilai)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_matapelajaran tm');
+        $this->db->join('tb_kd tk', 'tm.id_mapel = tk.id_mapel', 'inner');
+        $this->db->join('tb_pengajar tp', 'tm.id_mapel = tp.id_mapel', 'inner');
+        $this->db->where('tm.id_mapel', $id_mapel);
+        $this->db->where('tp.id_kelas', $id_kelas);
+        $this->db->where('tk.jenis_penilaian', $jenis_nilai);
+        return $this->db->get()->result();
+    }
+
     public function get_kd_permapel($id_mapel)
     {
         return $this->db->get_where('tb_kd', ['id_mapel' => $id_mapel])->result();

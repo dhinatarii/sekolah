@@ -116,7 +116,7 @@ class Pengajar_model extends CI_Model
         if ($id_tahun) {
             $this->db->where('tt.id_tahun', $id_tahun);
         } else {
-            $this->db->where('tt.status', 1);
+            $this->db->where('tt.status', '1');
         }
 
         if ($id_kelas) {
