@@ -30,6 +30,7 @@
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'mata pelajaran') echo 'c-active' ?>" href="<?= base_url('admin/mapel') ?>"> Mata Pelajaran</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'tahun ajaran') echo 'c-active' ?>" href="<?= base_url('admin/tahunajaran') ?>"> Tahun Ajaran</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'pengajar') echo 'c-active' ?>" href="<?= base_url('admin/pengajar') ?>"> Guru Pengajar</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'peserta') echo 'c-active' ?>" href="<?= base_url('admin/pesertadidik') ?>"> Peserta Didik</a></li>
                 </ul>
             </li>
             <li class="c-sidebar-nav-dropdown"><a class="c-sidebar-nav-dropdown-toggle" href="#">

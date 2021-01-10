@@ -128,7 +128,7 @@ class Pengajar extends CI_Controller
         $id_guru   = $this->input->post('id_guru', TRUE);
         $guru      = $this->Guru_model->get_detail_data($id_guru);
         $kelas     = $this->Kelas_model->get_kelas_with_name($guru['nama']);
-        $kelas_other= $this->Kelas_model->get_data();
+        $kelas_other = $this->Kelas_model->get_data();
         // $mapel      = $this->Mapel_model->get_detail_data($id_guru);
         // $kelas      = $this->Kelas_model->get_like_data($mapel['level']);
         if ($kelas) {

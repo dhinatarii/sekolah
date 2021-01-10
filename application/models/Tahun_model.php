@@ -6,6 +6,14 @@ class Tahun_model extends CI_Model
         return $this->db->get('tb_tahunajaran')->result();
     }
 
+    public function get_name_data()
+    {
+        $this->db->select('tt.nama');
+        $this->db->from('tb_tahunajaran tt');
+        $this->db->group_by('tt.nama');
+        return $this->db->get()->result();
+    }
+
     public function get_detail_data($id)
     {
         return $this->db->get_where('tb_tahunajaran', ['id_tahun' => $id])->row_array();
@@ -16,7 +24,7 @@ class Tahun_model extends CI_Model
         $data = $this->db->get('tb_tahunajaran')->num_rows();
         if ($data > 0) {
             $this->db->order_by('nama', 'desc');
-            return $this->db->get_where('tb_tahunajaran', ['status' => 1])->row_array();
+            return $this->db->get_where('tb_tahunajaran', ['status' => '1'])->row_array();
         } else {
             return NULL;
         }

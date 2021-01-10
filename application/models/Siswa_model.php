@@ -1,6 +1,16 @@
 <?php
 class Siswa_model extends CI_Model
 {
+    public function get_data()
+    {
+        return $this->db->query('select * from tb_siswa ts where ts.id_siswa not in (select td.id_siswa from tb_datasiswa td) order by ts.nis')->result();
+    }
+
+    public function get_data_tahun($tahun)
+    {
+        return $this->db->query("select * from tb_siswa ts where ts.id_siswa not in (select td.id_siswa from tb_datasiswa td where td.tahun_ajaran = '$tahun') order by ts.nis asc")->result();
+    }
+
     public function get_detail_data($id)
     {
         $this->db->select('*');
