@@ -42,23 +42,21 @@
         const idKelas = <?= $kelas['id_kelas'] ?>;
         const idMapel = $('#mapel').val();
 
-        console.log(idKelas, idMapel);
-
-        if (idKelas !== '' && idMapel !== '') {
-            $.ajax({
-                type: 'POST',
-                url: '<?= base_url('walikelas/nilai/data_nilai_permapel') ?>',
-                data: {
-                    id_kelas: idKelas,
-                    id_mapel: idMapel
-                },
-                success: function(response) {
-                    $('#table-result').html(response);
-                },
-                error: function(response) {
-                    $('#table-result').html(response);
-                }
-            });
-        }
+        // if (idKelas !== '' && idMapel !== '') {
+        $.ajax({
+            type: 'POST',
+            url: '<?= base_url('walikelas/nilai/data_nilai_permapel') ?>',
+            data: {
+                id_kelas: idKelas,
+                id_mapel: idMapel
+            },
+            success: function(response) {
+                $('#table-result').html(response);
+            },
+            error: function(response) {
+                $('#table-result').html(response);
+            }
+        });
+        // }
     }
 </script>

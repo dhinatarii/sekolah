@@ -62,18 +62,27 @@ class LaporanNilai extends CI_Controller
     {
         $id_tahun       = $this->input->post('id_tahun', TRUE);
         $id_kelas       = $this->input->post('id_kelas', TRUE);
-        $tahun          = $this->Tahun_model->get_detail_data($id_tahun);
-        $kelas          = $this->Kelas_model->get_detail_data($id_kelas);
-        $daftar_mapel   = $this->Laporan_model->get_mapel_pertahun($id_tahun, $id_kelas)->result();
-        $result         = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'default');
-        $result_min     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'min');
-        $result_max     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'max');
-        $result_jumlah  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'jumlah');
-        $result_rerata  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'rerata');
         $html           = '';
 
-        if ($result != null) {
-            $html = $html . '
+        if ($id_tahun == null || $id_kelas == null) {
+            //id not found
+            $html = $html . '<div class="card">
+                                <div class="card-body">
+                                    <h6 class="text-center">Laporan Daftar Nilai Siswa Tidak Tersedia, Silahkan Masukan Data Yang Diperlukan</h6>
+                                </div>
+                            </div>';
+        } else {
+            $tahun          = $this->Tahun_model->get_detail_data($id_tahun);
+            $kelas          = $this->Kelas_model->get_detail_data($id_kelas);
+            $daftar_mapel   = $this->Laporan_model->get_mapel_pertahun($id_tahun, $id_kelas)->result();
+            $result         = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'default');
+            $result_min     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'min');
+            $result_max     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'max');
+            $result_jumlah  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'jumlah');
+            $result_rerata  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'rerata');
+
+            if ($result) {
+                $html = $html . '
                 <div class="card">
                     <div class="card-body">
                         <a href="' . base_url('admin/laporannilai/pdf_laporan?q=alldata&tahun=' . $id_tahun . '&kelas=' . $id_kelas) . '" class="btn btn-info mb-2"><i class="fas fa-print"></i> Print PDF</a>
@@ -92,98 +101,99 @@ class LaporanNilai extends CI_Controller
                                     <th width="10px">NISN</th>
                                     <th>NAMA</th>';
 
-            //heading mapel
-            foreach ($daftar_mapel as $key => $value) {
-                $html = $html . "<th>$value->nama_mapel</th>";
-            }
+                //heading mapel
+                foreach ($daftar_mapel as $key => $value) {
+                    $html = $html . "<th>$value->nama_mapel</th>";
+                }
 
-            //heading jumlah dan rata-rata
-            $html = $html . '<th>Jumlah</th>
+                //heading jumlah dan rata-rata
+                $html = $html . '<th>Jumlah</th>
                             <th>Rata-rata</th>
                             </tr></thead><tbody>';
 
-            // body table default
-            foreach ($result as $key => $value) {
-                $html = $html . '
+                // body table default
+                foreach ($result as $key => $value) {
+                    $html = $html . '
                     <tr>
                         <td class="text-center">' . ++$key . '</td>
                         <td>' . $value['nis'] . '</td>
                         <td>' . $value['nisn'] . '</td>
                         <td>' . $value['nama'] . '</td>';
 
-                foreach ($daftar_mapel as $kd => $mapel) {
-                    $html = $html . '<td>' . $value[$mapel->nama_mapel] . '</td>';
-                }
+                    foreach ($daftar_mapel as $kd => $mapel) {
+                        $html = $html . '<td>' . $value[$mapel->nama_mapel] . '</td>';
+                    }
 
-                $html = $html . '
+                    $html = $html . '
                         <td>' . $value['jumlah'] . '</td>
                         <td>' . $value['rerata'] . '</td>
                     </tr>';
-            }
+                }
 
-            // body table min
-            foreach ($result_min as $key => $value) {
-                $html = $html . '<tr><td colspan="100%"></td></tr>';
+                // body table min
+                foreach ($result_min as $key => $value) {
+                    $html = $html . '<tr><td colspan="100%"></td></tr>';
 
-                $html = $html . '<tr>
+                    $html = $html . '<tr>
                     <td width="20px"></td>
                     <td colspan="3">MIN</td>';
-                foreach ($daftar_mapel as $kd => $mapel) {
-                    $html = $html . '<td>' . $value[$mapel->nama_mapel] . '</td>';
+                    foreach ($daftar_mapel as $kd => $mapel) {
+                        $html = $html . '<td>' . $value[$mapel->nama_mapel] . '</td>';
+                    }
+
+                    $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
                 }
 
-                $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
-            }
-
-            // body table max
-            foreach ($result_max as $key => $value) {
-                $html = $html . '<tr>
+                // body table max
+                foreach ($result_max as $key => $value) {
+                    $html = $html . '<tr>
                     <td width="20px"></td>
                     <td colspan="3">MAX</td>';
-                foreach ($daftar_mapel as $kd => $mapel) {
-                    $html = $html . '<td>' . $value[$mapel->nama_mapel] . '</td>';
+                    foreach ($daftar_mapel as $kd => $mapel) {
+                        $html = $html . '<td>' . $value[$mapel->nama_mapel] . '</td>';
+                    }
+
+                    $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
                 }
 
-                $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
-            }
-
-            // body table jumlah
-            foreach ($result_jumlah as $key => $value) {
-                $html = $html . '<tr>
+                // body table jumlah
+                foreach ($result_jumlah as $key => $value) {
+                    $html = $html . '<tr>
                     <td width="20px"></td>
                     <td colspan="3">Jumlah</td>';
-                foreach ($daftar_mapel as $kd => $mapel) {
-                    $html = $html . '<td>' . $value[$mapel->nama_mapel] . '</td>';
+                    foreach ($daftar_mapel as $kd => $mapel) {
+                        $html = $html . '<td>' . $value[$mapel->nama_mapel] . '</td>';
+                    }
+
+                    $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
                 }
 
-                $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
-            }
-
-            // body table rerata
-            foreach ($result_rerata as $key => $value) {
-                $html = $html . '<tr>
+                // body table rerata
+                foreach ($result_rerata as $key => $value) {
+                    $html = $html . '<tr>
                     <td width="20px"></td>
                     <td colspan="3">Rata-Rata</td>';
-                foreach ($daftar_mapel as $kd => $mapel) {
-                    $html = $html . '<td>' . $value[$mapel->nama_mapel] . '</td>';
+                    foreach ($daftar_mapel as $kd => $mapel) {
+                        $html = $html . '<td>' . $value[$mapel->nama_mapel] . '</td>';
+                    }
+
+                    $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
                 }
 
-                $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
-            }
+                $html = $html . '<tr></tr>';
 
-            $html = $html . '<tr></tr>';
-
-            $html = $html . '
+                $html = $html . '
                             </tbody>
                         </table>
                     </div>
                 </div>';
-        } else {
-            $html = $html . '<div class="card">
+            } else {
+                $html = $html . '<div class="card">
                                 <div class="card-body">
                                     <h6 class="text-center">Laporan Daftar Nilai Siswa Tidak Tersedia, Silahkan Masukan Data Yang Diperlukan</h6>
                                 </div>
                             </div>';
+            }
         }
 
         echo $html;

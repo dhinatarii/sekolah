@@ -3,15 +3,20 @@ class Pengajar_model extends CI_Model
 {
     public function input_data($id_tahun)
     {
-        $data = array(
-            'id_guru'   => $this->input->post('guru', TRUE),
-            'id_mapel'  => $this->input->post('mapel', TRUE),
-            'id_kelas'  => $this->input->post('kelas', TRUE),
-            'id_tahun'  => $id_tahun,
-            'jabatan'   => $this->input->post('jabatan', TRUE)
-        );
+        $mapel = $this->input->post('mapel', TRUE);
+        if (!empty($mapel)) {
+            foreach ($mapel as $key => $value) {
+                $data = array(
+                    'id_guru'   => $this->input->post('guru', TRUE),
+                    'id_mapel'  => $value,
+                    'id_kelas'  => $this->input->post('kelas', TRUE),
+                    'id_tahun'  => $id_tahun,
+                    'jabatan'   => $this->input->post('jabatan', TRUE)
+                );
 
-        $this->db->insert('tb_pengajar', $data);
+                $this->db->insert('tb_pengajar', $data);
+            }
+        }
     }
 
     public function get_count_perpengajar($id)
@@ -75,18 +80,68 @@ class Pengajar_model extends CI_Model
         return $this->db->get()->row_array();
     }
 
+    public function get_count_pengampu($id_guru)
+    {
+        $query = $this->db->query("
+            select
+                tp.jabatan,
+                tm.jumlah_kelas,
+                count(ts.id_siswa) 'jumlah_siswa'
+            from
+                tb_pengajar tp,
+                tb_siswa ts,
+                (
+                select
+                    tp.jabatan,
+                    count(tp.id_kelas) as 'jumlah_kelas'
+                from
+                    tb_pengajar tp
+                where
+                    tp.id_guru = $id_guru) tm
+            where
+                tp.id_guru = $id_guru
+                and tp.id_kelas = ts.id_kelas");
+        return $query->row_array();
+    }
+
+    public function get_mapel_pengampu($id_guru, $id_kelas = NULL, $id_mapel = NULL, $id_tahun = NULL)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_pengajar tp');
+        $this->db->join('tb_kelas tk', 'tk.id_kelas = tp.id_kelas', 'left');
+        $this->db->join('tb_matapelajaran tm', 'tm.id_mapel = tp.id_mapel', 'left');
+        $this->db->join('tb_tahunajaran tt', 'tt.id_tahun = tp.id_tahun', 'left');
+        $this->db->where('tp.id_guru', $id_guru);
+
+        if ($id_tahun) {
+            $this->db->where('tt.id_tahun', $id_tahun);
+        } else {
+            $this->db->where('tt.status', '1');
+        }
+
+        if ($id_kelas) {
+            $this->db->where('tp.id_kelas', $id_kelas);
+        }
+
+        if ($id_mapel) {
+            $this->db->where('tp.id_mapel', $id_mapel);
+        }
+
+        return $this->db->get()->result();
+    }
+
     public function delete_data($id)
     {
         $this->db->delete('tb_pengajar', ['id_pengajar' => $id]);
     }
 
-    var $column_order = array(null, 'guru', 'jabatan', 'mapel', 'kelas', 'tahun'); //Sesuaikan dengan field
+    var $column_order = array(null, 'guru', 'jabatan', 'mapel', 'kelas', 'tahun', 'semester'); //Sesuaikan dengan field
     var $column_search = array('guru', 'jabatan', 'mapel', 'kelas', 'tahun'); //field yang diizin untuk pencarian 
     var $order = array('kelas' => 'asc'); // default order 
 
     private function _get_datatables_query()
     {
-        $this->db->select('tp.id_pengajar, tp.jabatan, tg.nama as guru, CONCAT_WS(" / ", tm.nama_mapel, tm.level) as mapel, tk.kelas, tt.nama as tahun');
+        $this->db->select('tp.id_pengajar, tp.jabatan, tg.nama as guru, CONCAT_WS(" / ", tm.nama_mapel, tm.level) as mapel, tk.kelas, tt.nama as tahun, tt.semester');
         $this->db->from('tb_pengajar tp');
         $this->db->join('tb_guru tg', 'tp.id_guru = tg.id_guru', 'left');
         $this->db->join('tb_matapelajaran tm', 'tp.id_mapel = tm.id_mapel', 'left');

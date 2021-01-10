@@ -196,7 +196,9 @@ class LaporanGuru extends CI_Controller
         $id_guru = $this->input->get('id');
 
         if ($query == 'alldata') {
-            $data['data'] = $this->Laporan_model->get_all_lap_guru($tahun);
+            $data['data']   = $this->Laporan_model->get_all_lap_guru($tahun);
+            $data['tahun']  = $this->Tahun_model->get_detail_data($tahun);
+
             $this->mypdf->generate('pdf/laporan_allguru', $data, 'Laporan Data Guru', 'A4', 'landscape');
         } elseif ($query == 'detaildata') {
             $data = array(

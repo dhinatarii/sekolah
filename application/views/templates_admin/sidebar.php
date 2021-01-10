@@ -30,6 +30,7 @@
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'mata pelajaran') echo 'c-active' ?>" href="<?= base_url('admin/mapel') ?>"> Mata Pelajaran</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'tahun ajaran') echo 'c-active' ?>" href="<?= base_url('admin/tahunajaran') ?>"> Tahun Ajaran</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'pengajar') echo 'c-active' ?>" href="<?= base_url('admin/pengajar') ?>"> Guru Pengajar</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'peserta') echo 'c-active' ?>" href="<?= base_url('admin/pesertadidik') ?>"> Peserta Didik</a></li>
                 </ul>
             </li>
             <li class="c-sidebar-nav-dropdown"><a class="c-sidebar-nav-dropdown-toggle" href="#">
@@ -74,16 +75,17 @@
             <ul class="c-header-nav ml-auto mr-4">
                 <li class="c-header-nav-item d-md-down-none mx-2">
                     <svg class="c-icon">
-                    </svg>Hello, <?= $nama ?></li>
+                    </svg>Hello, <?= $nama ?>
+                </li>
                 <li class="c-header-nav-item dropdown"><a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                         <div class="c-avatar"><img class="c-avatar-img" style="max-width:36px; max-height:36px; object-fit: scale-down; object-position: center; " src="<?= base_url('assets/photos/' . $photo) ?>" alt="user@email.com"></div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right pt-0">
-                        <a class="dropdown-item" href="<?= base_url('admin/profile?id_user=' . $id_user) ?>">
+                        <a class="dropdown-item" href="<?= base_url('admin/profile') ?>">
                             <svg class="c-icon mr-2">
                                 <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-user"></use>
                             </svg> Profile</a>
-                        <a class="dropdown-item" href="<?= base_url('admin/profile/password?id_user=' . $id_user) ?>">
+                        <a class="dropdown-item" href="<?= base_url('admin/profile/password') ?>">
                             <svg class="c-icon mr-2">
                                 <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
                             </svg> Ganti Password</a>

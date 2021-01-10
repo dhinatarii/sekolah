@@ -51,19 +51,6 @@
                                 <?php echo form_error('jenis_kelamin', '<div class="text-danger small ml-3">', '</div>') ?>
                             </div>
                             <div class="form-group">
-                                <label for="kelas">Kelas</label>
-                                <select class="form-control" id="kelas" name="kelas">
-                                    <?php foreach ($kelas as $kl) : ?>
-                                        <?php if ($kl->kelas == $siswa['kelas']) : ?>
-                                            <option value="<?php echo $kl->kelas ?>" selected><?php echo $kl->kelas ?></option>
-                                        <?php else : ?>
-                                            <option value="<?php echo $kl->kelas ?>"><?php echo $kl->kelas ?></option>
-                                        <?php endif; ?>
-                                    <?php endforeach; ?>
-                                </select>
-                                <?php echo form_error('kelas', '<div class="text-danger small ml-3">', '</div>') ?>
-                            </div>
-                            <div class="form-group">    
                                 <label for="photo">Photo (ukuran 4x6 atau 2x3)</label>
                                 <?php if ($siswa['photo'] != null) : ?>
                                     <div class="mb-3">

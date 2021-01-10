@@ -56,7 +56,7 @@
     <p align="center">
         <span style="font-size: 20px">LAPORAN DATA NILAI SISWA</span>
         <br>
-        <b>TAHUN AJARAN 2020/2021</b>
+        <b>TAHUN AJARAN <?= $tahun['nama'] ?></b>
         <br>
         <?= 'KELAS ' . $kelas['kelas'] ?>
     </p>
@@ -78,74 +78,63 @@
             </tr>
         </thead>
         <tbody>
-            <?php
-            $html = "";
-            foreach ($result as $key => $value) {
-                $html = $html . '
-                    <tr>
-                        <td class="text-center">' . ++$key . '</td>
-                        <td>' . $value['nis'] . '</td>
-                        <td>' . $value['nisn'] . '</td>
-                        <td>' . $value['nama'] . '</td>';
+            <?php foreach ($result as $key => $value) : ?>
+                <tr>
+                    <td class="text-center"><?= ++$key ?></td>
+                    <td><?= $value['nis'] ?></td>
+                    <td><?= $value['nisn'] ?></td>
+                    <td><?= $value['nama'] ?></td>
+                    <?php foreach ($mapel as $kd => $value_mp) : ?>
+                        <td><?= $value[$value_mp->nama_mapel] ?></td>
+                    <?php endforeach; ?>
+                    <td><?= $value['jumlah'] ?></td>
+                    <td><?= $value['rerata'] ?></td>
+                </tr>
+            <?php endforeach; ?>
 
-                foreach ($mapel as $kd => $value_mp) {
-                    $html = $html . '<td>' . $value[$value_mp->nama_mapel] . '</td>';
-                }
+            <?php foreach ($min as $key => $value) : ?>
+                <tr>
+                    <td colspan="4">MIN</td>
+                    <?php foreach ($mapel as $kd => $value_mp) : ?>
+                        <td><?= $value[$value_mp->nama_mapel] ?></td>
+                    <?php endforeach; ?>
+                    <td><?= $value['jumlah'] ?></td>
+                    <td><?= $value['rerata'] ?></td>
+                </tr>
+            <?php endforeach; ?>
 
-                $html = $html . '
-                        <td>' . $value['jumlah'] . '</td>
-                        <td>' . $value['rerata'] . '</td>
-                    </tr>';
-            }
+            <?php foreach ($max as $key => $value) : ?>
+                <tr>
+                    <td colspan="4">MAX</td>
+                    <?php foreach ($mapel as $kd => $value_mp) : ?>
+                        <td><?= $value[$value_mp->nama_mapel] ?></td>
+                    <?php endforeach; ?>
+                    <td><?= $value['jumlah'] ?></td>
+                    <td><?= $value['rerata'] ?></td>
+                </tr>
+            <?php endforeach; ?>
 
-            // body table min
-            foreach ($min as $key => $value) {
-                $html = $html . '<tr><td colspan="100%"></td></tr>';
+            <?php foreach ($jumlah as $key => $value) : ?>
+                <tr>
+                    <td colspan="4">JUMLAH</td>
+                    <?php foreach ($mapel as $kd => $value_mp) : ?>
+                        <td><?= $value[$value_mp->nama_mapel] ?></td>
+                    <?php endforeach; ?>
+                    <td><?= $value['jumlah'] ?></td>
+                    <td><?= $value['rerata'] ?></td>
+                </tr>
+            <?php endforeach; ?>
 
-                $html = $html . '<tr>
-                    <td colspan="4">MIN</td>';
-                foreach ($mapel as $kd => $value_mp) {
-                    $html = $html . '<td>' . $value[$value_mp->nama_mapel] . '</td>';
-                }
-
-                $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
-            }
-
-            // body table max
-            foreach ($max as $key => $value) {
-                $html = $html . '<tr>
-                    <td colspan="4">MAX</td>';
-                foreach ($mapel as $kd => $value_mp) {
-                    $html = $html . '<td>' . $value[$value_mp->nama_mapel] . '</td>';
-                }
-
-                $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
-            }
-
-            // body table jumlah
-            foreach ($jumlah as $key => $value) {
-                $html = $html . '<tr>
-                    <td colspan="4">Jumlah</td>';
-                foreach ($mapel as $kd => $value_mp) {
-                    $html = $html . '<td>' . $value[$value_mp->nama_mapel] . '</td>';
-                }
-
-                $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
-            }
-
-            // body table rerata
-            foreach ($rerata as $key => $value) {
-                $html = $html . '<tr>
-                    <td colspan="4">Rata-Rata</td>';
-                foreach ($mapel as $kd => $value_mp) {
-                    $html = $html . '<td>' . $value[$value_mp->nama_mapel] . '</td>';
-                }
-
-                $html = $html . "<td>{$value['jumlah']}</td><td>{$value['rerata']}</td></tr>";
-            }
-
-            echo $html
-            ?>
+            <?php foreach ($rerata as $key => $value) : ?>
+                <tr>
+                    <td colspan="4">RATA-RATA</td>
+                    <?php foreach ($mapel as $kd => $value_mp) : ?>
+                        <td><?= $value[$value_mp->nama_mapel] ?></td>
+                    <?php endforeach; ?>
+                    <td><?= $value['jumlah'] ?></td>
+                    <td><?= $value['rerata'] ?></td>
+                </tr>
+            <?php endforeach; ?>
         </tbody>
     </table>
 </body>

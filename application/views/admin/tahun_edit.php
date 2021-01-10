@@ -12,6 +12,19 @@
                     <?php echo form_error('nama', '<div class="text-danger small ml-3">', '</div>') ?>
                 </div>
                 <div class="form-group">
+                    <label for="">Bagikan ke Orang Tua</label>
+                    <select class="form-control" id="shared" name="shared">
+                        <?php foreach ($shared as $st) : ?>
+                            <?php if ($st == $tahun['shared']) : ?>
+                                <option value="<?= $st ?>" selected><?= ($st == '0') ? 'Tidak' : 'Ya'; ?></option>
+                            <?php else : ?>
+                                <option value="<?= $st ?>"><?= ($st == '0') ? 'Tidak' : 'Ya'; ?></option>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </select>
+                    <?php echo form_error('shared', '<div class="text-danger small ml-3">', '</div>') ?>
+                </div>
+                <div class="form-group">
                     <label for="">Status</label>
                     <select class="form-control" id="status" name="status">
                         <?php foreach ($status as $st) : ?>

@@ -18,6 +18,7 @@ class Nilai extends CI_Controller
     public function index()
     {
         $data = $this->User_model->get_detail_guru($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $guru  = $this->Guru_model->get_detail_data(NULL, $data['id_user']);
         $kelas = $this->Kelas_model->get_like_walikelas($data['nama']);
         $data = array(
             'id_user'   => $data['id_user'],
@@ -26,7 +27,7 @@ class Nilai extends CI_Controller
             'level'     => $data['level'],
             'tahun'     => $this->Tahun_model->get_active_stats(),
             'kelas'     => $kelas,
-            'mapel'     => $this->Mapel_model->get_mapel_with_kelas($kelas['id_kelas']),
+            'mapel'     => $this->Mapel_model->get_mapel_with_kelas($kelas['id_kelas'], $guru['id_guru']),
             'menu'      => 'nilai',
             'breadcrumb' => [
                 0 => (object)[
@@ -64,7 +65,7 @@ class Nilai extends CI_Controller
             //id not found
             $html = $html . '<div class="card">
                                 <div class="card-body">
-                                    <h6 class="text-center">Data Nilai Tidak Tersedia</h6>
+                                    <h6 class="text-center">Data Nilai Tidak Tersedia, Silahkan Masukkan Data Yang Diperlukkan</h6>
                                 </div>
                             </div>';
         } else if ($data_default != null) {
@@ -436,7 +437,7 @@ class Nilai extends CI_Controller
         redirect('walikelas/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel);
     }
 
-    public function _rules_persiswa($data_siswa)
+    private function _rules_persiswa($data_siswa)
     {
         foreach ($data_siswa as $key => $value) {
             $this->form_validation->set_rules('nilai' . $key, 'Nilai', 'required|numeric');
