@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-sort-numeric-down"></i> Detail Nilai <?= $mapel['nama_mapel'] . ' / Kelas ' . $kelas['kelas'] ?></h1>
+        <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-sort-numeric-down"></i> Detail Nilai <?= $mapel['nama_mapel'] . ' / Kelas ' . $kelas['kelas'] ?> <?= $thn = ($tahun) ? '(Tahun Ajaran ' . $tahun['nama'] . ' - Semester ' . $tahun['semester'] . ')' : '(Tidak Ada Tahun Ajaran Yang Aktif)';  ?> - <?= $jenis_nilai ?></h1>
     </div>
     <?php if ($this->session->flashdata('message')) : ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -37,13 +37,18 @@
         const idKd = $('#komp_dasar').val();
         const idMapel = '<?= $id_mapel ?>';
         const idKelas = '<?= $id_kelas ?>';
+        const nameTahun = '<?= $tahun['nama'] ?>';
+        const jenisNilai = '<?= $jenis_nilai ?>';
+
         $.ajax({
             type: 'POST',
             url: '<?= base_url('walikelas/nilai/data_nilai_perkd') ?>',
             data: {
                 id_kelas: idKelas,
                 id_mapel: idMapel,
-                id_kd: idKd
+                id_kd: idKd,
+                tahun: nameTahun,
+                nilai: jenisNilai
             },
             success: function(response) {
                 $('#nilai-detail').html(response);

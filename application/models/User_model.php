@@ -58,6 +58,16 @@ class User_model extends CI_Model
         return $this->db->get()->row_array();
     }
 
+    public function get_detail_siswa($id, $level)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_user');
+        $this->db->where('tb_user.id_user', $id);
+        $this->db->where('tb_user.level', $level);
+        $this->db->join('tb_siswa', "tb_user.id_user = tb_siswa.id_user", 'left');
+        return $this->db->get()->row_array();
+    }
+
     public function input_data($photo)
     {
         $id_user = $this->_input_admin();
