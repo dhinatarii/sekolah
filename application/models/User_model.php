@@ -7,14 +7,30 @@ class User_model extends CI_Model
         return $this->db->get('tb_user')->row();
     }
 
-    public function count_user($level)
+    public function count_user($level, $levels = null)
     {
-        return $this->db->get_where('tb_user', ['level' => $level])->num_rows();
+        if ($levels != null) {
+            $this->db->select('*');
+            $this->db->from('tb_user');
+            $this->db->where('level', $level);
+            $this->db->or_where('level', $levels);
+            return $this->db->get()->num_rows();
+        } else {
+            return $this->db->get_where('tb_user', ['level' => $level])->num_rows();
+        }
     }
 
-    public function get_user($level)
+    public function get_user($level, $levels = null)
     {
-        return $this->db->get_where('tb_user', ['level' => $level])->result();
+        if ($levels != null) {
+            $this->db->select('*');
+            $this->db->from('tb_user');
+            $this->db->where('level', $level);
+            $this->db->or_where('level', $levels);
+            return $this->db->get()->result();
+        } else {
+            return $this->db->get_where('tb_user', ['level' => $level])->result();
+        }
     }
 
     public function get_detail_user($id, $level)
@@ -32,17 +48,28 @@ class User_model extends CI_Model
         return $this->db->get()->row_array();
     }
 
-    public function input_data()
+    public function get_detail_guru($id, $level)
     {
-        // $data = array(
-        //     'username'  => $this->input->post('username', TRUE),
-        //     'password'  => MD5($this->input->post('password', TRUE)),
-        //     'level'     => 'admin',
-        //     'status'    => $this->input->post('status', TRUE)
-        // );
+        $this->db->select('*');
+        $this->db->from('tb_user');
+        $this->db->where('tb_user.id_user', $id);
+        $this->db->where('tb_user.level', $level);
+        $this->db->join('tb_guru', "tb_user.id_user = tb_guru.id_user", 'left');
+        return $this->db->get()->row_array();
+    }
 
-        // $this->db->insert('tb_user', $data);
+    public function get_detail_siswa($id, $level)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_user');
+        $this->db->where('tb_user.id_user', $id);
+        $this->db->where('tb_user.level', $level);
+        $this->db->join('tb_siswa', "tb_user.id_user = tb_siswa.id_user", 'left');
+        return $this->db->get()->row_array();
+    }
 
+    public function input_data($photo)
+    {
         $id_user = $this->_input_admin();
         $data = array(
             'nip'           => $this->input->post('nip', TRUE),
@@ -52,6 +79,7 @@ class User_model extends CI_Model
             'no_hp'         => $this->input->post('no_hp', TRUE),
             'email'         => $this->input->post('email', TRUE),
             'alamat'        => $this->input->post('alamat', TRUE),
+            'photo'         => $photo,
             'id_user'       => $id_user
         );
 
@@ -86,7 +114,7 @@ class User_model extends CI_Model
         $this->db->update('tb_user', $data);
     }
 
-    public function edit_admin($id)
+    public function edit_admin($id, $photo)
     {
         $data_admin = array(
             'nip'           => $this->input->post('nip', TRUE),
@@ -97,6 +125,10 @@ class User_model extends CI_Model
             'email'         => $this->input->post('email', TRUE),
             'alamat'        => $this->input->post('alamat', TRUE)
         );
+
+        if ($photo != null) {
+            $data_admin['photo'] = $photo;
+        }
 
         $data_account = array(
             'username'  => $this->input->post('username', TRUE),
@@ -128,17 +160,21 @@ class User_model extends CI_Model
 
     var $column_order = array(null, 'nama', 'username', 'level', 'status'); //Sesuaikan dengan field
     var $column_search = array('username'); //field yang diizin untuk pencarian 
-    var $order = array('id_user' => 'asc'); // default order 
+    var $order = array('level' => 'asc'); // default order 
 
-    private function _get_datatables_query($level)
+    private function _get_datatables_query($level, $levels)
     {
 
         $table_join = $level == 'admin' ? 'tb_admin' : ($level == 'guru' ? 'tb_guru' : ($level == 'wali kelas' ? 'tb_guru' : ($level == 'siswa' ? 'tb_siswa' : NULL)));
 
         $this->db->select("tu.id_user, $table_join.nama, tu.username, tu.level, tu.status");
         $this->db->from('tb_user tu');
-        $this->db->where('level', $level);
         $this->db->join($table_join, "tu.id_user = $table_join.id_user", 'left');
+        $this->db->order_by('level', 'asc');
+        $this->db->where('level', $level);
+        if ($levels != null) {
+            $this->db->or_where('level', $levels);
+        }
 
         $i = 0;
 
@@ -169,26 +205,29 @@ class User_model extends CI_Model
         }
     }
 
-    function get_datatables($level)
+    function get_datatables($level, $levels = null)
     {
-        $this->_get_datatables_query($level);
+        $this->_get_datatables_query($level, $levels);
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
 
-    function count_filtered($level)
+    function count_filtered($level, $levels = null)
     {
-        $this->_get_datatables_query($level);
+        $this->_get_datatables_query($level, $levels);
         $query = $this->db->get();
         return $query->num_rows();
     }
 
-    public function count_all($level)
+    public function count_all($level, $levels = null)
     {
         $this->db->from('tb_user');
         $this->db->where('level', $level);
+        if ($levels != null) {
+            $this->db->or_where('level', $levels);
+        }
         return $this->db->count_all_results();
     }
 }

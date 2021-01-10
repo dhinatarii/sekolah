@@ -22,19 +22,25 @@ class Pengajar extends CI_Controller
 
     public function index()
     {
-        $data['menu']       = 'pengajar';
-        $data['pengajar']   = $this->Pengajar_model->get_data();
-
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Guru Pengajar',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'     => $data['level'],
+            'pengajar'  => $this->Pengajar_model->get_data(),
+            'menu'      => 'pengajar',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Guru Pengajar',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -56,6 +62,7 @@ class Pengajar extends CI_Controller
             $row[] = $item->mapel;
             $row[] = $item->kelas;
             $row[] = $item->tahun;
+            $row[] = $item->semester;
             $row[] = anchor('admin/pengajar/edit/' . $item->id_pengajar, '<div class="btn btn-sm btn-primary btn-xs mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>')
                 . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_pengajar . ')" class="btn btn-sm btn-danger btn-xs mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';
             $data[] = $row;
@@ -73,25 +80,33 @@ class Pengajar extends CI_Controller
 
     public function input()
     {
-        $data['menu']       = 'pengajar';
-        $data['guru']       = $this->Guru_model->get_data();
-        $data['mapel']      = $this->Mapel_model->get_data();
-        $data['kelas']      = $this->Kelas_model->get_data();
-        $data['tahun']      = $this->Tahun_model->get_active_stats();
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Guru Pengajar',
-                'link' => 'admin/pengajar'
-            ],
-            2 => (object)[
-                'name' => 'Input',
-                'link' => NULL
+
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'     => $data['level'],
+            'guru'      => $this->Guru_model->get_data(),
+            'mapel'     => $this->Mapel_model->get_data(),
+            'kelas'     => $this->Kelas_model->get_data(),
+            'tahun'     => $this->Tahun_model->get_active_stats(),
+            'menu'      => 'pengajar',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Guru Pengajar',
+                    'link' => 'admin/pengajar'
+                ],
+                2 => (object)[
+                    'name' => 'Input',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->_rules();
 
@@ -108,6 +123,27 @@ class Pengajar extends CI_Controller
         }
     }
 
+    public function get_kelas()
+    {
+        $id_guru   = $this->input->post('id_guru', TRUE);
+        $guru      = $this->Guru_model->get_detail_data($id_guru);
+        $kelas     = $this->Kelas_model->get_kelas_with_name($guru['nama']);
+        $kelas_other = $this->Kelas_model->get_data();
+        // $mapel      = $this->Mapel_model->get_detail_data($id_guru);
+        // $kelas      = $this->Kelas_model->get_like_data($mapel['level']);
+        if ($kelas) {
+            echo '<option value="">--Pilih Kelas--</option>';
+            foreach ($kelas as $kl) {
+                echo '<option value="' . $kl->id_kelas . '">' . $kl->kelas . '</option>';
+            }
+        } else {
+            echo '<option value="">--Pilih Kelas--</option>';
+            foreach ($kelas_other as $kl) {
+                echo '<option value="' . $kl->id_kelas . '">' . $kl->kelas . '</option>';
+            }
+        }
+    }
+
     public function edit()
     {
         $id           = $this->uri->segment(4);
@@ -115,27 +151,34 @@ class Pengajar extends CI_Controller
             redirect('admin/pengajar');
         }
 
-        $data['menu']       = 'pengajar';
-        $data['pengajar']   = $this->Pengajar_model->get_detail_data($id);
-        $data['guru']       = $this->Guru_model->get_data();
-        $data['mapel']      = $this->Mapel_model->get_data();
-        $data['kelas']      = $this->Kelas_model->get_data();
-        $data['tahun']      = $this->Tahun_model->get_detail_data($data['pengajar']['id_tahun']);
-        $data['jabatan'] = ['Guru Kelas', 'Guru Agama', 'Guru Penjas'];
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Guru Pengajar',
-                'link' => 'admin/pengajar'
-            ],
-            2 => (object)[
-                'name' => 'Edit',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'     => $data['level'],
+            'guru'      => $this->Guru_model->get_data(),
+            'mapel'     => $this->Mapel_model->get_data(),
+            'kelas'     => $this->Kelas_model->get_data(),
+            'tahun'     => $this->Tahun_model->get_detail_data($this->Pengajar_model->get_detail_data($id)['id_tahun']),
+            'pengajar'  => $this->Pengajar_model->get_detail_data($id),
+            'jabatan'   => ['Guru Kelas', 'Guru Agama', 'Guru Penjas'],
+            'menu'      => 'pengajar',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Guru Pengajar',
+                    'link' => 'admin/pengajar'
+                ],
+                2 => (object)[
+                    'name' => 'Edit',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->_rules();
 
@@ -162,7 +205,7 @@ class Pengajar extends CI_Controller
     private function _rules()
     {
         $this->form_validation->set_rules('guru', 'Guru', 'required');
-        $this->form_validation->set_rules('mapel', 'Mata Pelajaran', 'required');
+        $this->form_validation->set_rules('mapel[]', 'Kompetensi Dasar', 'required');
         $this->form_validation->set_rules('kelas', 'Kelas', 'required');
         $this->form_validation->set_rules('jabatan', 'Jabatan', 'required');
     }

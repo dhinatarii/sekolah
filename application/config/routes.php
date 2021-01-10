@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
@@ -53,3 +53,6 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = 'error_404';
 $route['translate_uri_dashes'] = FALSE;
 $route['admin'] = 'admin/dashboard';
+$route['walikelas'] = 'walikelas/dashboard';
+$route['guru'] = 'guru/dashboard';
+$route['siswa'] = 'siswa/dashboard';

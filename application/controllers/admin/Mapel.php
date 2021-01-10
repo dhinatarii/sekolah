@@ -21,17 +21,24 @@ class Mapel extends CI_Controller
 
     public function index()
     {
-        $data['menu'] = 'mata pelajaran';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Mata Pelajaran',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'     => $data['level'],
+            'menu'      => 'mata pelajaran',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Mata Pelajaran',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -50,7 +57,7 @@ class Mapel extends CI_Controller
             $row[] = $no;
             $row[] = $item->nama_mapel;
             $row[] = $item->level;
-            $row[] = anchor('admin/mapel/kd?id_mapel=' . $item->id_mapel, '<div class="btn btn-sm btn-success btn-xs mr-1 ml-1 mb-1"><i class="fa fa-eye"></i></div>') .
+            $row[] = anchor('admin/mapel/kd?id_mapel=' . $item->id_mapel, '<div class="btn btn-sm btn-info btn-xs mr-1 ml-1 mb-1"><i class="fa fa-edit"></i> <strong>KD</strong></div>') .
                 anchor('admin/mapel/edit/' . $item->id_mapel, '<div class="btn btn-sm btn-primary btn-xs mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>')
                 . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_mapel . ')" class="btn btn-sm btn-danger btn-xs mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';
             $data[] = $row;
@@ -73,23 +80,30 @@ class Mapel extends CI_Controller
             redirect('admin/mapel');
         }
 
-        $data['komp_dasar']  = $this->Mapel_model->get_kd_permapel($id);
-        $data['mapel']  = $this->Mapel_model->get_detail_data($id);
-        $data['menu'] = 'mata pelajaran';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Mata Pelajaran',
-                'link' => 'admin/mapel'
-            ],
-            2 => (object)[
-                'name' => 'Kompetensi Dasar',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'     => $data['level'],
+            'mapel'     => $this->Mapel_model->get_detail_data($id),
+            'komp_dasar' => $this->Mapel_model->get_kd_permapel($id),
+            'menu'      => 'mata pelajaran',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Mata Pelajaran',
+                    'link' => 'admin/mapel'
+                ],
+                2 => (object)[
+                    'name' => 'Kompetensi Dasar',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->_rules_kd();
 
@@ -109,21 +123,28 @@ class Mapel extends CI_Controller
 
     public function input()
     {
-        $data['menu'] = 'mata pelajaran';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Mata Pelajaran',
-                'link' => 'admin/mapel'
-            ],
-            2 => (object)[
-                'name' => 'Input',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'     => $data['level'],
+            'menu'      => 'mata pelajaran',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Mata Pelajaran',
+                    'link' => 'admin/mapel'
+                ],
+                2 => (object)[
+                    'name' => 'Input',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->_rules();
 
@@ -146,23 +167,30 @@ class Mapel extends CI_Controller
             redirect('admin/mapel');
         }
 
-        $data['mapel']  = $this->Mapel_model->get_detail_data($id);
-        $data['level']  = [1, 2, 3, 4, 5, 6];
-        $data['menu']   = 'mata pelajaran';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Mata Pelajaran',
-                'link' => 'admin/mapel'
-            ],
-            2 => (object)[
-                'name' => 'Edit',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'     => $data['level'],
+            'mapel'     => $this->Mapel_model->get_detail_data($id),
+            'levels'    => [1, 2, 3, 4, 5, 6],
+            'menu'      => 'mata pelajaran',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Mata Pelajaran',
+                    'link' => 'admin/mapel'
+                ],
+                2 => (object)[
+                    'name' => 'Edit',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->_rules();
 
@@ -188,10 +216,10 @@ class Mapel extends CI_Controller
 
     public function delete_kd()
     {
-        $id_kd      = $this->input->get('id_kd', TRUE);
+        $kd      = $this->input->get('kd', TRUE);
         $id_mapel   = $this->input->get('id_mapel', TRUE);
 
-        $this->Mapel_model->delete_kd($id_kd);
+        $this->Mapel_model->delete_kd($kd, $id_mapel);
         $this->session->set_flashdata('message', 'Data Kompetensi Dasar Berhasil Dihapus!');
         redirect('admin/mapel/kd?id_mapel=' . $id_mapel);
     }

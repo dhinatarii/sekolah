@@ -18,7 +18,7 @@ class Login extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
             $this->load->view('login/index');
-            $this->load->view('templates/footer' , $data);
+            $this->load->view('templates/footer', $data);
         } else {
             $username = $this->input->post('username');
             $password = $this->input->post('password');
@@ -30,21 +30,31 @@ class Login extends CI_Controller
 
             if ($check->num_rows() > 0) {
                 foreach ($check->result() as $ck) {
-                    $sess_data['username'] = $ck->username;
-                    $sess_data['email'] = $ck->email;
-                    $sess_data['level'] = $ck->level;
+                    if ($ck->status == 1) {
+                        $sess_data['logged_in']     = TRUE;
+                        $sess_data['id_user']       = $ck->id_user;
+                        $sess_data['username']      = $ck->username;
+                        $sess_data['password']      = $ck->$password;
+                        $sess_data['level']         = $ck->level;
 
-                    $this->session->set_userdata($sess_data);
-                }
-                if ($sess_data['level'] == 'admin') {
-                    redirect('admin/dashboard');
-                } elseif ($sess_data['level'] == 'guru') {
-                    redirect('guru/dashboard');
-                } elseif ($sess_data['level'] == 'siswa') {
-                    redirect('siswa/dashboard');
-                } else {
-                    $this->session->set_flashdata('message', 'Username atau Password Salah!');
-                    redirect('login');
+                        $this->session->set_userdata($sess_data);
+
+                        if ($sess_data['level'] == 'admin') {
+                            redirect('admin');
+                        } elseif ($sess_data['level'] == 'guru') {
+                            redirect('guru');
+                        } elseif ($sess_data['level'] == 'wali kelas') {
+                            redirect('walikelas');
+                        } elseif ($sess_data['level'] == 'siswa') {
+                            redirect('siswa');
+                        } else {
+                            $this->session->set_flashdata('message', 'Username atau Password Salah!');
+                            redirect('login');
+                        }
+                    } else {
+                        $this->session->set_flashdata('message', 'Username atau Password Salah!');
+                        redirect('login');
+                    }
                 }
             } else {
                 $this->session->set_flashdata('message', 'Username atau Password Salah!');

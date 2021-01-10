@@ -22,21 +22,28 @@ class User extends CI_Controller
 
     public function index()
     {
-        $data['menu']           = 'user';
-        $data['count_admin']    = $this->User_model->count_user('admin');
-        $data['count_guru']     = $this->User_model->count_user('guru');
-        $data['count_wali']     = $this->User_model->count_user('wali kelas');
-        $data['count_siswa']    = $this->User_model->count_user('siswa');
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Users',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'         => $data['level'],
+            'count_admin'   => $this->User_model->count_user('admin'),
+            'count_guru'    => $this->User_model->count_user('guru', 'wali kelas'),
+            'count_wali'    => $this->User_model->count_user('wali kelas'),
+            'count_siswa'   => $this->User_model->count_user('siswa'),
+            'menu'          => 'user',
+            'breadcrumb'    => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Users',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -50,41 +57,54 @@ class User extends CI_Controller
 
         if ($id < '1' || $id > '4') {
             redirect('admin/user');
-        } else {
-            $data['id']     = $id;
-            $data['level']  = $id == 1 ? 'admin' : ($id == 2 ? 'guru' : ($id == 3 ? 'wali kelas' : ($id == 4 ? 'siswa' : null)));
-            $data['menu']   = 'user';
-            $data['users']  = $this->User_model->get_user($data['level']);
-            $data['breadcrumb'] = [
+        }
+
+        $level      = $id == 1 ? 'admin' : ($id == 2 ? 'guru' : ($id == 3 ? 'wali kelas' : ($id == 4 ? 'siswa' : null)));
+        $data       = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $get_list   = ($id == 2) ? $this->User_model->get_user($data['level'], 'wali kelas') : $this->User_model->get_user($data['level']);
+        $data       = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'         => $data['level'],
+            'id'            => $id,
+            'levels'        => $level,
+            'user'          => $get_list,
+            'menu'          => 'user',
+            'breadcrumb'    => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Users',
                     'link' => 'admin/user'
                 ],
                 2 => (object)[
-                    'name' => $data['level'],
+                    'name' => $level,
                     'link' => NULL
                 ]
-            ];
+            ]
+        );
 
-            $this->load->view('templates/header');
-            $this->load->view('templates_admin/sidebar', $data);
-            $this->load->view('admin/user_detail', $data);
-            $this->load->view('templates/footer');
-        }
+        $this->load->view('templates/header');
+        $this->load->view('templates_admin/sidebar', $data);
+        $this->load->view('admin/user_detail', $data);
+        $this->load->view('templates/footer');
     }
 
     function get_result_user($id)
     {
-        $level  = $id == 1 ? 'admin' : ($id == 2 ? 'guru' : ($id == 3 ? 'wali kelas' : ($id == 4 ? 'siswa' : null)));
-        $list = $this->User_model->get_datatables($level);
-        $data = array();
-        $no = @$_POST['start'];
+        $level          = $id == 1 ? 'admin' : ($id == 2 ? 'guru' : ($id == 3 ? 'wali kelas' : ($id == 4 ? 'siswa' : null)));
+        $list           = ($id == 2) ?  $this->User_model->get_datatables($level, 'wali kelas') : $this->User_model->get_datatables($level);
+        $count_all      = ($id == 2) ?  $this->User_model->count_all($level, 'wali kelas') : $this->User_model->count_all($level);
+        $count_filter   = ($id == 2) ?  $this->User_model->count_filtered($level, 'wali kelas') : $this->User_model->count_filtered($level);
+        $data           = array();
+        $no             = @$_POST['start'];
         foreach ($list as $item) {
-            $isDelete = $level == 'admin' ? '<a href="javascript:;" onclick="confirmDelete(' . $item->id_user . ')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>' : '';
+            $dataAdmin  = $level == 'admin' ? $this->User_model->get_detail_admin($item->id_user, $level) : NULL;
+            $isDelete   = $level == 'admin' ? '<a href="javascript:;" onclick="confirmDelete(' . $item->id_user . ')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>' : '';
+            $isDetail   = $level == 'admin' ? '<div id="set_detailModal" class="btn btn-sm btn-info mr-1 ml-1 mb-1" data-toggle="modal" data-target="#detailModal" data-level="' . $level . '" data-idadmin="' . $item->id_user . '" data-nip="' . $dataAdmin['nip'] . '" data-nama="' . $dataAdmin['nama'] . '" data-jeniskelamin="' . $dataAdmin['jenis_kelamin'] . '"data-tanggallahir="' . $dataAdmin['tanggal_lahir'] . '" data-nohp="' . $dataAdmin['no_hp'] . '" data-email="' . $dataAdmin['email'] . '"  data-alamat="' . $dataAdmin['alamat'] . '" data-photo="' . $dataAdmin['photo'] . '"><i class="fa fa-eye"></i></div>' : '';
             $no++;
             $row = array();
             $row[] = $no;
@@ -92,10 +112,11 @@ class User extends CI_Controller
             $row[] = $item->username;
             $row[] = $item->level;
             $row[] = ($item->status == 1) ? '<strong class="badge badge-success">aktif</strong>' : '<strong class="badge badge-danger">tidak aktif</strong>';
-            $row[] = anchor(
-                'admin/user/edit?level=' . $level . '&id=' . $item->id_user,
-                '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>'
-            )
+            $row[] = $isDetail
+                . anchor(
+                    'admin/user/edit/' . $level . '/' . $item->id_user,
+                    '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>'
+                )
                 . anchor(
                     'admin/user/change_password?level=' . $level . '&id=' . $item->id_user,
                     '<div class="btn btn-sm btn-success  mr-1 ml-1 mb-1"><i class="fa fa-lock"></i></div>'
@@ -105,8 +126,8 @@ class User extends CI_Controller
 
         $output = array(
             "draw" => @$_POST['draw'],
-            "recordsTotal" => $this->User_model->count_all($level),
-            "recordsFiltered" => $this->User_model->count_filtered($level),
+            "recordsTotal" => $count_all,
+            "recordsFiltered" => $count_filter,
             "data" => $data,
         );
 
@@ -115,25 +136,32 @@ class User extends CI_Controller
 
     public function input()
     {
-        $data['menu']   = 'user';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Users',
-                'link' => 'admin/user'
-            ],
-            2 => (object)[
-                'name' => 'admin',
-                'link' => 'admin/user/detail/1'
-            ],
-            3 => (object)[
-                'name' => 'input',
-                'link' => NULL
-            ],
-        ];
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'         => $data['level'],
+            'menu'          => 'user',
+            'breadcrumb'    => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Users',
+                    'link' => 'admin/user'
+                ],
+                2 => (object)[
+                    'name' => 'admin',
+                    'link' => 'admin/user/detail/1'
+                ],
+                3 => (object)[
+                    'name' => 'input',
+                    'link' => NULL
+                ],
+            ]
+        );
 
         $this->_rules();
 
@@ -145,9 +173,43 @@ class User extends CI_Controller
         } else {
             $cek = $this->User_model->cek_user();
             if ($cek == 0) {
-                $this->User_model->input_data();
-                $this->session->set_flashdata('message', 'Data Admin Berhasil Ditambahkan!');
-                redirect('admin/user/detail/1');
+                $config['upload_path']          = './assets/photos/';
+                $config['allowed_types']        = 'gif|jpg|png|jpeg';
+                $config['max_size']             = 5000;
+                $config['file_name']            = 'photo-admin-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
+                $this->upload->initialize($config);
+
+                if (@$_FILES['photo']['name'] != null) {
+
+                    if ($this->upload->do_upload('photo')) {
+                        $gbr = $this->upload->data();
+                        //Compress Image
+                        $config['image_library'] = 'gd2';
+                        $config['source_image'] = './assets/photos/' . $gbr['file_name'];
+                        $config['create_thumb'] = FALSE;
+                        $config['maintain_ratio'] = FALSE;
+                        $config['quality'] = '50%';
+                        $config['width'] = 400;
+                        $config['height'] = 600;
+                        $config['new_image'] = './assets/photos/' . $gbr['file_name'];
+                        $this->image_lib->initialize($config);
+                        $this->image_lib->resize();
+
+                        $photo = $gbr['file_name'];
+                        $this->User_model->input_data($photo);
+                        $this->session->set_flashdata('message', 'Data Admin Berhasil Ditambahkan!');
+                        redirect('admin/user/detail/1');
+                    } else {
+                        $error = $this->upload->display_errors();
+                        $this->session->set_flashdata('message_error', $error);
+                        redirect('admin/user/input');
+                    }
+                } else {
+                    $photo = NULL;
+                    $this->User_model->input_data($photo);
+                    $this->session->set_flashdata('message', 'Data Admin Berhasil Ditambahkan!');
+                    redirect('admin/user/detail/1');
+                }
             } else {
                 $this->session->set_flashdata('message_error', 'Username telah ada');
                 redirect('admin/user/input');
@@ -157,34 +219,42 @@ class User extends CI_Controller
 
     public function edit()
     {
-        $data['id']     = $this->input->get('id', TRUE);
-        $data['level']  = $this->input->get('level', TRUE);
-        $data['user']   = $this->User_model->get_detail_user($data['id'], $data['level']);
-        $data['admin']  = $this->User_model->get_detail_admin($data['id'], $data['level']);
-        $data['status'] = ['0', '1'];
-        $data['jenis_kelamin'] = ['Laki-laki', 'Perempuan'];
-        $detail         = $data['level'] == 'admin' ? '1' : ($data['level'] == 'guru' ? '2' : ($data['level'] == 'wali kelas' ? '3' : ($data['level'] == 'siswa' ? '4' : NULL)));
-        $data['menu']   = 'user';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Users',
-                'link' => 'admin/user'
-            ],
-            2 => (object)[
-                'name' => $data['level'],
-                'link' => 'admin/user/detail/' . $detail
-            ],
-            3 => (object)[
-                'name' => 'edit',
-                'link' => NULL
-            ],
-        ];
+        $level  = $this->uri->segment(4);
+        $id     = $this->uri->segment(5);
+        $detail = $level == 'admin' ? '1' : ($level == 'guru' ? '2' : ($level == 'wali kelas' ? '3' : ($level == 'siswa' ? '4' : NULL)));
+        $data   = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data   = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'         => $data['level'],
+            'levels'        => $level,
+            'user'          => $this->User_model->get_detail_user($id, $level),
+            'admin'         => $this->User_model->get_detail_admin($id, $level),
+            'status'        => ['0', '1'],
+            'jenis_kelamin' => ['Laki-laki', 'Perempuan'],
+            'menu'          => 'user',
+            'breadcrumb'    => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Users',
+                    'link' => 'admin/user'
+                ],
+                2 => (object)[
+                    'name' => $level,
+                    'link' => 'admin/user/detail/' . $detail
+                ],
+                3 => (object)[
+                    'name' => 'edit',
+                    'link' => NULL
+                ],
+            ]
+        );
 
-        if ($data['level'] == 'admin') {
+        if ($level == 'admin') {
             $this->_rules_data();
 
             if ($this->form_validation->run() == FALSE) {
@@ -193,9 +263,50 @@ class User extends CI_Controller
                 $this->load->view('admin/user_admin', $data);
                 $this->load->view('templates/footer');
             } else {
-                $this->User_model->edit_admin($data['id']);
-                $this->session->set_flashdata('message', 'Data Berhasil Diupdate!');
-                redirect('admin/user/detail/' . $detail);
+                $config['upload_path']          = './assets/photos/';
+                $config['allowed_types']        = 'gif|jpg|png|jpeg';
+                $config['max_size']             = 5000;
+                $config['file_name']            = 'photo-admin-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
+                $this->upload->initialize($config);
+
+                if (@$_FILES['photo']['name'] != null) {
+
+                    if ($this->upload->do_upload('photo')) {
+
+                        $item = $this->User_model->get_detail_admin($id, $level);
+                        if ($item['photo'] != null) {
+                            $target_delete = './assets/photos/' . $item['photo'];
+                            unlink($target_delete);
+                        }
+
+                        $gbr = $this->upload->data();
+                        //Compress Image
+                        $config['image_library'] = 'gd2';
+                        $config['source_image'] = './assets/photos/' . $gbr['file_name'];
+                        $config['create_thumb'] = FALSE;
+                        $config['maintain_ratio'] = FALSE;
+                        $config['quality'] = '50%';
+                        $config['width'] = 400;
+                        $config['height'] = 600;
+                        $config['new_image'] = './assets/photos/' . $gbr['file_name'];
+                        $this->image_lib->initialize($config);
+                        $this->image_lib->resize();
+
+                        $photo = $gbr['file_name'];
+                        $this->User_model->edit_admin($id, $photo);
+                        $this->session->set_flashdata('message', 'Data Berhasil Diupdate!');
+                        redirect('admin/user/detail/' . $detail);
+                    } else {
+                        $error = $this->upload->display_errors();
+                        $this->session->set_flashdata('message_error', $error);
+                        redirect('admin/user/input');
+                    }
+                } else {
+                    $photo = NULL;
+                    $this->User_model->edit_admin($id, $photo);
+                    $this->session->set_flashdata('message', 'Data Berhasil Diupdate!');
+                    redirect('admin/user/detail/' . $detail);
+                }
             }
         } else {
             $this->_rules_data();
@@ -206,7 +317,7 @@ class User extends CI_Controller
                 $this->load->view('admin/user_edit', $data);
                 $this->load->view('templates/footer');
             } else {
-                $this->User_model->edit_data($data['id']);
+                $this->User_model->edit_data($id);
                 $this->session->set_flashdata('message', 'Data Berhasil Diupdate!');
                 redirect('admin/user/detail/' . $detail);
             }
@@ -215,29 +326,35 @@ class User extends CI_Controller
 
     public function change_password()
     {
-        $data['menu']   = 'user';
-        $data['id']     = $this->input->get('id', TRUE);
-        $data['level']  = $this->input->get('level', TRUE);
-        $detail         = $data['level'] == 'admin' ? '1' : ($data['level'] == 'guru' ? '2' : ($data['level'] == 'wali kelas' ? '3' : ($data['level'] == 'siswa' ? '4' : NULL)));
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Users',
-                'link' => 'admin/user'
-            ],
-            2 => (object)[
-                'name' => $data['level'],
-                'link' => 'admin/user/detail/' . $detail
-            ],
-            3 => (object)[
-                'name' => 'password',
-                'link' => NULL
-            ],
-        ];
-
+        $id     = $this->input->get('id', TRUE);
+        $level  = $this->input->get('level', TRUE);
+        $detail = $level == 'admin' ? '1' : ($level == 'guru' ? '2' : ($level == 'wali kelas' ? '3' : ($level == 'siswa' ? '4' : NULL)));
+        $data   = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data   = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'photo'         => $data['photo'],
+            'level'         => $data['level'],
+            'menu'          => 'user',
+            'breadcrumb'    => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Users',
+                    'link' => 'admin/user'
+                ],
+                2 => (object)[
+                    'name' => $level,
+                    'link' => 'admin/user/detail/' . $detail
+                ],
+                3 => (object)[
+                    'name' => 'password',
+                    'link' => NULL
+                ],
+            ]
+        );
 
         $this->_rules_password();
 
@@ -247,7 +364,7 @@ class User extends CI_Controller
             $this->load->view('admin/user_password', $data);
             $this->load->view('templates/footer');
         } else {
-            $this->User_model->edit_password($data['id']);
+            $this->User_model->edit_password($id);
             $this->session->set_flashdata('message', 'Password Berhasil Diupdate!');
             redirect('admin/user/detail/' . $detail);
         }
@@ -258,6 +375,12 @@ class User extends CI_Controller
         $level      = $this->uri->segment(4);
         $id         = $this->uri->segment(5);
         $detail     = $level == 'admin' ? '1' : ($level == 'guru' ? '2' : ($level == 'wali kelas' ? '3' : ($level == 'siswa' ? '4' : NULL)));
+
+        $item = $this->User_model->get_detail_admin($id, $level);
+        if ($item['photo'] != null) {
+            $target_delete = './assets/photos/' . $item['photo'];
+            unlink($target_delete);
+        }
 
         $this->User_model->delete_data($id);
         $this->session->set_flashdata('message', 'Data User Berhasil Dihapus!');

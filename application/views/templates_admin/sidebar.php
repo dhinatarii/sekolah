@@ -14,7 +14,7 @@
             </svg>
         </div>
         <ul class="c-sidebar-nav">
-            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'dashboard') echo 'c-active' ?>" href="<?= base_url('admin/dashboard') ?>">
+            <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'dashboard') echo 'c-active' ?>" href="<?= base_url('admin') ?>">
                     <svg class="c-sidebar-nav-icon">
                         <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-speedometer"></use>
                     </svg><b> Dashboard</b></a></li>
@@ -30,6 +30,7 @@
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'mata pelajaran') echo 'c-active' ?>" href="<?= base_url('admin/mapel') ?>"> Mata Pelajaran</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'tahun ajaran') echo 'c-active' ?>" href="<?= base_url('admin/tahunajaran') ?>"> Tahun Ajaran</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'pengajar') echo 'c-active' ?>" href="<?= base_url('admin/pengajar') ?>"> Guru Pengajar</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'peserta') echo 'c-active' ?>" href="<?= base_url('admin/pesertadidik') ?>"> Peserta Didik</a></li>
                 </ul>
             </li>
             <li class="c-sidebar-nav-dropdown"><a class="c-sidebar-nav-dropdown-toggle" href="#">
@@ -37,7 +38,9 @@
                         <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-education"></use>
                     </svg> Pengolahan Data</a>
                 <ul class="c-sidebar-nav-dropdown-items">
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'nilai') echo 'c-active' ?>" href="<?= base_url('admin/nilai') ?>"> Nilai</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'nilai') echo 'c-active' ?>" href="<?= base_url('admin/nilai') ?>"> Nilai Harian</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'nilai') echo 'c-active' ?>" href="<?= base_url('admin/nilaiuts') ?>"> Nilai UTS</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'nilai') echo 'c-active' ?>" href="<?= base_url('admin/nilaiuas') ?>"> Nilai UAS</a></li>
                 </ul>
             </li>
             <li class="c-sidebar-nav-dropdown"><a class="c-sidebar-nav-dropdown-toggle" href="#">
@@ -45,9 +48,9 @@
                         <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-description"></use>
                     </svg> Laporan</a>
                 <ul class="c-sidebar-nav-dropdown-items">
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'laporan_guru') echo 'c-active' ?>" href="<?= base_url('admin/laporan_guru') ?>"> Laporan Daftar Guru</a></li>
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'laporan_siswa') echo 'c-active' ?>" href="<?= base_url('admin/laporan_siswa') ?>"> Laporan Daftar Siswa</a></li>
-                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'laporan_nilai') echo 'c-active' ?>" href="<?= base_url('admin/laporan_nilai') ?>"> Laporan Daftar Nilai</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'laporan_guru') echo 'c-active' ?>" href="<?= base_url('admin/laporanguru') ?>"> Laporan Daftar Guru</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'laporan_siswa') echo 'c-active' ?>" href="<?= base_url('admin/laporansiswa') ?>"> Laporan Daftar Siswa</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'laporan_nilai') echo 'c-active' ?>" href="<?= base_url('admin/laporannilai') ?>"> Laporan Daftar Nilai</a></li>
                 </ul>
             </li>
         </ul>
@@ -74,15 +77,20 @@
             <ul class="c-header-nav ml-auto mr-4">
                 <li class="c-header-nav-item d-md-down-none mx-2">
                     <svg class="c-icon">
-                    </svg>Hello, Admin</li>
+                    </svg>Hello, <?= $nama ?>
+                </li>
                 <li class="c-header-nav-item dropdown"><a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        <div class="c-avatar"><img class="c-avatar-img" src="<?= base_url() ?>assets/img/avatars/undraw_profile.svg" alt="user@email.com"></div>
+                        <div class="c-avatar"><img class="c-avatar-img" style="max-width:36px; max-height:36px; object-fit: scale-down; object-position: center; " src="<?= base_url('assets/photos/' . $photo) ?>" alt="user@email.com"></div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right pt-0">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="<?= base_url('admin/profile') ?>">
                             <svg class="c-icon mr-2">
                                 <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-user"></use>
                             </svg> Profile</a>
+                        <a class="dropdown-item" href="<?= base_url('admin/profile/password') ?>">
+                            <svg class="c-icon mr-2">
+                                <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
+                            </svg> Ganti Password</a>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                             <svg class="c-icon mr-2">
                                 <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-account-logout"></use>

@@ -27,7 +27,7 @@
                 </thead>
 
                 <tbody>
-                    
+
                 </tbody>
             </table>
         </div>
@@ -39,6 +39,7 @@
 <script>
     //onclick hapus data kelas
     function confirmDelete(id) {
+        console.log(id);
         const href = '<?= site_url('admin/kelas/delete/') ?>' + id;
 
         Swal.fire({

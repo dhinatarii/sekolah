@@ -25,34 +25,12 @@
                         <th>Mata Pelajaran</th>
                         <th>Kelas</th>
                         <th>Tahun Ajaran</th>
+                        <th>Semester</th>
                         <th width="100px">Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <!-- <?php
-                            $no = 1;
-                            foreach ($pengajar as $pe) : ?>
-                        <tr>
-                            <td width="20px"><?php echo $no++ ?></td>
-                            <td><?php echo $pe->guru ?></td>
-                            <td><?php echo $pe->jabatan ?></td>
-                            <td><?php echo $pe->mapel ?></td>
-                            <td><?php echo $pe->kelas ?></td>
-                            <td><?php echo $pe->tahun ?></td>
-                            <td width="40px">
-                                <?php echo anchor(
-                                    'admin/pengajar/edit/' . $pe->id_pengajar,
-                                    '<div class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></div>'
-                                ) ?>
-                            </td>
-                            <td width="40px">
-                                <a href="<?php echo base_url(); ?>admin/pengajar/delete/<?php echo $pe->id_pengajar ?>" class="btn btn-sm btn-danger btn-delete-mapel">
-                                    <i class="fa fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    <?php endforeach ?> -->
                 </tbody>
             </table>
         </div>

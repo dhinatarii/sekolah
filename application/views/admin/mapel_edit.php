@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <label for="level">Level</label>
                     <select class="form-control" id="level" name="level">
-                        <?php foreach ($level as $lv) : ?>
+                        <?php foreach ($levels as $lv) : ?>
                             <?php if ($lv == $mapel['level']) : ?>
                                 <option value="<?php echo $lv ?>" selected><?php echo $lv ?></option>
                             <?php else : ?>

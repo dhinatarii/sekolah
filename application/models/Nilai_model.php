@@ -8,13 +8,17 @@ class Nilai_model extends CI_Model
         $kd = $id_kd != null ? $id_kd : 'null';
         $jenis_nilai = $this->get_jenis_nilai_in_perkd($id_kelas, $id_mapel, $id_kd);
         $query_select = "";
-        $inner_join = "";
 
         foreach ($jenis_nilai as $jn => $value) {
-            $query_select = $query_select . "nilai$jn.nilai as '$value->jenis', ";
-            $inner_join = $inner_join . "
-            inner join (
-                    select tn.id_siswa, tn.nilai from tb_nilai tn  
+            $query_select = $query_select . "sum( if ( nilai.jenis = '$value->jenis', nilai.nilai, 0)) as '$value->jenis', ";
+        }
+
+        $query_select = substr($query_select, 0, -2);
+
+        if ($query_select != null) {
+            $query = $this->db->query("select ts.nis, ts.nisn ,ts.nama, $query_select, jm.jumlah, jm.rerata from tb_siswa ts
+                inner join (
+                    select tn.id_siswa, tn.nilai, tn.jenis from tb_nilai tn  
                         left join tb_kd tk 
                             on tn.id_kd = tk.id_kd 
                         left join tb_matapelajaran tm 
@@ -28,17 +32,9 @@ class Nilai_model extends CI_Model
                     where tt.status = 1
                         and tm.id_mapel = $mapel
                         and tk.id_kd = $kd
-                        and tk2.id_kelas = $kelas
-                        and tn.jenis = '$value->jenis') nilai$jn on nilai$jn.id_siswa = ts.id_siswa ";
-        }
-
-
-        $query_select = substr($query_select, 0, -2);
-
-        if ($query_select != null || $inner_join != null) {
-            $query = $this->db->query("select ts.nis, ts.nisn ,ts.nama, $query_select, jm.jumlah, jm.rerata from tb_siswa ts $inner_join
+                        and tk2.id_kelas = $kelas) nilai on nilai.id_siswa = ts.id_siswa    
                 inner join (
-                    select ts.id_siswa, ts.nis, ts.nama, sum(tn.nilai) as jumlah, ceil(avg(tn.nilai)) as rerata 
+                    select ts.id_siswa, ts.nis, ts.nama, sum(tn.nilai) as jumlah, round(avg(tn.nilai)) as rerata 
                     from tb_nilai tn 
                         inner join tb_siswa ts 
                             on tn.id_siswa = ts.id_siswa 
@@ -50,8 +46,9 @@ class Nilai_model extends CI_Model
                         tm.id_mapel = $mapel
                         and tk.id_kd = $kd
                         and ts.id_kelas = $kelas
-                    group by ts.id_siswa) jm on jm.id_siswa = ts.id_siswa");
-
+                    group by ts.id_siswa) jm on jm.id_siswa = ts.id_siswa
+                where ts.id_kelas = $kelas
+                group by ts.nis");
             return $query->result_array();
         } else {
             return null;
@@ -83,45 +80,49 @@ class Nilai_model extends CI_Model
             left join tb_siswa ts 
                 on tn.id_siswa = ts.id_siswa
             left join tb_kelas tk2 
-                on ts.id_kelas = tk2.id_kelas 
-            where 
-                tm.id_mapel = $mapel
+                on ts.id_kelas = tk2.id_kelas
+            left join tb_pengajar tp 
+                on tk2.id_kelas = tp.id_kelas
+            left join tb_tahunajaran tt 
+                on tp.id_tahun = tt.id_tahun  
+            where
+                tt.status = 1 
+                and tm.id_mapel = $mapel
                 and tk.id_kd = $kd
                 and tk2.id_kelas = $kelas
             group by tn.jenis");
         return $query;
     }
 
-    public function get_nilai_permapel($id_mapel, $id_kelas, $view)
+    public function get_nilai_permapel($id_mapel, $id_kelas, $view, $id_tahun = NULL)
     {
         $kelas          = $id_kelas != null ? $id_kelas : 'null';
         $mapel          = $id_mapel != null ? $id_mapel : 'null';
         $kd             = $this->get_kd_permapel_result($mapel, $kelas);
         $kd_row         = $this->get_kd_permapel_numrow($mapel, $kelas);
         $query_select   = "";
-        $inner_join     = "";
+        $query_join     = "";
 
         foreach ($kd as $key => $value) {
             switch ($view) {
                 case 'min':
-                    $query_select = $query_select . "min(kd$key.rerata) as '$value->nama_kd', ";
+                    $query_select = $query_select . "min(round(kd$key.rerata)) as '$value->nama_kd', ";
                     break;
                 case 'max':
-                    $query_select = $query_select . "max(kd$key.rerata) as '$value->nama_kd', ";
+                    $query_select = $query_select . "max(round(kd$key.rerata)) as '$value->nama_kd', ";
                     break;
                 case 'jumlah':
-                    $query_select = $query_select . "sum(kd$key.rerata) as '$value->nama_kd', ";
+                    $query_select = $query_select . "sum(round(kd$key.rerata)) as '$value->nama_kd', ";
                     break;
                 case 'rerata':
-                    $query_select = $query_select . "avg(kd$key.rerata) as '$value->nama_kd', ";
+                    $query_select = $query_select . "round(avg(kd$key.rerata)) as '$value->nama_kd', ";
                     break;
-
                 default:
-                    $query_select = $query_select . "kd$key.rerata as '$value->nama_kd', ";
+                    $query_select = $query_select . "round(kd$key.rerata) as '$value->nama_kd', ";
                     break;
             }
 
-            $inner_join = $inner_join . "
+            $query_join = $query_join . "
                 inner join (
                     select ts.id_siswa, ts.nis, ts.nama, sum(tn.nilai) as jumlah, avg(tn.nilai) as rerata 
                     from tb_nilai tn 
@@ -131,8 +132,19 @@ class Nilai_model extends CI_Model
                         on tn.id_kd = tk.id_kd
                     inner join tb_matapelajaran tm 
                         on tk.id_mapel = tm.id_mapel
-                    where 
-                        tm.id_mapel = $mapel
+                    inner join tb_pengajar tp 
+                        on tm.id_mapel = tp.id_mapel
+                    inner join tb_tahunajaran tt 
+                        on tp.id_tahun = tt.id_tahun 
+                    where";
+            if ($id_tahun) {
+                $query_join = $query_join . " tt.id_tahun = $id_tahun";
+            } else {
+                $query_join = $query_join . " tt.status = 1";
+            }
+
+            $query_join = $query_join . "
+                        and tm.id_mapel = $mapel
                         and tk.id_kd = {$value->id_kd}
                         and ts.id_kelas = $kelas
                     group by ts.id_siswa ) kd$key on ts.id_siswa = kd$key.id_siswa";
@@ -140,27 +152,26 @@ class Nilai_model extends CI_Model
 
         switch ($view) {
             case 'min':
-                $query_select = $query_select . "min(nm.jumlah) as jumlah, min(nm.rerata) as rerata";
+                $query_select = $query_select . "min(round(nm.jumlah)) as jumlah, min(nm.rerata) as rerata";
                 break;
             case 'max':
-                $query_select = $query_select . "max(nm.jumlah) as jumlah, max(nm.rerata) as rerata";
+                $query_select = $query_select . "max(round(nm.jumlah)) as jumlah, max(nm.rerata) as rerata";
                 break;
             case 'jumlah':
-                $query_select = $query_select . "sum(nm.jumlah) as jumlah, sum(nm.rerata) as rerata";
+                $query_select = $query_select . "sum(round(nm.jumlah)) as jumlah, sum(nm.rerata) as rerata";
                 break;
             case 'rerata':
-                $query_select = $query_select . "avg(nm.jumlah) as jumlah, avg(nm.rerata) as rerata";
+                $query_select = $query_select . "round(avg(nm.jumlah)) as jumlah, round(avg(nm.rerata)) as rerata";
                 break;
-
             default:
                 $query_select = $query_select . "nm.jumlah as jumlah, nm.rerata as rerata";
                 break;
         }
 
-        if ($query_select != null || $inner_join != null) {
-            $inner_join = $inner_join . "
+        if ($query_select != null || $query_join != null) {
+            $query_join = $query_join . "
                 inner join(
-                        select ts.id_siswa, ts.nis, ts.nama, sum(tn.nilai)/$kd_row as jumlah, avg(tn.nilai) as rerata 
+                        select ts.id_siswa, ts.nis, ts.nama, round(sum(tn.nilai)/$kd_row) as jumlah, round(avg(tn.nilai)) as rerata 
                         from tb_nilai tn 
                         inner join tb_siswa ts 
                             on tn.id_siswa = ts.id_siswa 
@@ -173,7 +184,7 @@ class Nilai_model extends CI_Model
                             and ts.id_kelas = $kelas
                         group by ts.id_siswa) nm on ts.id_siswa = nm.id_siswa";
 
-            $query = $this->db->query("select ts.id_siswa, ts.nis, ts.nama, $query_select from tb_siswa ts $inner_join");
+            $query = $this->db->query("select ts.id_siswa, ts.nis, ts.nisn, ts.nama, $query_select from tb_siswa ts $query_join");
             return $query->result_array();
         } else {
             return null;

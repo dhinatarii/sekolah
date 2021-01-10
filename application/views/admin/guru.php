@@ -18,15 +18,16 @@
             <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-guru">
                 <thead>
                     <tr>
-                        <th class="text-center">No</th>
-                        <th>NIP</th>
-                        <th>Nama</th>
-                        <th>Jenis Kelamin</th>
-                        <th>Tanggal Lahir</th>
-                        <th>No Handphone</th>
-                        <th>Email</th>
-                        <th>Alamat</th>
-                        <th class="text-center">Aksi</th>
+                        <th class="text-center" style="vertical-align : middle;text-align:center;">No</th>
+                        <th style="vertical-align : middle;text-align:center;">NIP</th>
+                        <th style="vertical-align : middle;text-align:center;">Nama</th>
+                        <th style="vertical-align : middle;text-align:center;">Jenis Kelamin</th>
+                        <th style="vertical-align : middle;text-align:center;">Tanggal Lahir</th>
+                        <th style="vertical-align : middle;text-align:center;">No Handphone</th>
+                        <th style="vertical-align : middle;text-align:center;">Email</th>
+                        <th style="vertical-align : middle;text-align:center;">Foto</th>
+                        <th style="vertical-align : middle;text-align:center;">Alamat</th>
+                        <th class="text-center" width="80px" style="vertical-align : middle;text-align:center;">Aksi</th>
                     </tr>
                 </thead>
 

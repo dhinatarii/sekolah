@@ -25,20 +25,27 @@ class Nilai extends CI_Controller
 
     public function index()
     {
-        $data['mapel']      = $this->Mapel_model->get_data();
-        $data['kelas']      = $this->Kelas_model->get_data();
-        $data['tahun']      = $this->Tahun_model->get_active_stats();
-        $data['menu'] = 'nilai';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Nilai',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'     => $data['level'],
+            'mapel'     => $this->Mapel_model->get_data(),
+            'kelas'     => $this->Kelas_model->get_data(),
+            'tahun'     => $this->Tahun_model->get_active_stats(),
+            'menu'      => 'nilai',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Nilai',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -49,7 +56,7 @@ class Nilai extends CI_Controller
     public function get_mapel()
     {
         $id_kelas   = $this->input->post('id_kelas', TRUE);
-        $data       =  $this->Mapel_model->get_mapel_with_kelas($id_kelas);
+        $data       = $this->Mapel_model->get_mapel_with_kelas($id_kelas);
         if ($data->num_rows() > 0) {
             echo '<option value="">--Pilih Mata Pelajaran--</option>';
             foreach ($data->result() as $mp) {
@@ -64,31 +71,38 @@ class Nilai extends CI_Controller
     {
         $id_kelas = $this->input->get('id_kelas', TRUE);
         $id_mapel = $this->input->get('id_mapel', TRUE);
+
         if (!isset($id_kelas) || !isset($id_mapel)) {
             redirect('error_404');
         }
 
-        $data['menu'] = 'nilai';
-        $data['breadcrumb'] = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Nilai',
-                'link' => 'admin/nilai'
-            ],
-            2 => (object)[
-                'name' => 'Detail',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'     => $data['level'],
+            'id_kelas'  => $id_kelas,
+            'id_mapel'  => $id_mapel,
+            'kelas'     => $this->Kelas_model->get_detail_data($id_kelas),
+            'mapel'     => $this->Mapel_model->get_detail_data($id_mapel),
+            'komp_dasar' => $this->Mapel_model->get_mapel_with_kd_detail($id_mapel, $id_kelas),
+            'menu'      => 'nilai',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Nilai',
+                    'link' => 'admin/nilai'
+                ],
+                2 => (object)[
+                    'name' => 'Detail',
+                    'link' => NULL
+                ]
             ]
-        ];
-
-        $data['id_kelas']   = $id_kelas;
-        $data['id_mapel']   = $id_mapel;
-        $data['kelas']      = $this->Kelas_model->get_detail_data($id_kelas);
-        $data['mapel']      = $this->Mapel_model->get_detail_data($id_mapel);
-        $data['komp_dasar'] = $this->Mapel_model->get_mapel_with_kd_detail($id_mapel, $id_kelas);
+        );
 
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
@@ -110,11 +124,14 @@ class Nilai extends CI_Controller
         $daftar_kd      = $this->Nilai_model->get_kd_permapel_result($id_mapel, $id_kelas);
         $html           = '';
 
+        // var_dump("$id_kelas ---- $id_mapel");
+        // die();
+
         if ($id_mapel == null || $id_kelas == null) {
             //id not found
             $html = $html . '<div class="card">
                                 <div class="card-body">
-                                    <h6 class="text-center">Data Nilai Tidak Dapat Ditampilkan, Silahkan Cek Selengkapnya</h6>
+                                    <h6 class="text-center">Data Nilai Tidak Tersedia, Silahkan Masukkan Data Yang Diperlukan</h6>
                                 </div>
                             </div>';
         } else if ($data_default != null) {
@@ -124,20 +141,22 @@ class Nilai extends CI_Controller
                         <h6 class="text-white"> ' . $mapel['nama_mapel'] . ' / Kelas ' . $kelas['kelas'] . '</h6>
                     </div>
                     <div class="card-body">
-                        <a href="' . base_url('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel) . '" class="btn btn-primary mb-3">Cek Selengkapnya</i></a>
+                        <a href="' . base_url('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel) . '" class="btn btn-primary mb-3"><i class="fas fa-info-circle"></i> Cek Selengkapnya</i></a>
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Nama</th>';
+                                    <th style="vertical-align : middle;text-align:center;">No</th>
+                                    <th style="vertical-align : middle;text-align:center;">Nama</th>';
 
             //heading table
             foreach ($daftar_kd as $key => $value) {
-                $html = $html . '<th>' . $value->nama_kd . '</th>';
+                $html = $html . '<th style="vertical-align : middle;text-align:center;">' . $value->nama_kd . '</th>';
             }
 
             //jumlah dan rata-rata
-            $html = $html . '<th>Jumlah</th><th>Rata-rata</th></tr></thead><tbody>';
+            $html = $html . '<th style="vertical-align : middle;text-align:center;">Jumlah</th>
+                            <th style="vertical-align : middle;text-align:center;">Rata-rata</th>
+                            </tr></thead><tbody>';
 
             //body table default
             foreach ($data_default as $dt => $value_dt) {
@@ -153,14 +172,7 @@ class Nilai extends CI_Controller
 
             //body table min
             foreach ($data_min as $dt => $value_dt) {
-                $html = $html . '<tr>
-                    <td width="20px"></td>
-                    <td></td>';
-                foreach ($daftar_kd as $kd => $value_kd) {
-                    $html = $html . '<td></td>';
-                }
-
-                $html = $html . "<td></td><td></td></tr>";
+                $html = $html . '<tr><td colspan="100%"></td></tr>';
 
                 $html = $html . '<tr>
                     <td width="20px"></td>
@@ -217,7 +229,7 @@ class Nilai extends CI_Controller
                         <h6 class="text-white"> ' . $mapel['nama_mapel'] . ' / Kelas ' . $kelas['kelas'] . '</h6>
                     </div>
                     <div class="card-body">
-                        <a href="' . base_url('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel) . '" class="btn btn-primary mb-3">Cek Selengkapnya</i></a>
+                        <a href="' . base_url('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel) . '" class="btn btn-primary mb-3"><i class="fas fa-info-circle"></i> Cek Selengkapnya</i></a>
                         <h6 class="text-center">Data nilai belum lengkap, silahkan cek selengkapnya</h6>
                     </div>
                 </div>
@@ -246,8 +258,8 @@ class Nilai extends CI_Controller
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table">
                             <thead>
                                 <tr>
-                                    <th rowspan="2" >No</th>
-                                    <th rowspan="2" >Nama</th>';
+                                    <th rowspan="2" style="vertical-align : middle;text-align:center;" >No</th>
+                                    <th rowspan="2" style="vertical-align : middle;text-align:center;" >Nama</th>';
 
             //heading button table
             foreach ($jenis as $jn => $value) {
@@ -257,8 +269,8 @@ class Nilai extends CI_Controller
                     '</th>';
             }
 
-            $html = $html . '<th rowspan="2">Jumlah</th>
-                            <th rowspan="2">Rata-rata</th>
+            $html = $html . '<th rowspan="2" style="vertical-align : middle;text-align:center;">Jumlah</th>
+                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Rata-rata</th>
                             </tr><tr>';
 
             //heading table
@@ -295,7 +307,7 @@ class Nilai extends CI_Controller
                                 <div class="card-body">
                                     ' . anchor('admin/nilai/input?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel . '&id_kd=' . $id_kd, '<button class="btn btn-sm btn-primary mb-3 mr-2"><i class="fas fa-plus fa-sm"></i> Tambah Nilai</button>') . '
                                     <h5>' . $kd['nama_kd'] . '</h5>
-                                    <h4 class="text-center">Data Nilai Belum Tersedia</h4>
+                                    <h5 class="text-center">Data nilai ' . $kd['nama_kd'] . ' belum tersedia, silahkan klik tambah nilai untuk menambahkan nilai siswa</h5>
                                 </div>
                             </div>';
         }
@@ -315,32 +327,40 @@ class Nilai extends CI_Controller
 
         $result_jenis = array_column($this->Nilai_model->get_jenis_nilai_in_perkd_array($id_kelas, $id_mapel, $id_kd), 'jenis');
         $object_jenis = ['Tugas Harian 1', 'Tugas Harian 2', 'Tugas Harian 3', 'Tugas Harian 4', 'Ulangan Harian 1', 'Ulangan Harian 2', 'Ulangan Harian 3', 'Ulangan Harian 4', 'UTS', 'UAS'];
-
-        $data['kelas']          = $this->Kelas_model->get_detail_data($id_kelas);
-        $data['mapel']          = $this->Mapel_model->get_detail_data($id_mapel);
-        $data['pengajar']       = $this->Pengajar_model->get_detail_data_with_kelas_and_mapel($id_kelas, $id_mapel);
-        $data['jenis_nilai']    = array_diff($object_jenis, $result_jenis);
-        $data['siswa']          = $this->Siswa_model->get_data_perkelas($id_kelas);
-        $data['komp_dasar']     = $this->Mapel_model->get_kd_detail($id_kd);
-        $data['menu']           = 'nilai';
-        $data['breadcrumb']     = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Nilai',
-                'link' => 'admin/nilai'
-            ],
-            2 => (object)[
-                'name' => 'Detail',
-                'link' => 'admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel
-            ],
-            3 => (object)[
-                'name' => 'Input Nilai',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'   => $data['id_user'],
+            'nama'      => $data['nama'],
+            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'     => $data['level'],
+            'id_kelas'  => $id_kelas,
+            'id_mapel'  => $id_mapel,
+            'kelas'     => $this->Kelas_model->get_detail_data($id_kelas),
+            'mapel'     => $this->Mapel_model->get_detail_data($id_mapel),
+            'komp_dasar' => $this->Mapel_model->get_kd_detail($id_kd),
+            'pengajar'  => $this->Pengajar_model->get_detail_data_with_kelas_and_mapel($id_kelas, $id_mapel),
+            'siswa'     => $this->Siswa_model->get_data_perkelas($id_kelas),
+            'jenis_nilai' => array_diff($object_jenis, $result_jenis),
+            'menu'      => 'nilai',
+            'breadcrumb' => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Nilai',
+                    'link' => 'admin/nilai'
+                ],
+                2 => (object)[
+                    'name' => 'Detail',
+                    'link' => 'admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel
+                ],
+                3 => (object)[
+                    'name' => 'Input Nilai',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->_rules_persiswa($data['siswa']);
 
@@ -368,31 +388,39 @@ class Nilai extends CI_Controller
             redirect('error_404');
         }
 
-        $data['kelas']          = $this->Kelas_model->get_detail_data($id_kelas);
-        $data['mapel']          = $this->Mapel_model->get_detail_data($id_mapel);
-        $data['pengajar']       = $this->Pengajar_model->get_detail_data_with_kelas_and_mapel($id_kelas, $id_mapel);
-        $data['komp_dasar']     = $this->Mapel_model->get_kd_detail($id_kd);
-        $data['nilai']          = $this->Nilai_model->detail_nilai_perkd($id_kelas, $id_mapel, $id_kd, $jenis);
-        $data['jenis_nilai']    = $jenis;
-        $data['menu']           = 'nilai';
-        $data['breadcrumb']     = [
-            0 => (object)[
-                'name' => 'Dashboard',
-                'link' => 'admin/dashboard'
-            ],
-            1 => (object)[
-                'name' => 'Nilai',
-                'link' => 'admin/nilai'
-            ],
-            2 => (object)[
-                'name' => 'Detail',
-                'link' => 'admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel
-            ],
-            3 => (object)[
-                'name' => 'Input Nilai',
-                'link' => NULL
+        $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $data = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'         => $data['level'],
+            'kelas'         => $this->Kelas_model->get_detail_data($id_kelas),
+            'mapel'         => $this->Mapel_model->get_detail_data($id_mapel),
+            'komp_dasar'    => $this->Mapel_model->get_kd_detail($id_kd),
+            'pengajar'      => $this->Pengajar_model->get_detail_data_with_kelas_and_mapel($id_kelas, $id_mapel),
+            'siswa'         => $this->Siswa_model->get_data_perkelas($id_kelas),
+            'nilai'         => $this->Nilai_model->detail_nilai_perkd($id_kelas, $id_mapel, $id_kd, $jenis),
+            'jenis_nilai'   => $jenis,
+            'menu'          => 'nilai',
+            'breadcrumb'    => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'admin'
+                ],
+                1 => (object)[
+                    'name' => 'Nilai',
+                    'link' => 'admin/nilai'
+                ],
+                2 => (object)[
+                    'name' => 'Detail',
+                    'link' => 'admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel
+                ],
+                3 => (object)[
+                    'name' => 'Input Nilai',
+                    'link' => NULL
+                ]
             ]
-        ];
+        );
 
         $this->_rules_persiswa($data['nilai']);
 
@@ -424,7 +452,7 @@ class Nilai extends CI_Controller
         redirect('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel);
     }
 
-    public function _rules_persiswa($data_siswa)
+    private function _rules_persiswa($data_siswa)
     {
         foreach ($data_siswa as $key => $value) {
             $this->form_validation->set_rules('nilai' . $key, 'Nilai', 'required|numeric');

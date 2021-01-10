@@ -38,8 +38,6 @@
                         <?php foreach ($kelas as $kl) : ?>
                             <?php if ($kl->id_kelas == $pengajar['id_kelas']) : ?>
                                 <option value="<?php echo $kl->id_kelas ?>" selected><?= $kl->kelas ?></option>
-                            <?php else : ?>
-                                <option value="<?php echo $kl->id_kelas ?>"><?= $kl->kelas ?></option>
                             <?php endif; ?>
                         <?php endforeach; ?>
                     </select>
@@ -71,3 +69,21 @@
 </div>
 
 </main>
+
+<script>
+    $(document).ready(function() {
+        $('#mapel').change(function() {
+            const mapel = $(this).val();
+            $.ajax({
+                type: 'POST',
+                url: '<?= base_url('admin/pengajar/get_kelas') ?>',
+                data: {
+                    id_mapel: mapel
+                },
+                success: function(response) {
+                    $('#kelas').html(response);
+                }
+            });
+        })
+    });
+</script>
