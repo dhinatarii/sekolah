@@ -340,7 +340,7 @@ class Nilai extends CI_Controller
             'id_kelas'          => $id_kelas,
             'id_mapel'          => $id_mapel,
             'jenis_penilaian'   => $nilai,
-            'tahun'             => $this->Tahun_model->get_active_stats(),
+            'tahun'             => $tahun,
             'kelas'             => $this->Kelas_model->get_detail_data($id_kelas),
             'mapel'             => $this->Mapel_model->get_detail_data($id_mapel),
             'komp_dasar'        => $this->Mapel_model->get_kd_detail($id_kd),
@@ -438,9 +438,9 @@ class Nilai extends CI_Controller
             $this->load->view('admin/nilai_edit', $data);
             $this->load->view('templates/footer');
         } else {
-            $this->Nilai_model->update_nilai($data['nilai'], $id_kd, $jenis);
+            $this->Nilai_model->update_nilai($data['siswa'], $id_kd, $jenis);
             $this->session->set_flashdata('message', 'Nilai Siswa Berhasil Diupdate!');
-            redirect('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel);
+            redirect('admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel . '&nilai=' . $nilai);
         }
     }
 

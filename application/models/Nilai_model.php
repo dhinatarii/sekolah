@@ -250,7 +250,7 @@ class Nilai_model extends CI_Model
             $data = array(
                 'nilai'         => $this->input->post('nilai' . $key, TRUE),
             );
-            $this->db->where('id_siswa', $value->id_siswa);
+            $this->db->where('id_datasiswa', $value->id_datasiswa);
             $this->db->where('id_kd', $id_kd);
             $this->db->where('jenis', $jenis);
             $this->db->update('tb_nilai', $data);

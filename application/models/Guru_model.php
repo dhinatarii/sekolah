@@ -42,7 +42,7 @@ class Guru_model extends CI_Model
         $date = date_create($this->input->post('tanggal_lahir', TRUE));
         $dateFormat = date_format($date, "mY");
         $data = array(
-            'username'  => $this->input->post('nip', TRUE),
+            'username'  => $this->input->post('email', TRUE),
             'password'  => MD5($dateFormat),
             'level'     => 'guru',
             'status'    => '1'
@@ -76,7 +76,7 @@ class Guru_model extends CI_Model
         $dataWali = $this->db->get_where('tb_kelas', ['wali_kelas' => $name_guru])->num_rows();
 
         $dataUser = array(
-            'username'       => $this->input->post('nip', TRUE),
+            'username'       => $this->input->post('email', TRUE),
         );
         $dataWali = array(
             'wali_kelas'     => $this->input->post('nama', TRUE),
@@ -98,7 +98,7 @@ class Guru_model extends CI_Model
         $this->db->where('id_guru', $id);
         $this->db->update('tb_guru', $data);
 
-        $this->db->where('username', $dataDetail['nip']);
+        $this->db->where('username', $dataDetail['email']);
         $this->db->update('tb_user', $dataUser);
 
         if ($dataWali > 0) {
