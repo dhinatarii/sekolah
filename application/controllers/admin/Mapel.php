@@ -216,10 +216,10 @@ class Mapel extends CI_Controller
 
     public function delete_kd()
     {
-        $id_kd      = $this->input->get('id_kd', TRUE);
+        $kd      = $this->input->get('kd', TRUE);
         $id_mapel   = $this->input->get('id_mapel', TRUE);
 
-        $this->Mapel_model->delete_kd($id_kd);
+        $this->Mapel_model->delete_kd($kd, $id_mapel);
         $this->session->set_flashdata('message', 'Data Kompetensi Dasar Berhasil Dihapus!');
         redirect('admin/mapel/kd?id_mapel=' . $id_mapel);
     }

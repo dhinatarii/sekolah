@@ -72,7 +72,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Jumlah Siswa</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $pengajar['jumlah_siswa'] ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $siswa['jumlah_siswa'] ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>

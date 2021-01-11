@@ -123,7 +123,6 @@ class Siswa extends CI_Controller
             $config['max_size']             = 5000;
             $config['file_name']            = 'photo-siswa-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
             $this->upload->initialize($config);
-            $id_kelas = $this->Kelas_model->get_id_kelas();
 
             if (@$_FILES['photo']['name'] != null) {
 
@@ -148,7 +147,7 @@ class Siswa extends CI_Controller
                     $this->image_lib->resize();
 
                     $photo = $gbr['file_name'];
-                    $this->Siswa_model->edit_data($id, $id_kelas, $photo);
+                    $this->Siswa_model->edit_data($id, $photo);
                     $this->session->set_flashdata('message', 'Data Siswa Berhasil Diupdate!');
                     redirect('admin/siswa');
                 } else {
@@ -158,7 +157,7 @@ class Siswa extends CI_Controller
                 }
             } else {
                 $photo = NULL;
-                $this->Siswa_model->edit_data($id, $id_kelas, $photo);
+                $this->Siswa_model->edit_data($id, $photo);
                 $this->session->set_flashdata('message', 'Data Siswa Berhasil Diupdate!');
                 redirect('admin/siswa');
             }
@@ -205,7 +204,6 @@ class Siswa extends CI_Controller
             $config['max_size']             = 5000;
             $config['file_name']            = 'photo-siswa-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
             $this->upload->initialize($config);
-            $id_kelas = $this->Kelas_model->get_id_kelas();
 
             if (@$_FILES['photo']['name'] != null) {
 
@@ -224,7 +222,7 @@ class Siswa extends CI_Controller
                     $this->image_lib->resize();
 
                     $photo = $gbr['file_name'];
-                    $this->Siswa_model->input_data_siswa($id_kelas, $photo);
+                    $this->Siswa_model->input_data_siswa($photo);
                     $this->session->set_flashdata('message', 'Data Siswa Berhasil Ditambahkan!');
                     redirect('admin/siswa');
                 } else {
@@ -234,7 +232,7 @@ class Siswa extends CI_Controller
                 }
             } else {
                 $photo = NULL;
-                $this->Siswa_model->input_data_siswa($id_kelas, $photo);
+                $this->Siswa_model->input_data_siswa($photo);
                 $this->session->set_flashdata('message', 'Data Siswa Berhasil Ditambahkan!');
                 redirect('admin/siswa');
             }
@@ -244,12 +242,14 @@ class Siswa extends CI_Controller
     public function delete($id)
     {
         $item = $this->Siswa_model->get_detail_data($id);
+        $id_address = $this->Siswa_model->get_id_address($item['id_orangtua']);
         if ($item['photo'] != null) {
             $target_delete = './assets/photos/' . $item['photo'];
             unlink($target_delete);
         }
 
-        $this->Siswa_model->delete_data($id);
+        $this->Siswa_model->delete_data($id_address);
+        $this->User_model->delete_data($item['id_user']);
         $this->session->set_flashdata('message', 'Data Siswa Berhasil Dihapus!');
         redirect('admin/siswa');
     }
@@ -263,7 +263,6 @@ class Siswa extends CI_Controller
         $this->form_validation->set_rules('tanggal_lahir', 'Tanggal lahir', 'required');
         $this->form_validation->set_rules('agama', 'Agama', 'required|max_length[10]');
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
-        $this->form_validation->set_rules('kelas', 'Kelas', 'required');
 
         // rules data orang tua
         $this->form_validation->set_rules('nama_ibu', 'Nama Ibu', 'required|max_length[100]');
