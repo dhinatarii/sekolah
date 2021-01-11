@@ -15,7 +15,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-sm-3" class="text-center">
-                    <h6 class="text-dark font-weight-bold">Foto Admin</h6>
+                    <h6 class="text-dark font-weight-bold">Foto Guru</h6>
                     <div id="photo" class="mb-3">
                         <?php if ($guru['photo']) : ?>
                             <img src="<?= base_url('assets/photos/' . $guru['photo']) ?>" alt="photo <?= $guru['nama'] ?>" style="width: 200px; height: 300px; border-radius: 15px;">

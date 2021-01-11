@@ -23,6 +23,8 @@ class Dashboard extends CI_Controller
             'nama'      => $data['nama'],
             'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
+            'kelas'     => $data['kelas'],
+            'wali_kelas' => $data['wali_kelas'],
             'menu'      => 'dashboard',
             'tahun'     => $this->Tahun_model->get_active_stats(),
             'breadcrumb' => [
