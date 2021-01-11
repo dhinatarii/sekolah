@@ -409,6 +409,8 @@ class Nilai extends CI_Controller
             'siswa'         => $this->Siswa_model->get_data_perkelas($id_kelas, $tahun['nama']),
             'nilai'         => $this->Nilai_model->detail_nilai_perkd($id_kelas, $id_mapel, $id_kd, $jenis, $tahun['nama']),
             'jenis_nilai'   => $jenis,
+            'jenis_penilaian'   => $nilai,
+            'tahun'         => $tahun,
             'menu'          => 'nilai',
             'breadcrumb'    => [
                 0 => (object)[
@@ -424,7 +426,7 @@ class Nilai extends CI_Controller
                     'link' => 'admin/nilai/kd?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel . '&nilai=' . $nilai
                 ],
                 3 => (object)[
-                    'name' => 'Input Nilai',
+                    'name' => 'Edit Nilai',
                     'link' => NULL
                 ]
             ]

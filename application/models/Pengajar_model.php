@@ -80,16 +80,12 @@ class Pengajar_model extends CI_Model
         return $this->db->get()->row_array();
     }
 
-    public function get_count_pengampu($id_guru)
+    public function get_count_pengampu($id_guru, $id_tahun)
     {
         $query = $this->db->query("
             select
-                tp.jabatan,
-                tm.jumlah_kelas,
-                count(ts.id_siswa) 'jumlah_siswa'
+                tm.jabatan ,count(tm.jumlah_kelas) as 'jumlah_kelas'
             from
-                tb_pengajar tp,
-                tb_siswa ts,
                 (
                 select
                     tp.jabatan,
@@ -97,10 +93,29 @@ class Pengajar_model extends CI_Model
                 from
                     tb_pengajar tp
                 where
-                    tp.id_guru = $id_guru) tm
-            where
-                tp.id_guru = $id_guru
-                and tp.id_kelas = ts.id_kelas");
+                    tp.id_guru = $id_guru
+                    and tp.id_tahun = $id_tahun
+                group by
+                    tp.id_kelas) tm");
+        return $query->row_array();
+    }
+
+    public function get_count_siswa($id_guru, $tahun)
+    {
+        $query = $this->db->query("
+        select 
+            count(tm.jumlah_siswa) as 'jumlah_siswa'
+        from (
+            select 
+                count(td.id_siswa) as 'jumlah_siswa' 
+            from tb_pengajar tp
+            inner join tb_kelas tk 
+                on tk.id_kelas = tp.id_kelas 
+            inner join tb_datasiswa td 
+                on td.id_kelas = tk.id_kelas 
+            where tp.id_guru = $id_guru
+                and td.tahun_ajaran = '$tahun'
+            group by td.id_siswa) tm");
         return $query->row_array();
     }
 
@@ -112,6 +127,8 @@ class Pengajar_model extends CI_Model
         $this->db->join('tb_matapelajaran tm', 'tm.id_mapel = tp.id_mapel', 'left');
         $this->db->join('tb_tahunajaran tt', 'tt.id_tahun = tp.id_tahun', 'left');
         $this->db->where('tp.id_guru', $id_guru);
+        $this->db->group_by('tk.id_kelas');
+        
 
         if ($id_tahun) {
             $this->db->where('tt.id_tahun', $id_tahun);

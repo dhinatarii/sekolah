@@ -399,6 +399,8 @@ class Nilai extends CI_Controller
             'siswa'         => $this->Siswa_model->get_data_perkelas($kelas['id_kelas'], $tahun['nama']),
             'nilai'         => $this->Nilai_model->detail_nilai_perkd($kelas['id_kelas'], $id_mapel, $id_kd, $jenis, $tahun['nama']),
             'jenis_nilai'   => $jenis,
+            'jenis_penilaian'   => $nilai,
+            'tahun'         => $tahun,
             'menu'          => 'nilai',
             'breadcrumb'    => [
                 0 => (object)[
