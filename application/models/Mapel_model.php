@@ -23,6 +23,18 @@ class Mapel_model extends CI_Model
         return $this->db->get()->result();
     }
 
+    public function get_mapel_with_kd_nilai($id_mapel, $id_kelas, $jenis_nilai)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_matapelajaran tm');
+        $this->db->join('tb_kd tk', 'tm.id_mapel = tk.id_mapel', 'inner');
+        $this->db->join('tb_pengajar tp', 'tm.id_mapel = tp.id_mapel', 'inner');
+        $this->db->where('tm.id_mapel', $id_mapel);
+        $this->db->where('tp.id_kelas', $id_kelas);
+        $this->db->where('tk.jenis_penilaian', $jenis_nilai);
+        return $this->db->get()->result();
+    }
+
     public function get_kd_permapel($id_mapel)
     {
         return $this->db->get_where('tb_kd', ['id_mapel' => $id_mapel])->result();
@@ -38,24 +50,35 @@ class Mapel_model extends CI_Model
         $komp_dasar = $this->input->post('kd', TRUE);
         if (!empty($komp_dasar)) {
             foreach ($komp_dasar as $kd) {
-                $data_kd = array(
-                    'nama_kd'   => $kd,
-                    'id_mapel'  => $id_mapel
-
+                $data_kd_pts = array(
+                    'nama_kd'           => $kd,
+                    'id_mapel'          => $id_mapel,
+                    'jenis_penilaian'   => 'PTS'
                 );
 
-                $this->db->insert('tb_kd', $data_kd);
+                $data_kd_pas = array(
+                    'nama_kd'           => $kd,
+                    'id_mapel'          => $id_mapel,
+                    'jenis_penilaian'   => 'PAS'
+                );
+
+                $this->db->insert('tb_kd', $data_kd_pts);
+                $this->db->insert('tb_kd', $data_kd_pas);
             }
         }
     }
 
-    public function get_mapel_with_kelas($id_kelas)
+    public function get_mapel_with_kelas($id_kelas, $id_guru = NULL)
     {
         $this->db->select('tm.id_mapel, tm.nama_mapel, tm.level');
         $this->db->from('tb_matapelajaran tm');
         $this->db->join('tb_pengajar tp', 'tm.id_mapel = tp.id_mapel', 'left');
         $this->db->join('tb_kelas tk', 'tp.id_kelas = tk.id_kelas', 'left');
         $this->db->where('tk.id_kelas', $id_kelas);
+        if ($id_guru) {
+            $this->db->where('tp.id_guru', $id_guru);
+        }
+
         return $this->db->get();
     }
 
@@ -72,13 +95,20 @@ class Mapel_model extends CI_Model
         $komp_dasar = $this->input->post('kd', TRUE);
         if (!empty($komp_dasar)) {
             foreach ($komp_dasar as $kd) {
-                $data_kd = array(
-                    'nama_kd'   => $kd,
-                    'id_mapel'  => $last_idmapel
-
+                $data_kd_pts = array(
+                    'nama_kd'           => $kd,
+                    'id_mapel'          => $last_idmapel,
+                    'jenis_penilaian'   => 'PTS'
                 );
 
-                $this->db->insert('tb_kd', $data_kd);
+                $data_kd_pas = array(
+                    'nama_kd'           => $kd,
+                    'id_mapel'          => $last_idmapel,
+                    'jenis_penilaian'   => 'PAS'
+                );
+
+                $this->db->insert('tb_kd', $data_kd_pts);
+                $this->db->insert('tb_kd', $data_kd_pas);
             }
         }
     }
@@ -99,9 +129,9 @@ class Mapel_model extends CI_Model
         $this->db->delete('tb_matapelajaran', ['id_mapel' => $id]);
     }
 
-    public function delete_kd($id)
+    public function delete_kd($kd, $id_mapel)
     {
-        $this->db->delete('tb_kd', ['id_kd' => $id]);
+        $this->db->delete('tb_kd', ['id_mapel' => $id_mapel, 'nama_kd' => $kd]);
     }
 
     var $column_order = array(null, 'nama_mapel', 'level'); //Sesuaikan dengan field

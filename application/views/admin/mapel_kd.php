@@ -43,12 +43,17 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <?php $name_kd = '';
+                    $no = 0; ?>
                     <?php foreach ($komp_dasar as $key => $value) : ?>
-                        <tr>
-                            <td><?= ++$key ?></td>
-                            <td><?= $value->nama_kd ?></td>
-                            <td class="text-center"><a href="<?= base_url(); ?>admin/mapel/delete_kd?id_mapel=<?= $mapel['id_mapel'] ?>&id_kd=<?= $value->id_kd ?>" class="btn btn-sm btn-danger btn-xs mr-1 ml-1 mb-1 btn-delete-kd"><i class="fa fa-trash"></i></a></td>
-                        </tr>
+                        <?php if ($name_kd !== $value->nama_kd) : ?>
+                            <tr>
+                                <td><?= ++$no ?></td>
+                                <td><?= $value->nama_kd ?></td>
+                                <td class="text-center"><a href="<?= base_url(); ?>admin/mapel/delete_kd?id_mapel=<?= $mapel['id_mapel'] ?>&kd=<?= $value->nama_kd ?>" class="btn btn-sm btn-danger btn-xs mr-1 ml-1 mb-1 btn-delete-kd"><i class="fa fa-trash"></i></a></td>
+                            </tr>
+                        <?php endif; ?>
+                        <?php $name_kd = $value->nama_kd; ?>
                     <?php endforeach ?>
                 </tbody>
             </table>

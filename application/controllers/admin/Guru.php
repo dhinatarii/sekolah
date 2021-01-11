@@ -33,7 +33,7 @@ class Guru extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Guru',
@@ -93,7 +93,7 @@ class Guru extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Guru',
@@ -173,7 +173,7 @@ class Guru extends CI_Controller
             'breadcrumb'    => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Guru',
@@ -233,7 +233,7 @@ class Guru extends CI_Controller
                 }
             } else {
                 $photo = NULL;
-                $this->Guru_model->edit_data($id, $photo);
+                $this->Guru_model->edit_data($id, $photo, $data['guru']['nama']);
                 $this->session->set_flashdata('message', 'Data Guru Berhasil Diupdate!');
                 redirect('admin/guru');
             }
@@ -249,6 +249,8 @@ class Guru extends CI_Controller
             unlink($target_delete);
         }
 
+        $this->User_model->delete_data($item['id_user']);
+        $this->Kelas_model->delete_walikelas($item['nama']);
         $this->Guru_model->delete_data($id);
         $this->session->set_flashdata('message', 'Data Guru Berhasil Dihapus!');
         redirect('admin/guru');

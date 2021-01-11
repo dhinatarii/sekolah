@@ -28,44 +28,44 @@
             <button onclick="lihatSiswa()" class="btn btn-primary"><i class="fas fa-search"></i> Lihat</button>
         </div>
     </div>
-    <div id="data-all-siswa">
-    </div>
-    </main>
+    <div id="data-all-siswa"></div>
+</div>
+</main>
 
-    <script>
-        $(document).ready(function() {
-            $('#thn_ajaran').change(function() {
-                const tahun = $(this).val();
-                $.ajax({
-                    type: 'POST',
-                    url: '<?= base_url('admin/laporansiswa/get_kelas') ?>',
-                    data: {
-                        id_tahun: tahun,
-                    },
-                    success: function(response) {
-                        $('#kelas').html(response);
-                    }
-                });
-            })
-        });
-
-        function lihatSiswa() {
-            const thnAjaran = $('#thn_ajaran').val();
-            const kelas = $('#kelas').val();
-
+<script>
+    $(document).ready(function() {
+        $('#thn_ajaran').change(function() {
+            const tahun = $(this).val();
             $.ajax({
                 type: 'POST',
-                url: '<?= base_url('admin/laporansiswa/data_all_siswa') ?>',
+                url: '<?= base_url('admin/laporansiswa/get_kelas') ?>',
                 data: {
-                    id_tahun: thnAjaran,
-                    id_kelas: kelas
+                    id_tahun: tahun,
                 },
                 success: function(response) {
-                    $('#data-all-siswa').html(response);
-                },
-                error: function(response) {
-                    $('#data-all-siswa').html(response);
+                    $('#kelas').html(response);
                 }
             });
-        }
-    </script>
+        })
+    });
+
+    function lihatSiswa() {
+        const thnAjaran = $('#thn_ajaran').val();
+        const kelas = $('#kelas').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '<?= base_url('admin/laporansiswa/data_all_siswa') ?>',
+            data: {
+                id_tahun: thnAjaran,
+                id_kelas: kelas
+            },
+            success: function(response) {
+                $('#data-all-siswa').html(response);
+            },
+            error: function(response) {
+                $('#data-all-siswa').html(response);
+            }
+        });
+    }
+</script>

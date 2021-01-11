@@ -195,4 +195,91 @@ class Laporan_model extends CI_Model
         $this->db->group_by('tg.nama');
         return $this->db->count_all_results();
     }
+
+    public function get_data_nilai($id_tahun, $id_kelas, $view = 'default')
+    {
+        $id_tahun               = $id_tahun != null ? $id_tahun : 'null';
+        $id_kelas               = $id_kelas != null ? $id_kelas : 'null';
+        $get_mapel              = $this->get_mapel_pertahun($id_tahun, $id_kelas);
+        $mapel                  = ($get_mapel->num_rows() > 0) ? $get_mapel->result() : 'null';
+        $query_join             = "";
+        $query_select           = "";
+        $query_select_injoin    = "";
+
+        foreach ($mapel as $key => $value) {
+            $query_select_injoin = $query_select_injoin . "sum(if ( nilai.nama_mapel = '$value->nama_mapel', nilai.nilai, 0)) as nilai$key, ";
+
+            switch ($view) {
+                case 'min':
+                    $query_select = $query_select . "min(hasil.nilai$key) as '$value->nama_mapel', ";
+                    break;
+                case 'max':
+                    $query_select = $query_select . "max(hasil.nilai$key) as '$value->nama_mapel', ";
+                    break;
+                case 'jumlah':
+                    $query_select = $query_select . "sum(hasil.nilai$key) as '$value->nama_mapel', ";
+                    break;
+                case 'rerata':
+                    $query_select = $query_select . "round(avg(hasil.nilai$key)) as '$value->nama_mapel', ";
+                    break;
+                default:
+                    $query_select = $query_select . "hasil.nilai$key as '$value->nama_mapel', ";
+                    break;
+            }
+        }
+
+        switch ($view) {
+            case 'min':
+                $query_select = $query_select . "min(hasil.jumlah) as 'jumlah', min(hasil.rerata) as 'rerata'";
+                break;
+            case 'max':
+                $query_select = $query_select . "max(hasil.jumlah) as 'jumlah', max(hasil.rerata) as 'rerata'";
+                break;
+            case 'jumlah':
+                $query_select = $query_select . "sum(hasil.jumlah) as 'jumlah', sum(hasil.rerata) as 'rerata'";
+                break;
+            case 'rerata':
+                $query_select = $query_select . "round(avg(hasil.jumlah)) as 'jumlah', round(avg(hasil.rerata)) as 'rerata'";
+                break;
+            default:
+                $query_select = $query_select . "hasil.jumlah as 'jumlah', hasil.rerata as 'rerata'";
+                break;
+        }
+
+        $query_join = "select ts.nis, ts.nisn ,ts.nama, $query_select_injoin round(sum(nilai.nilai)) as 'jumlah', round(avg(nilai.nilai)) as 'rerata' from tb_siswa ts 
+                inner join (
+                    select ts.id_siswa, ts.nis, ts.nama, round(avg(tn.nilai)) as nilai, tm.id_mapel, tm.nama_mapel 
+                    from tb_nilai tn 
+                    inner join tb_siswa ts 
+                        on tn.id_siswa = ts.id_siswa 
+                    inner join tb_kd tk 
+                        on tn.id_kd = tk.id_kd
+                    inner join tb_matapelajaran tm 
+                        on tk.id_mapel = tm.id_mapel
+                    where ts.id_kelas = $id_kelas
+                    group by ts.nis, tm.id_mapel) nilai on nilai.id_siswa = ts.id_siswa
+                    group by ts.nis";
+
+        if ($query_select != null || $query_join != null) {
+
+            $query = "select ts.nis, ts.nisn, ts.nama, $query_select from
+                        tb_siswa ts
+                    inner join($query_join) hasil on
+                    hasil.nis = ts.nis";
+
+            return $this->db->query($query)->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function get_mapel_pertahun($id_tahun, $id_kelas)
+    {
+        $this->db->select('tm.*');
+        $this->db->from('tb_matapelajaran tm');
+        $this->db->join('tb_pengajar tp', 'tm.id_mapel = tp.id_mapel', 'left');
+        $this->db->where('tp.id_tahun', $id_tahun);
+        $this->db->where('tp.id_kelas', $id_kelas);
+        return $this->db->get();
+    }
 }

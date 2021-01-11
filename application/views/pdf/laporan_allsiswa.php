@@ -42,9 +42,9 @@
     <p align="center">
         <span style="font-size: 20px">LAPORAN DATA SISWA</span>
         <br>
-        <b>Tahun Ajaran 2020/2021</b>
+        <b>TAHUN AJARAN <?= $tahun['nama'] ?></b>
         <br>
-        <?= 'Kelas ' . $kelas['kelas'] ?>
+        <?= 'KELAS ' . $kelas['kelas'] ?>
     </p>
     <table class="table table-bordered" id="table-laporansiswa">
         <thead>

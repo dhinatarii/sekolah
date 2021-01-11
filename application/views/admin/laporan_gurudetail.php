@@ -16,11 +16,15 @@
                     <td>NIP</td>
                     <td> : <?= $guru['nip'] ?></td>
                     <td rowspan="7" class="text-right">
-                        <!-- <?php if ($guru['photo'] != null) : ?>
+                        <?php if ($guru['photo'] != null) : ?>
                             <div class="mb-3">
                                 <img src="<?= base_url('assets/photos/' . $guru['photo']) ?>" alt="photo <?= $guru['nama'] ?>" style="max-width:120px; max-height:170px; object-fit: scale-down; object-position: center;">
                             </div>
-                        <?php endif ?> -->
+                        <?php else : ?>
+                            <div class="mb-3">
+                                <img src="<?= base_url('assets/photos/user-placeholder.jpg') ?>" alt="photo <?= $guru['nama'] ?>" style="max-width:120px; max-height:170px; object-fit: scale-down; object-position: center;">
+                            </div>
+                        <?php endif ?>
                     </td>
                 </tr>
                 <tr>

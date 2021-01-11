@@ -28,7 +28,7 @@ class LaporanSiswa extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Laporan Daftar Siswa',
@@ -55,7 +55,6 @@ class LaporanSiswa extends CI_Controller
         } else {
             echo '<option value="">--Tidak Tersedia--</option>';
         }
-        echo $id_tahun;
     }
 
     public function data_all_siswa()
@@ -197,7 +196,7 @@ class LaporanSiswa extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Laporan Daftar Siswa',
@@ -224,8 +223,10 @@ class LaporanSiswa extends CI_Controller
         $id_siswa   = $this->input->get('id');
 
         if ($query == 'alldata') {
-            $data['data'] = $this->Laporan_model->get_all_lap_siswa($tahun, $kelas);
-            $data['kelas'] = $this->Kelas_model->get_detail_data($kelas);
+            $data['data']   = $this->Laporan_model->get_all_lap_siswa($tahun, $kelas);
+            $data['kelas']  = $this->Kelas_model->get_detail_data($kelas);
+            $data['tahun']  = $this->Tahun_model->get_detail_data($tahun);
+
             $this->mypdf->generate('pdf/laporan_allsiswa', $data, 'Laporan Data Siswa', 'A4', 'landscape');
         } elseif ($query == 'detaildata') {
             $data['siswa'] = $this->Siswa_model->get_detail_data($id_siswa);

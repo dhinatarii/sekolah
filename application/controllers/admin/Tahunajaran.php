@@ -31,7 +31,7 @@ class TahunAjaran extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Tahun Ajaran',
@@ -56,7 +56,9 @@ class TahunAjaran extends CI_Controller
             $row = array();
             $row[] = $no;
             $row[] = $item->nama;
-            $row[] = ($item->status == 1) ? '<strong class="badge badge-success">aktif</strong>' : '<strong class="badge badge-danger">tidak aktif</strong>';;
+            $row[] = $item->semester;
+            $row[] = ($item->shared == 1) ? '<strong class="badge badge-success"> Ya </strong>' : '<strong class="badge badge-danger"> Tidak </strong>';
+            $row[] = ($item->status == 1) ? '<strong class="badge badge-success"> Aktif </strong>' : '<strong class="badge badge-danger"> Tidak Aktif</strong>';
             $row[] = anchor('admin/tahunajaran/edit/' . $item->id_tahun, '<div class="btn btn-sm btn-primary btn-xs mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>')
                 . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_tahun . ')" class="btn btn-sm btn-danger btn-xs mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';
             $data[] = $row;
@@ -84,7 +86,7 @@ class TahunAjaran extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Tahun Ajaran',
@@ -126,11 +128,12 @@ class TahunAjaran extends CI_Controller
             'level'     => $data['level'],
             'tahun'     => $this->Tahun_model->get_detail_data($id),
             'status'    => ['0', '1'],
+            'shared'    => ['0', '1'],
             'menu'      => 'tahun ajaran',
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Tahun Ajaran',
@@ -143,7 +146,7 @@ class TahunAjaran extends CI_Controller
             ]
         );
 
-        $this->_rules();
+        $this->_rules_edit();
 
         if ($this->form_validation->run() == FALSE) {
             $this->load->view('templates/header');
@@ -168,6 +171,12 @@ class TahunAjaran extends CI_Controller
     private function _rules()
     {
         $this->form_validation->set_rules('nama', 'Tahun Ajaran', 'required|max_length[50]');
+    }
+
+    private function _rules_edit()
+    {
+        $this->form_validation->set_rules('nama', 'Tahun Ajaran', 'required|max_length[50]');
         $this->form_validation->set_rules('status', 'Status', 'required');
+        $this->form_validation->set_rules('shared', 'Bagikan', 'required');
     }
 }

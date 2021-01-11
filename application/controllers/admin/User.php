@@ -29,14 +29,14 @@ class User extends CI_Controller
             'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'count_admin'   => $this->User_model->count_user('admin'),
-            'count_guru'    => $this->User_model->count_user('guru'),
+            'count_guru'    => $this->User_model->count_user('guru', 'wali kelas'),
             'count_wali'    => $this->User_model->count_user('wali kelas'),
             'count_siswa'   => $this->User_model->count_user('siswa'),
             'menu'          => 'user',
             'breadcrumb'    => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Users',
@@ -59,21 +59,22 @@ class User extends CI_Controller
             redirect('admin/user');
         }
 
-        $level = $id == 1 ? 'admin' : ($id == 2 ? 'guru' : ($id == 3 ? 'wali kelas' : ($id == 4 ? 'siswa' : null)));
-        $data  = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
-        $data  = array(
+        $level      = $id == 1 ? 'admin' : ($id == 2 ? 'guru' : ($id == 3 ? 'wali kelas' : ($id == 4 ? 'siswa' : null)));
+        $data       = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $get_list   = ($id == 2) ? $this->User_model->get_user($data['level'], 'wali kelas') : $this->User_model->get_user($data['level']);
+        $data       = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
             'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'id'            => $id,
             'levels'        => $level,
-            'user'          => $this->User_model->get_user($data['level']),
+            'user'          => $get_list,
             'menu'          => 'user',
             'breadcrumb'    => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Users',
@@ -94,10 +95,12 @@ class User extends CI_Controller
 
     function get_result_user($id)
     {
-        $level  = $id == 1 ? 'admin' : ($id == 2 ? 'guru' : ($id == 3 ? 'wali kelas' : ($id == 4 ? 'siswa' : null)));
-        $list = $this->User_model->get_datatables($level);
-        $data = array();
-        $no = @$_POST['start'];
+        $level          = $id == 1 ? 'admin' : ($id == 2 ? 'guru' : ($id == 3 ? 'wali kelas' : ($id == 4 ? 'siswa' : null)));
+        $list           = ($id == 2) ?  $this->User_model->get_datatables($level, 'wali kelas') : $this->User_model->get_datatables($level);
+        $count_all      = ($id == 2) ?  $this->User_model->count_all($level, 'wali kelas') : $this->User_model->count_all($level);
+        $count_filter   = ($id == 2) ?  $this->User_model->count_filtered($level, 'wali kelas') : $this->User_model->count_filtered($level);
+        $data           = array();
+        $no             = @$_POST['start'];
         foreach ($list as $item) {
             $dataAdmin  = $level == 'admin' ? $this->User_model->get_detail_admin($item->id_user, $level) : NULL;
             $isDelete   = $level == 'admin' ? '<a href="javascript:;" onclick="confirmDelete(' . $item->id_user . ')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>' : '';
@@ -123,8 +126,8 @@ class User extends CI_Controller
 
         $output = array(
             "draw" => @$_POST['draw'],
-            "recordsTotal" => $this->User_model->count_all($level),
-            "recordsFiltered" => $this->User_model->count_filtered($level),
+            "recordsTotal" => $count_all,
+            "recordsFiltered" => $count_filter,
             "data" => $data,
         );
 
@@ -143,7 +146,7 @@ class User extends CI_Controller
             'breadcrumb'    => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Users',
@@ -234,7 +237,7 @@ class User extends CI_Controller
             'breadcrumb'    => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Users',
@@ -336,7 +339,7 @@ class User extends CI_Controller
             'breadcrumb'    => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Users',

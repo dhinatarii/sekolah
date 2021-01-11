@@ -40,11 +40,13 @@ class Login extends CI_Controller
                         $this->session->set_userdata($sess_data);
 
                         if ($sess_data['level'] == 'admin') {
-                            redirect('admin/dashboard');
+                            redirect('admin');
                         } elseif ($sess_data['level'] == 'guru') {
-                            redirect('guru/dashboard');
+                            redirect('guru');
+                        } elseif ($sess_data['level'] == 'wali kelas') {
+                            redirect('walikelas');
                         } elseif ($sess_data['level'] == 'siswa') {
-                            redirect('siswa/dashboard');
+                            redirect('siswa');
                         } else {
                             $this->session->set_flashdata('message', 'Username atau Password Salah!');
                             redirect('login');

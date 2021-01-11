@@ -25,6 +25,7 @@
                         <th>Mata Pelajaran</th>
                         <th>Kelas</th>
                         <th>Tahun Ajaran</th>
+                        <th>Semester</th>
                         <th width="100px">Aksi</th>
                     </tr>
                 </thead>

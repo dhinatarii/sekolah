@@ -17,19 +17,18 @@ class Profile extends CI_Controller
 
     public function index()
     {
-        $id   = $this->input->get('id_user', TRUE);
         $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
+            'admin'     => $data,
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
             'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
-            'admin'     => $this->User_model->get_detail_admin($id, $data['level']),
             'menu'      => 'dashboard',
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Profile',
@@ -46,7 +45,6 @@ class Profile extends CI_Controller
 
     public function password()
     {
-        $id   = $this->input->get('id_user', TRUE);
         $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
             'id_user'   => $data['id_user'],
@@ -57,11 +55,11 @@ class Profile extends CI_Controller
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',
-                    'link' => 'admin/dashboard'
+                    'link' => 'admin'
                 ],
                 1 => (object)[
                     'name' => 'Profile',
-                    'link' => 'admin/profile?id_user=' . $id
+                    'link' => 'admin/profile'
                 ],
                 2 => (object)[
                     'name' => 'Password',
@@ -78,9 +76,9 @@ class Profile extends CI_Controller
             $this->load->view('admin/profile_password', $data);
             $this->load->view('templates/footer');
         } else {
-            $this->User_model->edit_password($id);
+            $this->User_model->edit_password($this->session->userdata['id_user']);
             $this->session->set_flashdata('message', 'Password Berhasil Diupdate!');
-            redirect('/admin/profile?id_user=' . $id);
+            redirect('admin/profile');
         }
     }
 

@@ -1,8 +1,9 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
     <!-- Page Heading -->
+    <?php $button = ($tahun) ? 'enabled' : 'disabled'; ?>
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-sort-numeric-down"></i> Data Nilai</h1>
+        <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-sort-numeric-down"></i> Data Nilai <?= $thn = ($tahun) ? '(Tahun Ajaran ' . $tahun['nama'] . ' - Semester ' . $tahun['semester'] . ')' : '(Tidak Ada Tahun Ajaran Yang Aktif)';  ?></h1>
     </div>
     <div class="row">
 
@@ -29,7 +30,16 @@
                         </select>
                         <?php echo form_error('mapel', '<div class="text-danger small ml-3">', '</div>') ?>
                     </div>
-                    <button onclick="searchNilai()" class="btn btn-primary"><i class="fas fa-search"></i> Cari</button>
+                    <div class="form-group">
+                        <label for="penilaian">Penilaian</label>
+                        <select class="form-control" id="penilaian" name="penilaian">
+                            <option value="">--Pilih Penilaian--</option>
+                            <option value="PTS">PTS</option>
+                            <option value="PAS">PAS</option>
+                        </select>
+                        <?php echo form_error('penilaian', '<div class="text-danger small ml-3">', '</div>') ?>
+                    </div>
+                    <button onclick="searchNilai()" class="btn btn-primary" <?= $button ?>><i class="fas fa-search"></i> Cari</button>
                 </div>
             </div>
         </div>
@@ -59,22 +69,26 @@
     function searchNilai() {
         const idKelas = $('#kelas').val()
         const idMapel = $('#mapel').val()
+        const penilaian = $('#penilaian').val()
 
-        if (kelas !== '' && mapel !== '') {
-            $.ajax({
-                type: 'POST',
-                url: '<?= base_url('admin/nilai/data_nilai_permapel') ?>',
-                data: {
-                    id_kelas: idKelas,
-                    id_mapel: idMapel
-                },
-                success: function(response) {
-                    $('#table-result').html(response);
-                },
-                error: function(response) {
-                    $('#table-result').html(response);
-                }
-            });
-        }
+        console.log(idKelas + '-' + idMapel + '-' + penilaian);
+
+        // if (idKelas !== '' && idMapel !== '') {
+        $.ajax({
+            type: 'POST',
+            url: '<?= base_url('admin/nilai/data_nilai_permapel') ?>',
+            data: {
+                id_kelas: idKelas,
+                id_mapel: idMapel,
+                nilai: penilaian
+            },
+            success: function(response) {
+                $('#table-result').html(response);
+            },
+            error: function(response) {
+                $('#table-result').html(response);
+            }
+        });
+        // }
     }
 </script>
