@@ -212,11 +212,15 @@ class Laporan_model extends CI_Model
         $tahun                  = $this->_get_detail_tahun($id_tahun);
         $name_tahun             = $tahun['nama'];
         $get_mapel              = $this->get_mapel_pertahun($id_tahun, $id_kelas, $id_guru);
-        $mapel                  = ($get_mapel->num_rows() > 0) ? $get_mapel->result() : 'null';
+        $mapel                  = ($get_mapel->num_rows() > 0) ? $get_mapel->result() : null;
         $guru                   = $id_guru != null ? " and tp.id_guru = $id_guru " : '';
         $query_join             = "";
         $query_select           = "";
         $query_select_injoin    = "";
+
+        if (!isset($mapel)) {
+            return null;
+        }
 
         foreach ($mapel as $key => $value) {
             $query_select_injoin = $query_select_injoin . "sum(if ( nilai.nama_mapel = '$value->nama_mapel', nilai.nilai, 0)) as nilai$key, ";

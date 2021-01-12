@@ -79,7 +79,7 @@ class LaporanNilai extends CI_Controller
                             <h3 class="text-center">Tahun Ajaran ' . $tahun['nama'] . '</h3>
                             <h4 class="text-center">Kelas ' . $kelas['kelas'] . '</h4>
                         </div>
-                        <a href="' . base_url('walikelas/laporannilai/pdf_laporan?q=alldata&tahun=' . $id_tahun . '&kelas=' . $id_kelas) . '" class="btn btn-success mb-2"><i class="fas fa-file-excel"></i> Print Excel</a>
+                        <a href="' . base_url('walikelas/laporannilai/excel_laporan?id_tahun=' . $id_tahun . '&id_kelas=' . $id_kelas . '&nilai=' . $nilai) . '" class="btn btn-success mb-2"><i class="fas fa-file-excel"></i> Print Excel</a>
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-laporansiswa">
                             <thead>
                                 <tr class="text-center">
@@ -205,5 +205,24 @@ class LaporanNilai extends CI_Controller
             $this->mypdf->generate('pdf/laporan_allnilai', $data, 'Laporan Data Siswa', 'A4', 'landscape');
             // $this->load->view('pdf/laporan_allnilai', $data);
         }
+    }
+
+    public function excel_laporan()
+    {
+        $id_tahun       = $this->input->get('id_tahun', TRUE);
+        $id_kelas       = $this->input->get('id_kelas', TRUE);
+        $nilai          = $this->input->get('nilai', TRUE);
+
+        $tahun          = $this->Tahun_model->get_detail_data($id_tahun);
+        $kelas          = $this->Kelas_model->get_detail_data($id_kelas);
+
+        $daftar_mapel   = $this->Laporan_model->get_mapel_pertahun($id_tahun, $id_kelas)->result();
+
+        $result         = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'default', $nilai);
+        $result_min     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'min', $nilai);
+        $result_max     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'max', $nilai);
+        $result_jumlah  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'jumlah', $nilai);
+        $result_rerata  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'rerata', $nilai);
+        $this->myexcel->generate('Wali Kelas', $nilai, $tahun, $kelas, $daftar_mapel, $result, $result_min, $result_max, $result_jumlah, $result_rerata);
     }
 }
