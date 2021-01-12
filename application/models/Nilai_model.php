@@ -288,4 +288,86 @@ class Nilai_model extends CI_Model
 
         return $query->result();
     }
+
+    public function nilai_persiswa($id_siswa, $id_kelas, $id_tahun)
+    {
+        $query = $this->db->query("
+            select
+                tm.nama_mapel,
+                coalesce(pts.nilai, 0) as pts,
+                coalesce(pas.nilai, 0) as pas
+            from
+                tb_matapelajaran tm
+            left join (
+                select
+                    ts.id_siswa,
+                    ts.nis,
+                    ts.nama,
+                    round(avg(tn.nilai)) as nilai,
+                    tm.id_mapel,
+                    tm.nama_mapel
+                from
+                    tb_nilai tn
+                inner join tb_datasiswa td on
+                    tn.id_datasiswa = td.id_datasiswa
+                inner join tb_siswa ts on
+                    td.id_siswa = ts.id_siswa
+                inner join tb_kd tk on
+                    tn.id_kd = tk.id_kd
+                inner join tb_matapelajaran tm on
+                    tk.id_mapel = tm.id_mapel
+                inner join tb_pengajar tp on
+                    tp.id_mapel = tm.id_mapel
+                inner join tb_tahunajaran tt on
+                    tp.id_tahun = tt.id_tahun
+                where
+                    td.id_kelas = $id_kelas
+                    and tk.jenis_penilaian = 'PTS'
+                    and tt.shared = '1'
+                    and tt.id_tahun = $id_tahun
+                    and td.id_siswa = $id_siswa
+                group by
+                    tm.id_mapel) pts on
+                pts.id_mapel = tm.id_mapel
+            left join (
+                select
+                    ts.id_siswa,
+                    ts.nis,
+                    ts.nama,
+                    round(avg(tn.nilai)) as nilai,
+                    tm.id_mapel,
+                    tm.nama_mapel
+                from
+                    tb_nilai tn
+                inner join tb_datasiswa td on
+                    tn.id_datasiswa = td.id_datasiswa
+                inner join tb_siswa ts on
+                    td.id_siswa = ts.id_siswa
+                inner join tb_kd tk on
+                    tn.id_kd = tk.id_kd
+                inner join tb_matapelajaran tm on
+                    tk.id_mapel = tm.id_mapel
+                inner join tb_pengajar tp on
+                    tp.id_mapel = tm.id_mapel
+                inner join tb_tahunajaran tt on
+                    tp.id_tahun = tt.id_tahun
+                where
+                    td.id_kelas = $id_kelas
+                    and tk.jenis_penilaian = 'PAS'
+                    and tt.shared = '1'
+                    and tt.id_tahun = $id_tahun
+                    and td.id_siswa = $id_siswa
+                group by
+                    tm.id_mapel) pas on
+                pas.id_mapel = tm.id_mapel
+            left join tb_pengajar tp2 on
+                tp2.id_mapel = tm.id_mapel
+            where
+                tp2.id_kelas = $id_kelas
+            group by
+                tm.id_mapel
+        ");
+
+        return $query->result();
+    }
 }

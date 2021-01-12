@@ -4,30 +4,36 @@
         <h1 class="h3 mb-0 text-gray-800"> <i class="fas fa-sticky-note"></i> Nilai</h1>
     </div>
     <div class="card">
-        <div class="card-header bg-behance">
-            <h6 class="text-white">Masukkan Data Yang Diperlukan</h6>
-        </div>
         <div class="card-body">
-            <div class="form-group">
-                <label for="thn_ajaran">Tahun Ajaran</label>
-                <select class="form-control" id="thn_ajaran" name="thn_ajaran">
+            <div class="form-inline">
+                <select class="form-control mb-2 mr-2" id="thn_ajaran" name="thn_ajaran">
                     <option value="">--Pilih Tahun Ajaran--</option>
                     <?php foreach ($tahun as $th) : ?>
                         <option value="<?php echo $th->id_tahun ?>"><?= $th->nama ?> - Semester <?= $th->semester ?></option>
                     <?php endforeach; ?>
                 </select>
-                <?php echo form_error('thn_ajaran', '<div class="text-danger small ml-3">', '</div>') ?>
+                <button onclick="lihatNilai()" class="btn btn-primary mb-2 mr-2"><i class="fas fa-search"></i> Lihat</button>
             </div>
-            <div class="form-group">
-                <label for="penilaian">Penilaian</label>
-                <select class="form-control" id="penilaian" name="penilaian">
-                    <option value="">--Pilih Penilaian--</option>
-                    <option value="PTS">PTS</option>
-                    <option value="PAS">PAS</option>
-                </select>
-                <?php echo form_error('penilaian', '<div class="text-danger small ml-3">', '</div>') ?>
-            </div>
-            <button onclick="lihatNilai()" class="btn btn-primary"><i class="fas fa-search"></i> Lihat</button>
+            <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-guru">
+                <thead>
+                    <tr>
+                        <th class="text-center" width="30px">No</th>
+                        <th>Mata Pelajaran</th>
+                        <th>PTS</th>
+                        <th>PAS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($nilai as $key => $value) : ?>
+                        <tr>
+                            <td class="text-center"><?= ++$key ?></td>
+                            <td><?= $value->nama_mapel ?></td>
+                            <td><?= $value->pts ?></td>
+                            <td><?= $value->pas ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
     <div id="data-all-nilai"></div>
