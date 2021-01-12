@@ -14,7 +14,7 @@
                 <select class="form-control" id="thn_ajaran" name="thn_ajaran">
                     <option value="">--Pilih Tahun Ajaran--</option>
                     <?php foreach ($tahun as $th) : ?>
-                        <option value="<?php echo $th->id_tahun ?>"><?= $th->nama ?></option>
+                        <option value="<?= $th->nama ?>"><?= $th->nama ?></option>
                     <?php endforeach; ?>
                 </select>
                 <?php echo form_error('thn_ajaran', '<div class="text-danger small ml-3">', '</div>') ?>
@@ -37,7 +37,7 @@
             type: 'POST',
             url: '<?= base_url('admin/laporanguru/data_all_guru') ?>',
             data: {
-                id_tahun: idThnAjaran
+                tahun: idThnAjaran
             },
             success: function(response) {
                 $('#data-all-guru').html(response);
@@ -48,3 +48,27 @@
         });
     }
 </script>
+
+<!-- <script>
+    $(document).ready(function() {
+        var tables = $("#table-laporanguru").DataTable({
+            serverSide: true,
+            ajax: {
+                url: "' . base_url('admin/laporanguru/get_result_guru') . '",
+                type: "POST",
+                data: {
+                    id_tahun: ' . $id_tahun . '
+                }
+            },
+            columnDefs: [{
+                    targets: [0],
+                    className: "text-center"
+                },
+                {
+                    targets: [-1],
+                    orderable: false
+                }
+            ]
+        });
+    });
+</script> -->

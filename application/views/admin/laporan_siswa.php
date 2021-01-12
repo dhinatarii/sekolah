@@ -13,7 +13,7 @@
                 <select class="form-control" id="thn_ajaran" name="thn_ajaran">
                     <option value="">--Pilih Tahun Ajaran--</option>
                     <?php foreach ($tahun as $th) : ?>
-                        <option value="<?php echo $th->id_tahun ?>"><?= $th->nama ?></option>
+                        <option value="<?= $th->nama ?>"><?= $th->nama ?></option>
                     <?php endforeach; ?>
                 </select>
                 <?php echo form_error('thn_ajaran', '<div class="text-danger small ml-3">', '</div>') ?>
@@ -22,6 +22,9 @@
                 <label for="kelas">Kelas</label>
                 <select class="form-control" id="kelas" name="kelas">
                     <option value="">--Pilih Kelas--</option>
+                    <?php foreach ($kelas as $kl) : ?>
+                        <option value="<?= $kl->id_kelas ?>"><?= $kl->kelas ?></option>
+                    <?php endforeach; ?>
                 </select>
                 <?php echo form_error('kelas', '<div class="text-danger small ml-3">', '</div>') ?>
             </div>
@@ -33,22 +36,6 @@
 </main>
 
 <script>
-    $(document).ready(function() {
-        $('#thn_ajaran').change(function() {
-            const tahun = $(this).val();
-            $.ajax({
-                type: 'POST',
-                url: '<?= base_url('admin/laporansiswa/get_kelas') ?>',
-                data: {
-                    id_tahun: tahun,
-                },
-                success: function(response) {
-                    $('#kelas').html(response);
-                }
-            });
-        })
-    });
-
     function lihatSiswa() {
         const thnAjaran = $('#thn_ajaran').val();
         const kelas = $('#kelas').val();
@@ -57,7 +44,7 @@
             type: 'POST',
             url: '<?= base_url('admin/laporansiswa/data_all_siswa') ?>',
             data: {
-                id_tahun: thnAjaran,
+                tahun: thnAjaran,
                 id_kelas: kelas
             },
             success: function(response) {

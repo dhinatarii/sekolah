@@ -26,7 +26,7 @@ class Peserta_model extends CI_Model
         $this->db->where('td.id_kelas', $id_kelas);
         $this->db->where('td.tahun_ajaran', $tahun);
         $this->db->order_by('ts.nis', 'asc');
-        
+
         return $this->db->get()->result();
     }
 

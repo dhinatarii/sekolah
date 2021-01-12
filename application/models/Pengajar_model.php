@@ -128,7 +128,7 @@ class Pengajar_model extends CI_Model
         $this->db->join('tb_tahunajaran tt', 'tt.id_tahun = tp.id_tahun', 'left');
         $this->db->where('tp.id_guru', $id_guru);
         $this->db->group_by('tk.id_kelas');
-        
+
 
         if ($id_tahun) {
             $this->db->where('tt.id_tahun', $id_tahun);

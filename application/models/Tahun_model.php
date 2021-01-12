@@ -6,6 +6,12 @@ class Tahun_model extends CI_Model
         return $this->db->get('tb_tahunajaran')->result();
     }
 
+    public function get_data_groupname()
+    {
+        $this->db->group_by('nama');
+        return $this->db->get('tb_tahunajaran')->result();
+    }
+
     public function get_name_data()
     {
         $this->db->select('tt.nama');
@@ -41,7 +47,7 @@ class Tahun_model extends CI_Model
     {
         $data_ganjil = array(
             'nama'         => $this->input->post('nama', TRUE),
-            'semester'     => 'Ganjil' 
+            'semester'     => 'Ganjil'
         );
 
         $data_genap = array(

@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"> <i class="fas fa-sticky-note"></i> Laporan Daftar Nilai Kelas <?= $kelas['kelas'] ?></h1>
+        <h1 class="h3 mb-0 text-gray-800"> <i class="fas fa-sticky-note"></i> Nilai</h1>
     </div>
     <div class="card">
         <div class="card-header bg-behance">
@@ -33,27 +33,3 @@
     <div id="data-all-nilai"></div>
 </div>
 </main>
-
-<script>
-    function lihatNilai() {
-        const thnAjaran = $('#thn_ajaran').val();
-        const kelas = '<?= $kelas['id_kelas'] ?>';
-        const jenisNilai = $('#penilaian').val();
-
-        $.ajax({
-            type: 'POST',
-            url: '<?= base_url('walikelas/laporannilai/data_all_nilai') ?>',
-            data: {
-                id_tahun: thnAjaran,
-                id_kelas: kelas,
-                nilai: jenisNilai
-            },
-            success: function(response) {
-                $('#data-all-nilai').html(response);
-            },
-            error: function(response) {
-                $('#data-all-nilai').html(response);
-            }
-        });
-    }
-</script>
