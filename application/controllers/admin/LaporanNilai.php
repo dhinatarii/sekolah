@@ -62,6 +62,7 @@ class LaporanNilai extends CI_Controller
     {
         $id_tahun       = $this->input->post('id_tahun', TRUE);
         $id_kelas       = $this->input->post('id_kelas', TRUE);
+        $nilai          = $this->input->post('nilai', TRUE);
         $html           = '';
 
         if ($id_tahun == null || $id_kelas == null) {
@@ -75,24 +76,23 @@ class LaporanNilai extends CI_Controller
             $tahun          = $this->Tahun_model->get_detail_data($id_tahun);
             $kelas          = $this->Kelas_model->get_detail_data($id_kelas);
             $daftar_mapel   = $this->Laporan_model->get_mapel_pertahun($id_tahun, $id_kelas)->result();
-            $result         = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'default');
-            $result_min     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'min');
-            $result_max     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'max');
-            $result_jumlah  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'jumlah');
-            $result_rerata  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'rerata');
+            $result         = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'default', $nilai);
+            $result_min     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'min', $nilai);
+            $result_max     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'max', $nilai);
+            $result_jumlah  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'jumlah', $nilai);
+            $result_rerata  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'rerata', $nilai);
 
             if ($result) {
                 $html = $html . '
                 <div class="card">
                     <div class="card-body">
-                        <a href="' . base_url('admin/laporannilai/pdf_laporan?q=alldata&tahun=' . $id_tahun . '&kelas=' . $id_kelas) . '" class="btn btn-info mb-2"><i class="fas fa-print"></i> Print PDF</a>
-                        <a href="' . base_url('admin/laporannilai/pdf_laporan?q=alldata&tahun=' . $id_tahun . '&kelas=' . $id_kelas) . '" class="btn btn-success mb-2"><i class="fas fa-file-excel"></i> Print Excel</a>
                         <div>
                             <h1 class="h1 text-center">LAPORAN DAFTAR NILAI SISWA</h1>
                             <h2 class="text-center">SD MUHAMMADIYAH TRINI</h2>
                             <h3 class="text-center">Tahun Ajaran ' . $tahun['nama'] . '</h3>
                             <h4 class="text-center">Kelas ' . $kelas['kelas'] . '</h4>
                         </div>
+                        <a href="' . base_url('admin/laporannilai/excel_laporan?id_tahun=' . $id_tahun . '&id_kelas=' . $id_kelas . '&nilai=' . $nilai) . '" class="btn btn-success mb-2">Print Excel</a>
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-laporansiswa">
                             <thead>
                                 <tr class="text-center">
@@ -218,5 +218,83 @@ class LaporanNilai extends CI_Controller
             $this->mypdf->generate('pdf/laporan_allnilai', $data, 'Laporan Data Siswa', 'A4', 'landscape');
             // $this->load->view('pdf/laporan_allnilai', $data);
         }
+    }
+
+    public function excel_laporan()
+    {
+        $id_tahun       = $this->input->get('id_tahun', TRUE);
+        $id_kelas       = $this->input->get('id_kelas', TRUE);
+        $nilai          = $this->input->get('nilai', TRUE);
+
+        $tahun          = $this->Tahun_model->get_detail_data($id_tahun);
+        $kelas          = $this->Kelas_model->get_detail_data($id_kelas);
+
+        $daftar_mapel   = $this->Laporan_model->get_mapel_pertahun($id_tahun, $id_kelas)->result();
+
+        $result         = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'default', $nilai);
+        $result_min     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'min', $nilai);
+        $result_max     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'max', $nilai);
+        $result_jumlah  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'jumlah', $nilai);
+        $result_rerata  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'rerata', $nilai);
+        $this->generate_excel('Admin', $nilai, $tahun, $kelas, $daftar_mapel, $result);
+    }
+
+    private function generate_excel($user, $jenis, $tahun, $kelas, $mapel, $result, $result_min = NULL, $result_max = NULL, $result_sum = NULL, $result_avg = NULL)
+    {
+        require(APPPATH . 'phpexcel/Classes/PHPExcel.php');
+        require(APPPATH . 'phpexcel/Classes/PHPExcel/Writer/Excel2007.php');
+        $kelas              = $kelas['kelas'];
+        $semester           = $tahun['semester'];
+        $tahun              = $tahun['nama'];
+        $list_head_cell     = ['E1', 'F1', 'G1', 'H1', 'I1', 'J1', 'K1', 'L1', 'M1', 'N1', 'O1', 'P1', 'Q1', 'R1', 'S1', 'T1', 'U1'];
+        $list_body_cell     = ['E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U'];
+        $object             = new PHPExcel();
+
+        $object->getProperties()->setCreator($user);
+        $object->getProperties()->setLastModifiedBy($user);
+        $object->getProperties()->setTitle("Nilai $jenis Siswa Kelas $kelas Tahun $tahun Semester $semester");
+
+        $object->setActiveSheetIndex(0);
+
+        $object->getActiveSheet()->setCellValue('A1', 'NO');
+        $object->getActiveSheet()->setCellValue('B1', 'NIS');
+        $object->getActiveSheet()->setCellValue('C1', 'NISN');
+        $object->getActiveSheet()->setCellValue('D1', 'NAMA');
+
+        $no_head = 0;
+        foreach ($mapel as $key => $value) {
+            $object->getActiveSheet()->setCellValue($list_head_cell[$key], $value->nama_mapel);
+            $no_head++;
+        }
+
+        $object->getActiveSheet()->setCellValue($list_head_cell[$no_head], 'Jumlah');
+        $object->getActiveSheet()->setCellValue($list_head_cell[$no_head + 1], 'Rata-Rata');
+
+        $baris = 2;
+        $no_body = 0;
+        foreach ($result as $key => $value) {
+            $object->getActiveSheet()->setCellValue('A' . $baris, ++$key);
+            $object->getActiveSheet()->setCellValue('B' . $baris, $value['nis']);
+            $object->getActiveSheet()->setCellValue('C' . $baris, $value['nisn']);
+            $object->getActiveSheet()->setCellValue('D' . $baris, $value['nama']);
+            foreach ($mapel as $mp => $value_mp) {
+                $object->getActiveSheet()->setCellValue($list_body_cell[$mp] . $baris, $value[$value_mp->nama_mapel]);
+                $no_body++;
+            }
+            $object->getActiveSheet()->setCellValue($list_body_cell[$no_body] . $baris, $value['jumlah']);
+            $object->getActiveSheet()->setCellValue($list_body_cell[$no_body + 1], $baris, $value['rerata']);
+            $baris++;
+        }
+
+        $file_name = "Data_Nilai_{$jenis}_Kelas{$kelas}_Tahun{$tahun}_Semester{$semester}" . '.xlsx';
+
+        $object->getActiveSheet()->setTitle("Kelas $kelas");
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $file_name . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = PHPExcel_IOFactory::createWriter($object, 'Excel2007');
+        $writer->save('php://output');
+        exit;
     }
 }

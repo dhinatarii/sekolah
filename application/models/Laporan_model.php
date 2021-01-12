@@ -6,6 +6,16 @@ class Laporan_model extends CI_Model
         return $this->db->get_where('tb_pengajar', ['id_tahun' => $id_tahun]);
     }
 
+    public function cek_datatahun_guru($tahun)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_pengajar tp');
+        $this->db->join('tb_tahunajaran tt', 'tp.id_tahun = tt.id_tahun', 'left');
+        $this->db->where('tt.nama', $tahun);
+        $this->db->group_by('tp.id_guru');
+        return $this->db->get();
+    }
+
     public function get_all_lap_guru($id_tahun)
     {
         $this->db->select('tg.*, tp.jabatan, group_concat(tk.kelas) as kelas');
@@ -34,41 +44,40 @@ class Laporan_model extends CI_Model
         return $this->db->get()->result();
     }
 
-    public function _get_data_siswa($id_tahun, $id_kelas)
+    public function _get_data_siswa($tahun, $id_kelas)
     {
-        $id_tahun = $id_tahun != null ? $id_tahun : 'null';
+        $tahun = $tahun != null ? $tahun : 'null';
         $id_kelas = $id_kelas != null ? $id_kelas : 'null';
 
-        $this->db->select('ts.id_siswa, ts.nis, ts.nisn, ts.nama, ts.jenis_kelamin, ts.tanggal_lahir, ts.agama, ta.dusun, ta.desa, ta.kecamatan, ta.kabupaten');
+        $this->db->select('ts.*, ta.*, to.nama_ayah,to.pendidikan_ayah,to.pekerjaan_ayah,to.nama_ibu,to.pendidikan_ibu,to.pekerjaan_ibu, to.no_hp');
         $this->db->from('tb_siswa ts');
-        $this->db->join('tb_orangtua to2', 'ts.id_orangtua = to2.id_orangtua', 'left');
-        $this->db->join('tb_alamat ta', 'to2.id_alamat = ta.id_alamat', 'left');
-        $this->db->join('tb_kelas tk', 'ts.id_kelas = tk.id_kelas', 'inner');
-        $this->db->join('tb_pengajar tp', 'tk.id_kelas = tp.id_kelas', 'inner');
-        $this->db->where('tp.id_tahun', $id_tahun);
-        $this->db->where('tk.id_kelas', $id_kelas);
+        $this->db->join('tb_orangtua to', 'ts.id_orangtua = to.id_orangtua', 'left');
+        $this->db->join('tb_alamat ta', 'to.id_alamat = ta.id_alamat', 'left');
+        $this->db->join('tb_datasiswa td', 'ts.id_siswa = td.id_siswa', 'inner');
+        $this->db->where('td.tahun_ajaran', $tahun);
+        $this->db->where('td.id_kelas', $id_kelas);
         $this->db->group_by('ts.nis');
     }
 
-    public function get_numrow_siswa($id_tahun, $id_kelas)
+    public function get_numrow_siswa($tahun, $id_kelas)
     {
-        $this->_get_data_siswa($id_tahun, $id_kelas);
+        $this->_get_data_siswa($tahun, $id_kelas);
         return $this->db->get()->num_rows();
     }
 
-    public function get_all_lap_siswa($id_tahun, $id_kelas)
+    public function get_all_lap_siswa($tahun, $id_kelas)
     {
-        $this->_get_data_siswa($id_tahun, $id_kelas);
+        $this->_get_data_siswa($tahun, $id_kelas);
         return $this->db->get()->result();
     }
 
-    var $column_order_siswa = array(null, 'nis', 'nisn', 'nama', 'jenis_kelamin', 'tanggal_lahir', 'agama', 'dusun', 'desa', 'kecamatan', 'kabupaten'); //Sesuaikan dengan field
+    var $column_order_siswa = array(null, 'nis', 'nisn', 'nama', 'jenis_kelamin', 'tanggal_lahir', 'agama', 'dusun', 'desa', 'kecamatan', 'kabupaten', 'nama_ayah', 'pendidikan_ayah', 'pekerjaan_ayah', 'nama_ibu', 'pendidikan_ibu', 'pekerjaan_ibu', 'no_hp'); //Sesuaikan dengan field
     var $column_search_siswa = array('nis', 'nisn', 'nama', 'dusun', 'kecamatan', 'kabupaten'); //field yang diizin untuk pencarian 
     var $order_siswa = array('nis' => 'asc'); // default order 
 
-    private function _get_datatables_query_siswa($id_tahun, $id_kelas)
+    private function _get_datatables_query_siswa($tahun, $id_kelas)
     {
-        $this->_get_data_siswa($id_tahun, $id_kelas);
+        $this->_get_data_siswa($tahun, $id_kelas);
 
         $i = 0;
 
@@ -99,25 +108,25 @@ class Laporan_model extends CI_Model
         }
     }
 
-    function get_datatables_siswa($id_tahun, $id_kelas)
+    function get_datatables_siswa($tahun, $id_kelas)
     {
-        $this->_get_datatables_query_siswa($id_tahun, $id_kelas);
+        $this->_get_datatables_query_siswa($tahun, $id_kelas);
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
 
-    function count_filtered_siswa($id_tahun, $id_kelas)
+    function count_filtered_siswa($tahun, $id_kelas)
     {
-        $this->_get_datatables_query_siswa($id_tahun, $id_kelas);
+        $this->_get_datatables_query_siswa($tahun, $id_kelas);
         $query = $this->db->get();
         return $query->num_rows();
     }
 
-    public function count_all_siswa($id_tahun, $id_kelas)
+    public function count_all_siswa($tahun, $id_kelas)
     {
-        $this->_get_data_siswa($id_tahun, $id_kelas);
+        $this->_get_data_siswa($tahun, $id_kelas);
         return $this->db->count_all_results();
     }
 
@@ -128,7 +137,7 @@ class Laporan_model extends CI_Model
     private function _get_datatables_query_guru($id_tahun)
     {
 
-        $this->db->select('tg.id_guru, tg.nama, tg.nip, tg.jenis_kelamin, tg.tanggal_lahir, tp.jabatan, group_concat(tk.kelas) as kelas, tg.alamat');
+        $this->db->select("tg.id_guru, tg.nama, tg.nip, tg.jenis_kelamin, tg.tanggal_lahir, tp.jabatan, group_concat(tk.kelas) as 'kelas', tg.alamat");
         $this->db->from('tb_guru tg');
         $this->db->join('tb_pengajar tp', 'tg.id_guru = tp.id_guru', 'left');
         $this->db->join('tb_tahunajaran tt', 'tp.id_tahun = tt.id_tahun', 'left');
@@ -136,7 +145,7 @@ class Laporan_model extends CI_Model
         $this->db->join('tb_kelas tk', 'tp.id_kelas = tk.id_kelas', 'left');
         $this->db->where('tp.id_tahun', $id_tahun);
         $this->db->group_by('tg.nama');
-        $this->db->order_by('kelas', 'asc');
+        $this->db->order_by('tk.kelas', 'asc');
 
         $i = 0;
 
@@ -196,12 +205,15 @@ class Laporan_model extends CI_Model
         return $this->db->count_all_results();
     }
 
-    public function get_data_nilai($id_tahun, $id_kelas, $view = 'default')
+    public function get_data_nilai($id_tahun, $id_kelas, $view = 'default', $jenis, $id_guru = NULL)
     {
         $id_tahun               = $id_tahun != null ? $id_tahun : 'null';
         $id_kelas               = $id_kelas != null ? $id_kelas : 'null';
-        $get_mapel              = $this->get_mapel_pertahun($id_tahun, $id_kelas);
+        $tahun                  = $this->_get_detail_tahun($id_tahun);
+        $name_tahun             = $tahun['nama'];
+        $get_mapel              = $this->get_mapel_pertahun($id_tahun, $id_kelas, $id_guru);
         $mapel                  = ($get_mapel->num_rows() > 0) ? $get_mapel->result() : 'null';
+        $guru                   = $id_guru != null ? " and tp.id_guru = $id_guru " : '';
         $query_join             = "";
         $query_select           = "";
         $query_select_injoin    = "";
@@ -250,13 +262,19 @@ class Laporan_model extends CI_Model
                 inner join (
                     select ts.id_siswa, ts.nis, ts.nama, round(avg(tn.nilai)) as nilai, tm.id_mapel, tm.nama_mapel 
                     from tb_nilai tn 
-                    inner join tb_siswa ts 
-                        on tn.id_siswa = ts.id_siswa 
-                    inner join tb_kd tk 
-                        on tn.id_kd = tk.id_kd
-                    inner join tb_matapelajaran tm 
-                        on tk.id_mapel = tm.id_mapel
-                    where ts.id_kelas = $id_kelas
+                    inner join tb_datasiswa td on 
+                        tn.id_datasiswa = td.id_datasiswa 
+                    inner join tb_siswa ts on
+                        td.id_siswa = ts.id_siswa
+                    inner join tb_kd tk on
+                        tn.id_kd = tk.id_kd
+                    inner join tb_matapelajaran tm on
+                        tk.id_mapel = tm.id_mapel
+                    inner join tb_pengajar tp on
+                        tp.id_mapel = tm.id_mapel 
+                    where td.id_kelas = $id_kelas
+                        and td.tahun_ajaran = '$name_tahun'
+                        and tk.jenis_penilaian = '$jenis' $guru
                     group by ts.nis, tm.id_mapel) nilai on nilai.id_siswa = ts.id_siswa
                     group by ts.nis";
 
@@ -273,13 +291,21 @@ class Laporan_model extends CI_Model
         }
     }
 
-    public function get_mapel_pertahun($id_tahun, $id_kelas)
+    private function _get_detail_tahun($id)
+    {
+        return $this->db->get_where('tb_tahunajaran', ['id_tahun' => $id])->row_array();
+    }
+
+    public function get_mapel_pertahun($id_tahun, $id_kelas, $id_guru = NULL)
     {
         $this->db->select('tm.*');
         $this->db->from('tb_matapelajaran tm');
         $this->db->join('tb_pengajar tp', 'tm.id_mapel = tp.id_mapel', 'left');
         $this->db->where('tp.id_tahun', $id_tahun);
         $this->db->where('tp.id_kelas', $id_kelas);
+        if ($id_guru != null) {
+            $this->db->where('tp.id_guru', $id_guru);
+        }
         return $this->db->get();
     }
 }

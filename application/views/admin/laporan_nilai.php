@@ -13,7 +13,7 @@
                 <select class="form-control" id="thn_ajaran" name="thn_ajaran">
                     <option value="">--Pilih Tahun Ajaran--</option>
                     <?php foreach ($tahun as $th) : ?>
-                        <option value="<?php echo $th->id_tahun ?>"><?= $th->nama ?></option>
+                        <option value="<?php echo $th->id_tahun ?>"><?= $th->nama ?> - Semester <?= $th->semester ?></option>
                     <?php endforeach; ?>
                 </select>
                 <?php echo form_error('thn_ajaran', '<div class="text-danger small ml-3">', '</div>') ?>
@@ -24,6 +24,15 @@
                     <option value="">--Pilih Kelas--</option>
                 </select>
                 <?php echo form_error('kelas', '<div class="text-danger small ml-3">', '</div>') ?>
+            </div>
+            <div class="form-group">
+                <label for="penilaian">Penilaian</label>
+                <select class="form-control" id="penilaian" name="penilaian">
+                    <option value="">--Pilih Penilaian--</option>
+                    <option value="PTS">PTS</option>
+                    <option value="PAS">PAS</option>
+                </select>
+                <?php echo form_error('penilaian', '<div class="text-danger small ml-3">', '</div>') ?>
             </div>
             <button onclick="lihatNilai()" class="btn btn-primary"><i class="fas fa-search"></i> Lihat</button>
         </div>
@@ -52,13 +61,15 @@
     function lihatNilai() {
         const thnAjaran = $('#thn_ajaran').val();
         const kelas = $('#kelas').val();
+        const jenisNilai = $('#penilaian').val();
 
         $.ajax({
             type: 'POST',
             url: '<?= base_url('admin/laporannilai/data_all_nilai') ?>',
             data: {
                 id_tahun: thnAjaran,
-                id_kelas: kelas
+                id_kelas: kelas,
+                nilai: jenisNilai
             },
             success: function(response) {
                 $('#data-all-nilai').html(response);

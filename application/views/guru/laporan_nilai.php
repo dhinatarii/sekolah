@@ -13,7 +13,7 @@
                 <select class="form-control" id="thn_ajaran" name="thn_ajaran">
                     <option value="">--Pilih Tahun Ajaran--</option>
                     <?php foreach ($tahun as $th) : ?>
-                        <option value="<?php echo $th->id_tahun ?>"><?= $th->nama ?></option>
+                        <option value="<?php echo $th->id_tahun ?>"><?= $th->nama ?> - Semester <?= $th->semester ?></option>
                     <?php endforeach; ?>
                 </select>
                 <?php echo form_error('thn_ajaran', '<div class="text-danger small ml-3">', '</div>') ?>
@@ -26,11 +26,13 @@
                 <?php echo form_error('kelas', '<div class="text-danger small ml-3">', '</div>') ?>
             </div>
             <div class="form-group">
-                <label for="mapel">Mata Pelajaran</label>
-                <select class="form-control" id="mapel" name="mapel">
-                    <option value="">--Pilih Mata Pelajaran--</option>
+                <label for="penilaian">Penilaian</label>
+                <select class="form-control" id="penilaian" name="penilaian">
+                    <option value="">--Pilih Penilaian--</option>
+                    <option value="PTS">PTS</option>
+                    <option value="PAS">PAS</option>
                 </select>
-                <?php echo form_error('mapel', '<div class="text-danger small ml-3">', '</div>') ?>
+                <?php echo form_error('penilaian', '<div class="text-danger small ml-3">', '</div>') ?>
             </div>
             <button onclick="lihatNilai()" class="btn btn-primary"><i class="fas fa-search"></i> Lihat</button>
         </div>
@@ -58,30 +60,10 @@
         })
     });
 
-    $(document).ready(function() {
-        $('#kelas').change(function() {
-            const tahun = $('#thn_ajaran').val();
-            const kelas = $(this).val();
-            const guru = '<?= $id_guru ?>';
-            $.ajax({
-                type: 'POST',
-                url: '<?= base_url('guru/laporannilai/get_mapel') ?>',
-                data: {
-                    id_tahun: tahun,
-                    id_guru: guru,
-                    id_kelas: kelas
-                },
-                success: function(response) {
-                    $('#mapel').html(response);
-                }
-            });
-        })
-    });
-
     function lihatNilai() {
         const tahun = $('#thn_ajaran').val();
         const kelas = $('#kelas').val();
-        const mapel = $('#mapel').val();
+        const jenisNilai = $('#penilaian').val();
         const guru = '<?= $id_guru ?>';
 
         $.ajax({
@@ -90,7 +72,7 @@
             data: {
                 id_tahun: tahun,
                 id_kelas: kelas,
-                id_mapel: mapel,
+                nilai: jenisNilai,
                 id_guru: guru
             },
             success: function(response) {

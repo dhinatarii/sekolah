@@ -49,6 +49,7 @@ class LaporanNilai extends CI_Controller
     {
         $id_tahun       = $this->input->post('id_tahun', TRUE);
         $id_kelas       = $this->input->post('id_kelas', TRUE);
+        $nilai          = $this->input->post('nilai', TRUE);
         $html           = '';
 
         if ($id_tahun == null || $id_kelas == null) {
@@ -62,24 +63,23 @@ class LaporanNilai extends CI_Controller
             $tahun          = $this->Tahun_model->get_detail_data($id_tahun);
             $kelas          = $this->Kelas_model->get_detail_data($id_kelas);
             $daftar_mapel   = $this->Laporan_model->get_mapel_pertahun($id_tahun, $id_kelas)->result();
-            $result         = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'default');
-            $result_min     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'min');
-            $result_max     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'max');
-            $result_jumlah  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'jumlah');
-            $result_rerata  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'rerata');
+            $result         = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'default', $nilai);
+            $result_min     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'min', $nilai);
+            $result_max     = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'max', $nilai);
+            $result_jumlah  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'jumlah', $nilai);
+            $result_rerata  = $this->Laporan_model->get_data_nilai($id_tahun, $id_kelas, 'rerata', $nilai);
 
             if ($result) {
                 $html = $html . '
                 <div class="card">
                     <div class="card-body">
-                        <a href="' . base_url('walikelas/laporannilai/pdf_laporan?q=alldata&tahun=' . $id_tahun . '&kelas=' . $id_kelas) . '" class="btn btn-info mb-2"><i class="fas fa-print"></i> Print PDF</a>
-                        <a href="' . base_url('walikelas/laporannilai/pdf_laporan?q=alldata&tahun=' . $id_tahun . '&kelas=' . $id_kelas) . '" class="btn btn-success mb-2"><i class="fas fa-file-excel"></i> Print Excel</a>
                         <div>
                             <h1 class="h1 text-center">LAPORAN DAFTAR NILAI SISWA</h1>
                             <h2 class="text-center">SD MUHAMMADIYAH TRINI</h2>
                             <h3 class="text-center">Tahun Ajaran ' . $tahun['nama'] . '</h3>
                             <h4 class="text-center">Kelas ' . $kelas['kelas'] . '</h4>
                         </div>
+                        <a href="' . base_url('walikelas/laporannilai/pdf_laporan?q=alldata&tahun=' . $id_tahun . '&kelas=' . $id_kelas) . '" class="btn btn-success mb-2"><i class="fas fa-file-excel"></i> Print Excel</a>
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-laporansiswa">
                             <thead>
                                 <tr class="text-center">

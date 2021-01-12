@@ -13,7 +13,7 @@
                 <select class="form-control" id="thn_ajaran" name="thn_ajaran">
                     <option value="">--Pilih Tahun Ajaran--</option>
                     <?php foreach ($tahun as $th) : ?>
-                        <option value="<?php echo $th->id_tahun ?>"><?= $th->nama ?></option>
+                        <option value="<?= $th->nama ?>"><?= $th->nama ?></option>
                     <?php endforeach; ?>
                 </select>
                 <?php echo form_error('thn_ajaran', '<div class="text-danger small ml-3">', '</div>') ?>
@@ -34,7 +34,7 @@
             type: 'POST',
             url: '<?= base_url('walikelas/laporansiswa/data_all_siswa') ?>',
             data: {
-                id_tahun: thnAjaran,
+                tahun: thnAjaran,
                 id_kelas: kelas
             },
             success: function(response) {
