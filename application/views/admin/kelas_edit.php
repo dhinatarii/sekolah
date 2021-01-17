@@ -14,12 +14,9 @@
                 <div class="form-group">
                     <label for="wali_kelas">Wali Kelas</label>
                     <select class="form-control" id="wali_kelas" name="wali_kelas">
+                        <option value="<?= $kelas['wali_kelas'] . '-' . $get_user_id['id_user'] ?>" selected><?= $kelas['wali_kelas'] ?></option>
                         <?php foreach ($guru as $gr) : ?>
-                            <?php if ($gr->nama == $kelas['wali_kelas']) : ?>
-                                <option value="<?php echo $gr->nama ?>" selected><?php echo $gr->nama ?></option>
-                            <?php else : ?>
-                                <option value="<?php echo $gr->nama ?>"><?php echo $gr->nama ?></option>
-                            <?php endif; ?>
+                            <option value="<?= $gr->nama . '-' . $gr->id_user ?>"><?php echo $gr->nama ?></option>
                         <?php endforeach; ?>
                     </select>
                     <?php echo form_error('wali_kelas', '<div class="text-danger small ml-3">', '</div>') ?>

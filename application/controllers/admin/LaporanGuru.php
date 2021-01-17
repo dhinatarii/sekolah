@@ -23,7 +23,7 @@ class LaporanGuru extends CI_Controller
             'nama'      => $data['nama'],
             'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
-            'tahun'     => $this->Tahun_model->get_data(),
+            'tahun'     => $this->Tahun_model->get_data_groupname(),
             'menu'      => 'laporan_guru',
             'breadcrumb' => [
                 0 => (object)[
@@ -85,64 +85,61 @@ class LaporanGuru extends CI_Controller
 
     public function data_all_guru()
     {
-        $id_tahun   = $this->input->post('id_tahun', TRUE);
-        $cek_data   = $this->Laporan_model->cek_datatahun($id_tahun);
+        $tahun   = $this->input->post('tahun', TRUE);
+        $cek_data = $this->Laporan_model->cek_datatahun_guru($tahun);
+        $id_tahun = ($cek_data->row_array()) ? $cek_data->row_array()['id_tahun'] : 'null';
+
         $tahun      = $this->Tahun_model->get_detail_data($id_tahun);
+        $data_guru  = $this->Laporan_model->get_all_lap_guru($id_tahun);
         $html       = '';
 
         if ($cek_data->num_rows() > 0) {
             $html = $html . '
                 <div class="card">
                     <div class="card-body">
-                        <a href="' . base_url('admin/laporanguru/pdf_laporan?q=alldata&tahun=' . $id_tahun) . '" class="btn btn-info mb-2"><i class="fas fa-print"></i> Print</a>
                         <div>
                             <h1 class="h1 text-center">LAPORAN DAFTAR GURU</h1>
                             <h2 class="text-center">SD MUHAMMADIYAH TRINI</h2>
                             <h3 class="text-center">Tahun Ajaran ' . $tahun['nama'] . '</h3>
                         </div>
+                        <a href="' . base_url('admin/laporanguru/excel_laporan?tahun=' . $tahun['nama']) . '" class="btn btn-success mb-2"><i class="fas fa-file-excel" aria-hidden="true" ></i> Print Excel</a>
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-laporanguru">
                             <thead>
                                 <tr class="text-center">
-                                    <th style="vertical-align : middle;text-align:center;">No</th>
-                                    <th style="vertical-align : middle;text-align:center;">Nama</th>
-                                    <th style="vertical-align : middle;text-align:center;">NIP</th>
-                                    <th style="vertical-align : middle;text-align:center;">Jenis Kelamin</th>
-                                    <th style="vertical-align : middle;text-align:center;">Tanggal Lahir</th>
-                                    <th style="vertical-align : middle;text-align:center;">Jabatan</th>
-                                    <th style="vertical-align : middle;text-align:center;">Kelas Mengajar</th>
-                                    <th style="vertical-align : middle;text-align:center;">Alamat</th>
-                                    <th class="text-center" width="80px" style="vertical-align : middle;text-align:center;">Aksi</th>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>NIP</th>
+                                    <th>Jenis Kelamin</th>
+                                    <th>Tanggal Lahir</th>
+                                    <th>Jabatan</th>
+                                    <th>Kelas Mengajar</th>
+                                    <th>Alamat</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody>';
+            foreach ($data_guru as $key => $value) {
+                $map_kelas = explode(',', $value->kelas);
+                $uniqe_kelas = array_unique($map_kelas);
+                sort($uniqe_kelas);
+                $new_kelas = implode(', ', $uniqe_kelas);
+
+                $html = $html . '<tr>
+                    <td>' . ++$key . '</td>
+                    <td>' . $value->nama . '</td>
+                    <td>' . $value->nip . '</td>
+                    <td>' . $value->jenis_kelamin . '</td>
+                    <td>' . $value->tanggal_lahir . '</td>
+                    <td>' . $value->jabatan . '</td>
+                    <td>' . $new_kelas . '</td>
+                    <td>' . $value->alamat . '</td>
+                    </tr>';
+            }
+
+            $html = $html . "
                             </tbody>
                         </table>
                     </div>
-                </div>
-                <script>
-                    $(document).ready(function() {
-                        $("#table-laporanguru").DataTable({
-                            "serverSide": true,
-                            "ajax": {
-                                "url": "' . base_url('admin/laporanguru/get_result_guru') . '",
-                                "type": "POST",
-                                "data":{
-                                    id_tahun: ' . $id_tahun . '
-                                }
-                            },
-                            "columnDefs": [{
-                                    "targets": [0, -1],
-                                    "className": "text-center"
-                                },
-                                {
-                                    "targets": [-1],
-                                    "orderable": false
-                                }
-                            ]
-                        });
-                    });
-                </script>
-                ';
+                </div>";
         } else {
             $html = $html . '<div class="card">
                                 <div class="card-body">
@@ -174,8 +171,9 @@ class LaporanGuru extends CI_Controller
             $row[] = $item->jabatan;
             $row[] = $new_kelas;
             $row[] = $item->alamat;
-            $row[] = anchor('admin/laporanguru/detail/' . $item->id_guru, '<div class="btn btn-sm btn-success mr-1 ml-1 mb-1 mt-1"><i class="fa fa-eye"></i></div>') .
-                '<a href="' . base_url('admin/laporanguru/pdf_laporan?q=detaildata&id=' . $item->id_guru) . '" class="btn btn-sm btn-info mr-1 ml-1 mb-1 mt-1"><i class="fa fa-print"></i></a>';
+
+            // $row[] = anchor('admin/laporanguru/detail/' . $item->id_guru, '<div class="btn btn-sm btn-success mr-1 ml-1 mb-1 mt-1"><i class="fa fa-eye"></i></div>') .
+            // '<a href="' . base_url('admin/laporanguru/pdf_laporan?q=detaildata&id=' . $item->id_guru) . '" class="btn btn-sm btn-info mr-1 ml-1 mb-1 mt-1"><i class="fa fa-print"></i></a>';
             $data[] = $row;
         }
 
@@ -208,5 +206,15 @@ class LaporanGuru extends CI_Controller
 
             $this->mypdf->generate('pdf/laporan_detailguru', $data, 'Laporan Data Guru', 'A4', 'portrait');
         }
+    }
+
+    public function excel_laporan()
+    {
+        $tahun      = $this->input->get('tahun');
+        $cek_data   = $this->Laporan_model->cek_datatahun_guru($tahun);
+        $id_tahun   = ($cek_data->row_array()) ? $cek_data->row_array()['id_tahun'] : 'null';
+        $tahun      = $this->Tahun_model->get_detail_data($id_tahun);
+        $data_guru  = $this->Laporan_model->get_all_lap_guru($id_tahun);
+        $this->myexcel->generate_guru('Admin', $tahun, $data_guru);
     }
 }

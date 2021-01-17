@@ -58,7 +58,7 @@ class Kelas extends CI_Controller
             $row[] = $item->kelas;
             $row[] = $item->wali_kelas;
             $row[] = anchor('admin/kelas/edit/' . $item->id_kelas, '<div class="btn btn-sm btn-primary btn-xs mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>')
-                . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_kelas . ')" class="btn btn-sm btn-danger btn-xs mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';
+                . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_kelas  . ')" class="btn btn-sm btn-danger btn-xs mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';
             $data[] = $row;
         }
 
@@ -119,16 +119,19 @@ class Kelas extends CI_Controller
             redirect('admin/kelas');
         }
 
+        $kelas = $this->Kelas_model->get_detail_data($id);
+        $guru  = $this->Guru_model->get_detail_data(NULL, NULL, $kelas['wali_kelas']);
         $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
-            'id_user'   => $data['id_user'],
-            'nama'      => $data['nama'],
-            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
-            'level'     => $data['level'],
-            'guru'      => $this->Guru_model->get_data_only_name(),
-            'kelas'     => $this->Kelas_model->get_detail_data($id),
-            'menu'      => 'kelas',
-            'breadcrumb' => [
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'         => $data['level'],
+            'guru'          => $this->Guru_model->get_data_only_name(),
+            'kelas'         => $kelas,
+            'get_user_id'   => $guru,
+            'menu'          => 'kelas',
+            'breadcrumb'    => [
                 0 => (object)[
                     'name' => 'Dashboard',
                     'link' => 'admin'
@@ -152,7 +155,7 @@ class Kelas extends CI_Controller
             $this->load->view('admin/kelas_edit', $data);
             $this->load->view('templates/footer');
         } else {
-            $this->Kelas_model->edit_data($id);
+            $this->Kelas_model->edit_data($id, $guru['id_user']);
             $this->session->set_flashdata('message', 'Data Kelas Berhasil Diupdate!');
             redirect('admin/kelas');
         }

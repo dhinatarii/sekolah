@@ -57,11 +57,12 @@ class Pengajar extends CI_Controller
             $no++;
             $row = array();
             $row[] = $no;
-            $row[] = $item->guru;
+            $row[] = $item->nama;
             $row[] = $item->jabatan;
             $row[] = $item->mapel;
             $row[] = $item->kelas;
             $row[] = $item->tahun;
+            $row[] = $item->semester;
             $row[] = anchor('admin/pengajar/edit/' . $item->id_pengajar, '<div class="btn btn-sm btn-primary btn-xs mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>')
                 . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_pengajar . ')" class="btn btn-sm btn-danger btn-xs mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';
             $data[] = $row;
@@ -124,16 +125,22 @@ class Pengajar extends CI_Controller
 
     public function get_kelas()
     {
-        $id_mapel   = $this->input->post('id_mapel', TRUE);
-        $mapel      = $this->Mapel_model->get_detail_data($id_mapel);
-        $kelas      = $this->Kelas_model->get_like_data($mapel['level']);
-        if ($kelas->num_rows() > 0) {
+        $id_guru   = $this->input->post('id_guru', TRUE);
+        $guru      = $this->Guru_model->get_detail_data($id_guru);
+        $kelas     = $this->Kelas_model->get_kelas_with_name($guru['nama']);
+        $kelas_other = $this->Kelas_model->get_data();
+        // $mapel      = $this->Mapel_model->get_detail_data($id_guru);
+        // $kelas      = $this->Kelas_model->get_like_data($mapel['level']);
+        if ($kelas) {
             echo '<option value="">--Pilih Kelas--</option>';
-            foreach ($kelas->result() as $kl) {
-                echo "<option value=$kl->id_kelas>$kl->kelas</option>";
+            foreach ($kelas as $kl) {
+                echo '<option value="' . $kl->id_kelas . '">' . $kl->kelas . '</option>';
             }
         } else {
-            echo '<option value="">--Tidak Tersedia--</option>';
+            echo '<option value="">--Pilih Kelas--</option>';
+            foreach ($kelas_other as $kl) {
+                echo '<option value="' . $kl->id_kelas . '">' . $kl->kelas . '</option>';
+            }
         }
     }
 
@@ -155,7 +162,7 @@ class Pengajar extends CI_Controller
             'kelas'     => $this->Kelas_model->get_data(),
             'tahun'     => $this->Tahun_model->get_detail_data($this->Pengajar_model->get_detail_data($id)['id_tahun']),
             'pengajar'  => $this->Pengajar_model->get_detail_data($id),
-            'jabatan'   => ['Guru Kelas', 'Guru Agama', 'Guru Penjas'],
+            'jabatan'   => ['Guru Kelas', 'Guru Agama','Guru Bahasa', 'Guru Penjas'],
             'menu'      => 'pengajar',
             'breadcrumb' => [
                 0 => (object)[
@@ -198,8 +205,8 @@ class Pengajar extends CI_Controller
     private function _rules()
     {
         $this->form_validation->set_rules('guru', 'Guru', 'required');
-        $this->form_validation->set_rules('mapel', 'Mata Pelajaran', 'required');
-        $this->form_validation->set_rules('kelas', 'Kelas', 'required');
         $this->form_validation->set_rules('jabatan', 'Jabatan', 'required');
+        $this->form_validation->set_rules('mapel[]', 'Kompetensi Dasar', 'required');
+        $this->form_validation->set_rules('kelas', 'Kelas', 'required');
     }
 }

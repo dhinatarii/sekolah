@@ -1,36 +1,88 @@
 <div class="container-fluid">
-    <div class="fade-in">
-        <div class="row">
-            <div class="col-sm-12 col-xl-12">
-                <div class="card bg-gradient-primary">
-                    <div class="jumbotron jumbotron-fluid" style="background-image: url(<?= base_url('assets/img/jumbotron.png') ?>); background-size: cover">
-                        <div class="container">
-                            <br>
-                            <h1 class="text-right">Sistem Informasi Nilai Siswa</h1>
-                            <h1 class="display-3 text-right">SD MUHAMMADIYAH TRINI</h1>
-                            <br>
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800"> <i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+    </div>
+
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Sealamt Datang!</h4>
+        <p>Selamat Datang Orang Tua dari <strong><?php echo $nama; ?></strong> di Sistem Informasi Pengolahan Data Nilai Siswa SD Muhammadiyah Trini</p>
+        <hr>
+    </div>
+
+    <div class="row">
+        <!-- Tahun Ajaran -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Tahun Ajaran</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php if ($tahun) {
+                                                                                    echo $tahun['nama'];
+                                                                                } else {
+                                                                                    echo 'Belum Ditentukan';
+                                                                                } ?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12 col-xl-6">
-                <div class="card card-accent-primary">
-                    <div class="card-header">VISI</div>
-                    <div class="card-body">Terbentuknya pribadi muslim yang berakhul karimah. Unggul dalam prestasi, mandiri, berbudaya, berkarakter bangsa serta bertanggungjawab.</div>
+
+
+        <!-- Tahun Ajaran -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Semester</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php if ($tahun) {
+                                                                                    echo $tahun['semester'];
+                                                                                } else {
+                                                                                    echo 'Belum Ditentukan';
+                                                                                } ?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-sm-12 col-xl-6">
-                <div class="card card-accent-success">
-                    <div class="card-header">MISI</div>
-                    <div class="card-body">
-                        <ul>
-                            <li>Mengembangkan nilai-nilai agama islam, iman dan taqwa kepada Allah SWT.</li>
-                            <li>Melaksanakan pembelajaran dan bimbingan secara efektif dan efisien sehingga kemampuan siswa berkembang secara optimal.</li>
-                            <li>Mengembangkan potensi dan kreatifitas siswa.</li>
-                            <li>Menerapkan manajemen partisipatif dengan melibatkan seluruh pemangku kepentingan.</li>
-                        </ul>
+        </div>
+
+        <!-- Wali kelas -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Kelas</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $kelas ?></div>
+                        </div>
+                        <div class="col-auto ">
+                            <i class="fas fa-chalkboard fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Wali Kelas</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $wali_kelas ?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>
+                        </div>
                     </div>
                 </div>
             </div>

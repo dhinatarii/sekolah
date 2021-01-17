@@ -219,7 +219,7 @@ class User extends CI_Controller
 
     public function edit()
     {
-        $level  = $this->uri->segment(4);
+        $level  = urldecode($this->uri->segment(4));
         $id     = $this->uri->segment(5);
         $detail = $level == 'admin' ? '1' : ($level == 'guru' ? '2' : ($level == 'wali kelas' ? '3' : ($level == 'siswa' ? '4' : NULL)));
         $data   = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
@@ -333,7 +333,7 @@ class User extends CI_Controller
         $data   = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
-            'photo'         => $data['photo'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'menu'          => 'user',
             'breadcrumb'    => [

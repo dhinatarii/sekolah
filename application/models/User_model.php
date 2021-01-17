@@ -13,6 +13,7 @@ class User_model extends CI_Model
             $this->db->select('*');
             $this->db->from('tb_user');
             $this->db->where('level', $level);
+            $this->db->where('status', '1');
             $this->db->or_where('level', $levels);
             return $this->db->get()->num_rows();
         } else {
@@ -61,10 +62,12 @@ class User_model extends CI_Model
     public function get_detail_siswa($id, $level)
     {
         $this->db->select('*');
-        $this->db->from('tb_user');
-        $this->db->where('tb_user.id_user', $id);
-        $this->db->where('tb_user.level', $level);
-        $this->db->join('tb_siswa', "tb_user.id_user = tb_siswa.id_user", 'left');
+        $this->db->from('tb_user tu');
+        $this->db->join('tb_siswa ts', "tu.id_user = ts.id_user", 'left');
+        $this->db->join('tb_datasiswa td', "ts.id_siswa = td.id_siswa", 'left');
+        $this->db->join('tb_kelas tk', "td.id_kelas = tk.id_kelas", 'left');
+        $this->db->where('tu.id_user', $id);
+        $this->db->where('tu.level', $level);
         return $this->db->get()->row_array();
     }
 
@@ -159,7 +162,7 @@ class User_model extends CI_Model
     }
 
     var $column_order = array(null, 'nama', 'username', 'level', 'status'); //Sesuaikan dengan field
-    var $column_search = array('username'); //field yang diizin untuk pencarian 
+    var $column_search = array('nama','username'); //field yang diizin untuk pencarian 
     var $order = array('level' => 'asc'); // default order 
 
     private function _get_datatables_query($level, $levels)

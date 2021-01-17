@@ -28,6 +28,15 @@
                         </select>
                         <?php echo form_error('mapel', '<div class="text-danger small ml-3">', '</div>') ?>
                     </div>
+                    <div class="form-group">
+                        <label for="penilaian">Penilaian</label>
+                        <select class="form-control" id="penilaian" name="penilaian">
+                            <option value="">--Pilih Penilaian--</option>
+                            <option value="PTS">PTS</option>
+                            <option value="PAS">PAS</option>
+                        </select>
+                        <?php echo form_error('penilaian', '<div class="text-danger small ml-3">', '</div>') ?>
+                    </div>
                     <button onclick="searchNilai()" class="btn btn-primary"><i class="fas fa-search"></i> Cari</button>
                 </div>
             </div>
@@ -62,6 +71,7 @@
         const idKelas = $('#kelas').val()
         const idMapel = $('#mapel').val()
         const idGuru = '<?= $id_guru ?>';
+        const penilaian = $('#penilaian').val()
 
         // if (idKelas !== '' && idMapel !== '') {
         $.ajax({
@@ -69,7 +79,8 @@
             url: '<?= base_url('guru/nilai/data_nilai_permapel') ?>',
             data: {
                 id_kelas: idKelas,
-                id_mapel: idMapel
+                id_mapel: idMapel,
+                nilai: penilaian
             },
             success: function(response) {
                 $('#table-result').html(response);

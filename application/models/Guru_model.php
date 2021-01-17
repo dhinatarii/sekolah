@@ -13,14 +13,25 @@ class Guru_model extends CI_Model
 
     public function get_data_only_name()
     {
-        $this->db->select('nama');
-        return $this->db->get('tb_guru')->result();
+        return $this->db->query("select tg.nama, tg.id_user 
+            from
+                tb_guru tg
+            where
+                tg.nama not in (
+                select
+                    tk.wali_kelas
+                from
+                    tb_kelas tk
+                where
+                    tk.wali_kelas = tg.nama)")->result();
     }
 
-    public function get_detail_data($id, $id_user = NULL)
+    public function get_detail_data($id, $id_user = NULL, $name = NULL)
     {
         if ($id_user) {
             return $this->db->get_where('tb_guru', ['id_user' => $id_user])->row_array();
+        } elseif ($name) {
+            return $this->db->get_where('tb_guru', ['nama' => $name])->row_array();
         } else {
             return $this->db->get_where('tb_guru', ['id_guru' => $id])->row_array();
         }
@@ -31,7 +42,7 @@ class Guru_model extends CI_Model
         $date = date_create($this->input->post('tanggal_lahir', TRUE));
         $dateFormat = date_format($date, "mY");
         $data = array(
-            'username'  => $this->input->post('nip', TRUE),
+            'username'  => $this->input->post('email', TRUE),
             'password'  => MD5($dateFormat),
             'level'     => 'guru',
             'status'    => '1'
@@ -59,11 +70,16 @@ class Guru_model extends CI_Model
         $this->db->insert('tb_guru', $data);
     }
 
-    public function edit_data($id, $photo)
+    public function edit_data($id, $photo, $name_guru)
     {
         $dataDetail = $this->get_detail_data($id);
+        $dataWali = $this->db->get_where('tb_kelas', ['wali_kelas' => $name_guru])->num_rows();
+
         $dataUser = array(
-            'username'       => $this->input->post('nip', TRUE),
+            'username'       => $this->input->post('email', TRUE),
+        );
+        $dataWali = array(
+            'wali_kelas'     => $this->input->post('nama', TRUE),
         );
         $data = array(
             'nip'       => $this->input->post('nip', TRUE),
@@ -82,9 +98,13 @@ class Guru_model extends CI_Model
         $this->db->where('id_guru', $id);
         $this->db->update('tb_guru', $data);
 
-        $this->db->where('username', $dataDetail['nip']);
+        $this->db->where('username', $dataDetail['email']);
         $this->db->update('tb_user', $dataUser);
-        
+
+        if ($dataWali > 0) {
+            $this->db->where('wali_kelas', $name_guru);
+            $this->db->update('tb_kelas', $dataWali);
+        }
     }
 
     public function delete_data($id)
