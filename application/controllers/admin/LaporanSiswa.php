@@ -54,8 +54,6 @@ class LaporanSiswa extends CI_Controller
 
         $cek_data   = $this->Laporan_model->get_numrow_siswa($tahun, $id_kelas);
         $data = $this->Laporan_model->get_all_lap_siswa($tahun, $id_kelas);
-        // var_dump($data);
-        // die();
         if ($cek_data > 0) {
             $html       = $html . '
                 <div class="card">
@@ -66,16 +64,21 @@ class LaporanSiswa extends CI_Controller
                             <h3 class="text-center">Tahun Ajaran ' . $tahun . '</h3>
                             <h4 class="text-center">Kelas ' . $kelas['kelas'] . '</h4>
                         </div>
+                        <a href="' . base_url('admin/laporansiswa/excel_laporan?tahun=' . $tahun . '&id_kelas=' . $id_kelas) . '" class="btn btn-success mb-2"><i class="fas fa-file-excel" aria-hidden="true" ></i> Print Excel</a>
                         <table class="table table-responsive-xl table-bordered table-striped table-sm w-100 d-block d-md-table" id="laporansiswa">
                             <thead>
                                 <tr class="text-center">
-                                    <th>No</th>
-                                    <th>NIS</th>
-                                    <th>NISN</th>
-                                    <th>Nama</th>
-                                    <th>JK</th>
-                                    <th>Tanggal Lahir</th>
-                                    <th>Agama</th>
+                                    <th rowspan="2">No</th>
+                                    <th rowspan="2">NIS</th>
+                                    <th rowspan="2">NISN</th>
+                                    <th rowspan="2">Nama</th>
+                                    <th rowspan="2">JK</th>
+                                    <th rowspan="2">Tanggal Lahir</th>
+                                    <th rowspan="2">Agama</th>
+                                    <th colspan="7">Orang Tua</th>
+                                    <th colspan="4">Alamat</th>
+                                </tr>
+                                <tr>
                                     <th>Nama Ayah</th>
                                     <th>Pendidkan Ayah</th>
                                     <th>Pekerjaan Ayah</th>
@@ -120,33 +123,6 @@ class LaporanSiswa extends CI_Controller
                 </div>';
             $html = $html . "
                 <script>
-                    $(document).ready(function() {
-                        var table = $('#laporansiswa').DataTable({
-                            dom: 'Bfrtip',
-                            lengthChange: false,
-                            'pageLength': 10,
-                            'lengthMenu': [[10, 20, 25, 50, -1], [10, 20, 25, 50, 'All']],
-                            buttons: [
-                                {
-                                    extend: 'excel',
-                                    text: 'Print Excel',
-                                    titleAttr: 'Excel',
-                                    className: 'btn-success'
-                                },
-                            ],
-                            columnDefs: [
-                                {
-                                    targets: [ -1,-2,-3,-4 ],
-                                    visible: false,
-                                    searchable: false
-                                }
-                            ]
-                        });
-
-
-                        table.buttons().container()
-                            .appendTo( '#laporansiswa_wrapper .col-md-6:eq(0)' );
-                    });
                 </script>
             ";
         } else {
@@ -259,5 +235,14 @@ class LaporanSiswa extends CI_Controller
             $data['siswa'] = $this->Siswa_model->get_detail_data($id_siswa);
             $this->mypdf->generate('pdf/laporan_detailsiswa', $data, 'Laporan Data Siswa', 'A4', 'portrait');
         }
+    }
+
+    public function excel_laporan()
+    {
+        $tahun      = $this->input->get('tahun', TRUE);
+        $id_kelas   = $this->input->get('id_kelas', TRUE);
+        $kelas      = $this->Kelas_model->get_detail_data($id_kelas);
+        $data       = $this->Laporan_model->get_all_lap_siswa($tahun, $id_kelas);
+        $this->myexcel->generate_siswa('Admin', $tahun, $kelas, $data);
     }
 }

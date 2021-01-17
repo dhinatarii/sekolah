@@ -8,6 +8,7 @@
             <div class="signin">
                 <form method="post" action="" class="sign-in-form">
                     <img src="<?php echo base_url() ?>assets/img/logo_dikdasmen.svg" alt="" class="image-logo">
+                    <span class="mb-2 text-center">Masukan Email Jika Sebagai Admin, Guru atau Wali kelas,<br> Masukan No. Hp Jika Sebagai Orang Tua Siswa</span>
                     <?php if ($this->session->flashdata('message')) : ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <?php echo $this->session->flashdata('message'); ?>
@@ -16,17 +17,24 @@
                             </button>
                         </div>
                     <?php endif; ?>
-                    <div class="input-field">
-                        <i class="fas fa-user"></i>
-                        <input type="text" placeholder="Username / Email / NIS" id="username" name="username" />
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <label for="datadiri">Data</label>
+                                <input class="form-control" id="datadiri" type="text" placeholder="Email / No. Hp">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="ccmonth">Sebagai</label>
+                            <select class="form-control" id="ccmonth">
+                                <option>Admin</option>
+                                <option>Wali Kelas</option>
+                                <option>Guru</option>
+                                <option>Orang Tua</option>
+                            </select>
+                        </div>
                     </div>
-                    <?php echo form_error('username', '<div class="text-danger small ml-3">', '</div>') ?>
-                    <div class="input-field">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" placeholder="Password (MMYYYY)" id="password" name="password" />
-                    </div>
-                    <?php echo form_error('password', '<div class="text-danger small ml-3">', '</div>') ?>
-                    <button class="btn solid">Login</button>
+                    <button class="btn solid">Reset Password</button>
                 </form>
             </div>
         </div>

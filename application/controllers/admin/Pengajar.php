@@ -57,7 +57,7 @@ class Pengajar extends CI_Controller
             $no++;
             $row = array();
             $row[] = $no;
-            $row[] = $item->guru;
+            $row[] = $item->nama;
             $row[] = $item->jabatan;
             $row[] = $item->mapel;
             $row[] = $item->kelas;
@@ -162,7 +162,7 @@ class Pengajar extends CI_Controller
             'kelas'     => $this->Kelas_model->get_data(),
             'tahun'     => $this->Tahun_model->get_detail_data($this->Pengajar_model->get_detail_data($id)['id_tahun']),
             'pengajar'  => $this->Pengajar_model->get_detail_data($id),
-            'jabatan'   => ['Guru Kelas', 'Guru Agama', 'Guru Penjas'],
+            'jabatan'   => ['Guru Kelas', 'Guru Agama','Guru Bahasa', 'Guru Penjas'],
             'menu'      => 'pengajar',
             'breadcrumb' => [
                 0 => (object)[
@@ -205,8 +205,8 @@ class Pengajar extends CI_Controller
     private function _rules()
     {
         $this->form_validation->set_rules('guru', 'Guru', 'required');
+        $this->form_validation->set_rules('jabatan', 'Jabatan', 'required');
         $this->form_validation->set_rules('mapel[]', 'Kompetensi Dasar', 'required');
         $this->form_validation->set_rules('kelas', 'Kelas', 'required');
-        $this->form_validation->set_rules('jabatan', 'Jabatan', 'required');
     }
 }

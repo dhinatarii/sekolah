@@ -32,12 +32,17 @@ class Mapel_model extends CI_Model
         $this->db->where('tm.id_mapel', $id_mapel);
         $this->db->where('tp.id_kelas', $id_kelas);
         $this->db->where('tk.jenis_penilaian', $jenis_nilai);
+        $this->db->order_by('tk.nama_kd', 'asc');
         return $this->db->get()->result();
     }
 
     public function get_kd_permapel($id_mapel)
     {
-        return $this->db->get_where('tb_kd', ['id_mapel' => $id_mapel])->result();
+        $this->db->select('*');
+        $this->db->from('tb_kd');
+        $this->db->where('id_mapel', $id_mapel);
+        $this->db->order_by('nama_kd', 'asc');
+        return $this->db->get()->result();
     }
 
     public function get_kd_detail($id_kd)

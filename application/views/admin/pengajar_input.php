@@ -57,6 +57,7 @@
                         <option value="">--Pilih Jabatan--</option>
                         <option value="Guru Kelas">Guru Kelas</option>
                         <option value="Guru Agama">Guru Agama</option>
+                        <option value="Guru Agama">Guru Bahasa</option>
                         <option value="Guru Penjas">Guru Penjas</option>
                     </select>
                     <?php echo form_error('jabatan', '<div class="text-danger small ml-3">', '</div>') ?>

@@ -89,7 +89,8 @@ class Nilai extends CI_Controller
             }
 
             //jumlah dan rata-rata
-            $html = $html . '<th style="vertical-align : middle;text-align:center;">Jumlah</th>
+            // <th style="vertical-align : middle;text-align:center;">Jumlah</th>
+            $html = $html . '
                             <th style="vertical-align : middle;text-align:center;">Rata-rata</th>
                             </tr></thead><tbody>';
 
@@ -102,7 +103,9 @@ class Nilai extends CI_Controller
                     $html = $html . '<td>' . $value_dt[$value_kd->nama_kd] . '</td>';
                 }
 
-                $html = $html . "<td>{$value_dt['jumlah']}</td><td>{$value_dt['rerata']}</td></tr>";
+                // <td>{$value_dt['jumlah']}</td>
+                $html = $html . "
+                <td>{$value_dt['rerata']}</td></tr>";
             }
 
             //body table min
@@ -123,7 +126,9 @@ class Nilai extends CI_Controller
                     $html = $html . '<td>' . $value_dt[$value_kd->nama_kd] . '</td>';
                 }
 
-                $html = $html . "<td>{$value_dt['jumlah']}</td><td>{$value_dt['rerata']}</td></tr>";
+                // <td>{$value_dt['jumlah']}</td>
+                $html = $html . "
+                <td>{$value_dt['rerata']}</td></tr>";
             }
 
             //body table max
@@ -135,7 +140,9 @@ class Nilai extends CI_Controller
                     $html = $html . '<td>' . $value_dt[$value_kd->nama_kd] . '</td>';
                 }
 
-                $html = $html . "<td>{$value_dt['jumlah']}</td><td>{$value_dt['rerata']}</td></tr>";
+                // <td>{$value_dt['jumlah']}</td>
+                $html = $html . "
+                <td>{$value_dt['rerata']}</td></tr>";
             }
 
             //body table jumlah
@@ -147,7 +154,9 @@ class Nilai extends CI_Controller
                     $html = $html . '<td>' . $value_dt[$value_kd->nama_kd] . '</td>';
                 }
 
-                $html = $html . "<td>{$value_dt['jumlah']}</td><td>{$value_dt['rerata']}</td></tr>";
+                // <td>{$value_dt['jumlah']}</td>
+                $html = $html . "
+                <td>{$value_dt['rerata']}</td></tr>";
             }
 
             //body table rerata
@@ -159,7 +168,9 @@ class Nilai extends CI_Controller
                     $html = $html . '<td>' . $value_dt[$value_kd->nama_kd] . '</td>';
                 }
 
-                $html = $html . "<td>{$value_dt['jumlah']}</td><td>{$value_dt['rerata']}</td></tr>";
+                // <td>{$value_dt['jumlah']}</td>
+                $html = $html . "
+                <td>{$value_dt['rerata']}</td></tr>";
             }
 
             //akhir table
@@ -244,6 +255,7 @@ class Nilai extends CI_Controller
             $html = $html . '<div class="card">
                     <div class="card-body">
                         ' . anchor('walikelas/nilai/input?id_mapel=' . $id_mapel . '&id_kd=' . $id_kd . '&nilai=' . $nilai, '<button class="btn btn-sm btn-primary mb-3 mr-2"><i class="fas fa-plus fa-sm"></i> Tambah Nilai</button>') . '
+                        ' . anchor('walikelas/nilai/archivedata?id_mapel=' . $id_mapel . '&id_kd=' . $id_kd . '&tahun=' . $tahun . '&nilai=' . $nilai, '<button class="btn btn-sm btn-dark mb-3 mr-2"><i class="fas fa-archive fa-sm"></i> Arsip Nilai</button>') . '
                         <h5>' . $kd['nama_kd'] . '</h5>
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table">
                             <thead>
@@ -255,7 +267,7 @@ class Nilai extends CI_Controller
             foreach ($jenis as $jn => $value) {
                 $html = $html . '<th class="text-center">' .
                     anchor('walikelas/nilai/edit?id_mapel=' . $id_mapel . '&id_kd=' . $id_kd . '&jenis=' . $value->jenis . '&nilai=' . $nilai, '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-edit fa-sm"></i></div>') .
-                    '<a href="' . base_url('walikelas/nilai/delete?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel . '&id_kd=' . $id_kd . '&jenis=' . $value->jenis . '&nilai=' . $nilai) . '" class="btn btn-sm btn-danger mr-1 ml-1 mb-1" onclick="return deleteNilai(event)"><i class="fa fa-trash fa-sm"></i></a>' .
+                    '<a href="' . base_url('walikelas/nilai/archive?id_kelas=' . $id_kelas . '&id_mapel=' . $id_mapel . '&id_kd=' . $id_kd . '&jenis=' . $value->jenis . '&nilai=' . $nilai) . '" class="btn btn-sm btn-dark mr-1 ml-1 mb-1" onclick="return deleteNilai(event)"><i class="fa fa-archive fa-sm"></i></a>' .
                     '</th>';
             }
 
@@ -436,14 +448,105 @@ class Nilai extends CI_Controller
         }
     }
 
-    public function delete()
+    public function archivedata()
+    {
+        $id_mapel   = $this->input->get('id_mapel', TRUE);
+        $id_kd      = $this->input->get('id_kd', TRUE);
+        $tahun      = $this->input->get('tahun', TRUE);
+        $nilai      = $this->input->get('nilai', TRUE);
+
+        if (!isset($id_mapel) || !isset($nilai) || !isset($id_kd) || !isset($tahun)) {
+            redirect('error_404');
+        }
+
+        $data = $this->User_model->get_detail_guru($this->session->userdata['id_user'], $this->session->userdata['level']);
+        $kelas = $this->Kelas_model->get_like_walikelas($data['nama']);
+
+        $data_nilai     = $this->Arsip_model->get_nilai_perkd($kelas['id_kelas'], $id_mapel, $id_kd, $tahun);
+        $jenis          = $this->Arsip_model->get_jenis_nilai_in_perkd($kelas['id_kelas'], $id_mapel, $id_kd, $tahun);
+        $kd             = $this->Mapel_model->get_kd_detail($id_kd);
+        $result_jenis   = array_column($this->Nilai_model->get_jenis_nilai_in_perkd_array($kelas['id_kelas'], $id_mapel, $id_kd, $tahun), 'jenis');
+        $object_jenis   = ['Tugas Harian 1', 'Tugas Harian 2', 'Tugas Harian 3', 'Tugas Harian 4', 'Ulangan Harian 1', 'Ulangan Harian 2', 'Ulangan Harian 3', 'Ulangan Harian 4', 'UTS', 'UAS'];
+
+        $data = array(
+            'id_user'       => $data['id_user'],
+            'nama'          => $data['nama'],
+            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'         => $data['level'],
+            'id_kelas'      => $kelas['id_kelas'],
+            'id_mapel'      => $id_mapel,
+            'jenis_nilai'   => $nilai,
+            'kelas'         => $this->Kelas_model->get_detail_data($kelas['id_kelas']),
+            'mapel'         => $this->Mapel_model->get_detail_data($id_mapel),
+            'kd'            => $kd,
+            'tahun'         => $this->Tahun_model->get_active_stats(),
+            'jenis'         => $jenis,
+            'data'          => $data_nilai,
+            'jenis_penilai' => array_diff($object_jenis, $result_jenis),
+            'menu'          => 'nilai',
+            'breadcrumb'    => [
+                0 => (object)[
+                    'name' => 'Dashboard',
+                    'link' => 'walikelas'
+                ],
+                1 => (object)[
+                    'name' => 'Nilai',
+                    'link' => 'walikelas/nilai'
+                ],
+                2 => (object)[
+                    'name' => 'Detail',
+                    'link' => 'walikelas/nilai/kd?id_kelas=' . $kelas['id_kelas'] . '&id_mapel=' . $id_mapel . '&nilai=' . $nilai
+                ],
+                3 => (object)[
+                    'name' => 'Arsip',
+                    'link' => NULL
+                ]
+            ]
+        );
+
+        $this->load->view('templates/header');
+        $this->load->view('templates_guruwali/sidebar', $data);
+        $this->load->view('guru_wali/nilai_arsip', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function archive()
     {
         $id_kelas   = $this->input->get('id_kelas', TRUE);
+        $id_mapel   = $this->input->get('id_mapel', TRUE);
         $id_kd      = $this->input->get('id_kd', TRUE);
         $jenis      = $this->input->get('jenis', TRUE);
-        $id_mapel   = $this->input->get('id_mapel', TRUE);
         $nilai      = $this->input->get('nilai', TRUE);
         $tahun      = $this->Tahun_model->get_active_stats();
+
+        $getnilai   = $this->Nilai_model->detail_nilai_perkd($id_kelas, $id_mapel, $id_kd, $jenis, $tahun['nama']);
+        $this->Arsip_model->input_nilai($getnilai);
+        $this->_delete($id_kelas, $id_kd, $jenis, $id_mapel, $nilai, $tahun);
+    }
+
+    public function archive_cancel()
+    {
+        $id_kelas   = $this->input->get('id_kelas', TRUE);
+        $id_mapel   = $this->input->get('id_mapel', TRUE);
+        $id_kd      = $this->input->get('id_kd', TRUE);
+        $old_jenis  = $this->input->get('oldjenis', TRUE);
+        $new_jenis  = $this->input->get('newjenis', TRUE);
+        $nilai      = $this->input->get('nilai', TRUE);
+        $tahun      = $this->Tahun_model->get_active_stats();
+
+        $getnilai   = $this->Arsip_model->detail_nilai_perkd($id_kelas, $id_mapel, $id_kd, $old_jenis, $tahun['nama']);
+        $this->Arsip_model->cancel_nilai($getnilai, $new_jenis);
+        $this->_delete_archive($id_kelas, $id_kd, $old_jenis, $id_mapel, $nilai, $tahun);
+    }
+
+    private function _delete($id_kelas, $id_kd, $jenis, $id_mapel, $nilai, $tahun)
+    {
+        // $id_kelas   = $this->input->get('id_kelas', TRUE);
+        // $id_kd      = $this->input->get('id_kd', TRUE);
+        // $jenis      = $this->input->get('jenis', TRUE);
+        // $id_mapel   = $this->input->get('id_mapel', TRUE);
+        // $nilai      = $this->input->get('nilai', TRUE);
+        // $tahun      = $this->Tahun_model->get_active_stats();
 
         if (!isset($id_kelas) || !isset($id_kd) || !isset($jenis) || !isset($id_mapel)) {
             redirect('error_404');
@@ -451,6 +554,17 @@ class Nilai extends CI_Controller
 
         $this->Nilai_model->delete_nilai($id_kelas, $id_kd, $jenis, $tahun['nama']);
         $this->session->set_flashdata('message', 'Data Nilai Berhasil Dihapus!');
+        redirect('walikelas/nilai/kd?id_mapel=' . $id_mapel . '&nilai=' . $nilai);
+    }
+
+    private function _delete_archive($id_kelas, $id_kd, $jenis, $id_mapel, $nilai, $tahun)
+    {
+        if (!isset($id_kelas) || !isset($id_kd) || !isset($jenis) || !isset($id_mapel)) {
+            redirect('error_404');
+        }
+
+        $this->Arsip_model->delete_nilai($id_kelas, $id_kd, $jenis, $tahun['nama']);
+        $this->session->set_flashdata('message', 'Data Nilai Berhasil Dipindah!');
         redirect('walikelas/nilai/kd?id_mapel=' . $id_mapel . '&nilai=' . $nilai);
     }
 

@@ -96,7 +96,7 @@ class PesertaDidik extends CI_Controller
     public function data_peserta()
     {
         $id_kelas       = $this->input->post('id_kelas', TRUE);
-        $tahun         = $this->input->post('tahun', TRUE);
+        $tahun          = $this->input->post('tahun', TRUE);
         $data_peserta   = $this->Peserta_model->get_data_kelas($id_kelas, $tahun);
         $html       = "";
         if ($data_peserta) {

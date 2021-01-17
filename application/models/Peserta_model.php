@@ -47,6 +47,11 @@ class Peserta_model extends CI_Model
         }
     }
 
+    public function get_kelas($id_siswa, $tahun)
+    {
+        return $this->db->get_where('tb_datasiswa', ['id_siswa' => $id_siswa, 'tahun_ajaran' => $tahun])->row_array();
+    }
+
     public function delete_data($id_datasiswa)
     {
         $this->db->delete('tb_datasiswa', ['id_datasiswa' => $id_datasiswa]);

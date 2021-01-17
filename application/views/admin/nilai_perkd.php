@@ -89,12 +89,12 @@
         if (href !== undefined) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
-                text: "data nilai akan dihapus",
+                text: "data nilai akan diarsipkan",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Hapus Data',
+                confirmButtonText: 'Arsip Data',
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {

@@ -7,35 +7,78 @@
         <div class="card-body">
             <div class="form-inline">
                 <select class="form-control mb-2 mr-2" id="thn_ajaran" name="thn_ajaran">
-                    <option value="">--Pilih Tahun Ajaran--</option>
                     <?php foreach ($tahun as $th) : ?>
-                        <option value="<?php echo $th->id_tahun ?>"><?= $th->nama ?> - Semester <?= $th->semester ?></option>
+                        <?php foreach ($allkelas as $kl) : ?>
+                            <?php if ($th->nama == $kl->tahun_ajaran) : ?>
+                                <?php if ($th->nama == $kl->tahun_ajaran) : ?>
+                                    <?php if ($th->id_tahun == $tahun_aktif['id_tahun']) : ?>
+                                        <option value="<?php echo $th->id_tahun ?>" selected><?= $th->nama ?> - Semester <?= $th->semester ?></option>
+                                    <?php else : ?>
+                                        <option value="<?php echo $th->id_tahun ?>"><?= $th->nama ?> - Semester <?= $th->semester ?></option>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                     <?php endforeach; ?>
                 </select>
                 <button onclick="lihatNilai()" class="btn btn-primary mb-2 mr-2"><i class="fas fa-search"></i> Lihat</button>
             </div>
-            <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-guru">
-                <thead>
-                    <tr>
-                        <th class="text-center" width="30px">No</th>
-                        <th>Mata Pelajaran</th>
-                        <th>PTS</th>
-                        <th>PAS</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($nilai as $key => $value) : ?>
+            <div id="data-nilai">
+                <h5 class="text-right">Kelas <?= $kelas ?></h5>
+                <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-guru">
+                    <thead>
                         <tr>
-                            <td class="text-center"><?= ++$key ?></td>
-                            <td><?= $value->nama_mapel ?></td>
-                            <td><?= $value->pts ?></td>
-                            <td><?= $value->pas ?></td>
+                            <th class="text-center" width="30px">No</th>
+                            <th>Mata Pelajaran</th>
+                            <th>PTS</th>
+                            <th>PAS</th>
+                            <th>Jumlah</th>
+                            <th>Rata-rata</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($nilai as $key => $value) : ?>
+                            <tr>
+                                <td class="text-center"><?= ++$key ?></td>
+                                <td><?= $value->nama_mapel ?></td>
+                                <td><?= $value->pts ?></td>
+                                <td><?= $value->pas ?></td>
+                                <td><?= $value->jumlah ?></td>
+                                <td><?= $value->rerata ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <tr>
+                            <td colspan="5">Jumlah Seluruh Nilai</td>
+                            <td><?= $total['jumlah'] ?></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">Rata-rata Seluruh Nilai</td>
+                            <td><?= $total['rerata'] ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-    <div id="data-all-nilai"></div>
 </div>
 </main>
+
+<script>
+    function lihatNilai() {
+        const tahun = $('#thn_ajaran').val()
+
+        $.ajax({
+            type: 'POST',
+            url: '<?= base_url('siswa/nilai/get_other_nilai') ?>',
+            data: {
+                id_tahun: tahun,
+            },
+            success: function(response) {
+                $('#data-nilai').html(response);
+            },
+            error: function(response) {
+                $('#data-nilai').html(response);
+            }
+        });
+    }
+</script>

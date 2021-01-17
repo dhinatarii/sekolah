@@ -106,10 +106,10 @@ class LaporanNilai extends CI_Controller
                 $html = $html . '<div class="card">
                     <div class="card-body">
                         <div>
-                            <h1 class="h1 text-center">LAPORAN DAFTAR NILAI SISWA</h1>
-                            <h2 class="text-center">SD MUHAMMADIYAH TRINI</h2>
-                            <h3 class="text-center">Tahun Ajaran ' . $tahun['nama'] . '</h3>
-                            <h4 class="text-center">Kelas ' . $kelas['kelas'] . '</h4>
+                            <h1 class="h1 text-center">LAPORAN DAFTAR NILAI SISWA ' . $nilai . '</h1>
+                            <h1 class="text-center">SD MUHAMMADIYAH TRINI</h1>
+                            <h3 class="text-center">Tahun Ajaran ' . $tahun['nama'] . ' Semester ' . $tahun['semester'] . '</h3>
+                            <h3 class="text-center">Kelas ' . $kelas['kelas'] . '</h3>
                         </div>
                         <a href="' . base_url('guru/laporannilai/excel_laporan?id_tahun=' . $id_tahun . '&id_kelas=' . $id_kelas . '&nilai=' . $nilai . '&id_guru=' . $id_guru) . '" class="btn btn-success mb-2">Print Excel</a>
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table">

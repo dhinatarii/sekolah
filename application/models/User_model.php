@@ -13,6 +13,7 @@ class User_model extends CI_Model
             $this->db->select('*');
             $this->db->from('tb_user');
             $this->db->where('level', $level);
+            $this->db->where('status', '1');
             $this->db->or_where('level', $levels);
             return $this->db->get()->num_rows();
         } else {
@@ -161,7 +162,7 @@ class User_model extends CI_Model
     }
 
     var $column_order = array(null, 'nama', 'username', 'level', 'status'); //Sesuaikan dengan field
-    var $column_search = array('username'); //field yang diizin untuk pencarian 
+    var $column_search = array('nama','username'); //field yang diizin untuk pencarian 
     var $order = array('level' => 'asc'); // default order 
 
     private function _get_datatables_query($level, $levels)

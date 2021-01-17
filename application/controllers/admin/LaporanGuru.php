@@ -86,7 +86,7 @@ class LaporanGuru extends CI_Controller
     public function data_all_guru()
     {
         $tahun   = $this->input->post('tahun', TRUE);
-        $cek_data   = $this->Laporan_model->cek_datatahun_guru($tahun);
+        $cek_data = $this->Laporan_model->cek_datatahun_guru($tahun);
         $id_tahun = ($cek_data->row_array()) ? $cek_data->row_array()['id_tahun'] : 'null';
 
         $tahun      = $this->Tahun_model->get_detail_data($id_tahun);
@@ -94,7 +94,6 @@ class LaporanGuru extends CI_Controller
         $html       = '';
 
         if ($cek_data->num_rows() > 0) {
-            // <a href="' . base_url('admin/laporanguru/pdf_laporan?q=alldata&tahun=' . $id_tahun) . '" class="btn btn-info mb-2"><i class="fas fa-print"></i> Print</a>
             $html = $html . '
                 <div class="card">
                     <div class="card-body">
@@ -103,6 +102,7 @@ class LaporanGuru extends CI_Controller
                             <h2 class="text-center">SD MUHAMMADIYAH TRINI</h2>
                             <h3 class="text-center">Tahun Ajaran ' . $tahun['nama'] . '</h3>
                         </div>
+                        <a href="' . base_url('admin/laporanguru/excel_laporan?tahun=' . $tahun['nama']) . '" class="btn btn-success mb-2"><i class="fas fa-file-excel" aria-hidden="true" ></i> Print Excel</a>
                         <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-laporanguru">
                             <thead>
                                 <tr class="text-center">
@@ -139,26 +139,7 @@ class LaporanGuru extends CI_Controller
                             </tbody>
                         </table>
                     </div>
-                </div>
-                <script>
-                    $(document).ready(function() {
-                        var table = $('#table-laporanguru').DataTable({
-                            dom: 'Bfrtip',
-                            lengthChange: false,
-                            buttons: [ 
-                                {
-                                    extend: 'excel',
-                                    text: 'Print Excel',
-                                    titleAttr: 'Excel',
-                                    className: 'btn-success'
-                                }
-                            ]
-                        });
-
-                        table.buttons().container()
-                            .appendTo( '#table-laporanguru_wrapper .col-md-6:eq(0)' );
-                    });
-                </script>";
+                </div>";
         } else {
             $html = $html . '<div class="card">
                                 <div class="card-body">
@@ -229,8 +210,11 @@ class LaporanGuru extends CI_Controller
 
     public function excel_laporan()
     {
-        $query   = $this->input->get('q');
-        $tahun   = $this->input->get('tahun');
-        $id_guru = $this->input->get('id');
+        $tahun      = $this->input->get('tahun');
+        $cek_data   = $this->Laporan_model->cek_datatahun_guru($tahun);
+        $id_tahun   = ($cek_data->row_array()) ? $cek_data->row_array()['id_tahun'] : 'null';
+        $tahun      = $this->Tahun_model->get_detail_data($id_tahun);
+        $data_guru  = $this->Laporan_model->get_all_lap_guru($id_tahun);
+        $this->myexcel->generate_guru('Admin', $tahun, $data_guru);
     }
 }
