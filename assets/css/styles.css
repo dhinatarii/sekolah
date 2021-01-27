@@ -9,3 +9,12 @@
     background-size: contain;
     margin-bottom: 18px;
 }
+
+.center-cropped {
+	object-fit: none;
+	/* Do not scale the image */
+	object-position: center;
+	/* Center the image within the element */
+	height: 36px;
+	width: 36px;
+}

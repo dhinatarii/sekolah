@@ -1,4 +1,5 @@
 <div class="container-fluid">
+    <?= anchor('admin/user/resetpass?level=' . $user_level . '&id=' . $user_id, '<button class="btn btn-sm btn-danger mb-3"><i class="fas fa-undo fa-sm"></i> Reset Password</button>') ?>
     <div class="card">
         <div class="card-header">
             <i class="fas fa-lock mr-3"></i>Ganti Password
@@ -21,3 +22,5 @@
         </div>
     </div>
 </div>
+
+</main>
