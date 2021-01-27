@@ -17,16 +17,16 @@ class Dashboard extends CI_Controller
 
     public function index()
     {
+        $tahun      = $this->Tahun_model->get_active_stats();
         $data       = $this->User_model->get_detail_siswa($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
             'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
-            'kelas'     => $data['kelas'],
-            'wali_kelas' => $data['wali_kelas'],
+            'kelas'     => $this->Kelas_model->get_detail_siswa($data['id_siswa'], $tahun),
             'menu'      => 'dashboard',
-            'tahun'     => $this->Tahun_model->get_active_stats(),
+            'tahun'     => $tahun,
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',

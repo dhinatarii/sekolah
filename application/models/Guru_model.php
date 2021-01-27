@@ -6,9 +6,19 @@ class Guru_model extends CI_Model
         return $this->db->get('tb_guru')->result();
     }
 
-    public function get_count()
+    // public function get_count()
+    // {
+    //     return $this->db->get('tb_guru')->num_rows();
+    // }
+    public function get_count($tahun)
     {
-        return $this->db->get('tb_guru')->num_rows();
+        $tahun_ajaran = ($tahun) ? $tahun['nama'] : 'null';
+        $this->db->from('tb_guru tg');
+        $this->db->join('tb_pengajar tp', 'tp.id_guru = tg.id_guru', 'inner');
+        $this->db->join('tb_tahunajaran tt', 'tt.id_tahun = tp.id_tahun', 'inner');
+        $this->db->where('tt.nama', $tahun_ajaran);
+        $this->db->group_by('tg.id_guru');
+        return $this->db->get()->num_rows();
     }
 
     public function get_data_only_name()

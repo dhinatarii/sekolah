@@ -258,7 +258,7 @@ class Guru extends CI_Controller
 
     function _rules()
     {
-        $this->form_validation->set_rules('nip', 'NIP', 'numeric|max_length[20]');
+        $this->form_validation->set_rules('nip', 'NIP', 'required|max_length[20]');
         $this->form_validation->set_rules('nama', 'Nama', 'required|max_length[100]');
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
         $this->form_validation->set_rules('no_hp', 'No Handphone', 'required|numeric|min_length[10]|max_length[15]');

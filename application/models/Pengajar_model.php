@@ -67,6 +67,8 @@ class Pengajar_model extends CI_Model
         $this->db->join('tb_tahunajaran tt', 'tp.id_tahun = tt.id_tahun', 'left');
         $this->db->where('tt.id_tahun', $id_tahun);
         $this->db->group_by('tk.id_kelas');
+        $this->db->order_by('tk.kelas', 'asc');
+
 
         return $this->db->get();
     }
@@ -88,8 +90,9 @@ class Pengajar_model extends CI_Model
         return $this->db->get()->row_array();
     }
 
-    public function get_count_pengampu($id_guru, $id_tahun)
+    public function get_count_pengampu($id_guru, $tahun)
     {
+        $id_tahun = ($tahun) ? $tahun['id_tahun'] : 'null';
         $query = $this->db->query("
             select
                 tm.jabatan ,count(tm.jumlah_kelas) as 'jumlah_kelas'
@@ -110,6 +113,7 @@ class Pengajar_model extends CI_Model
 
     public function get_count_siswa($id_guru, $tahun)
     {
+        $tahun_ajaran = ($tahun) ? $tahun['nama'] : 'null';
         $query = $this->db->query("
         select 
             count(tm.jumlah_siswa) as 'jumlah_siswa'
@@ -122,7 +126,7 @@ class Pengajar_model extends CI_Model
             inner join tb_datasiswa td 
                 on td.id_kelas = tk.id_kelas 
             where tp.id_guru = $id_guru
-                and td.tahun_ajaran = '$tahun'
+                and td.tahun_ajaran = '$tahun_ajaran'
             group by td.id_siswa) tm");
         return $query->row_array();
     }
@@ -136,7 +140,7 @@ class Pengajar_model extends CI_Model
         $this->db->join('tb_tahunajaran tt', 'tt.id_tahun = tp.id_tahun', 'left');
         $this->db->where('tp.id_guru', $id_guru);
         $this->db->group_by('tk.id_kelas');
-
+        $this->db->order_by('tk.kelas', 'asc');
 
         if ($id_tahun) {
             $this->db->where('tt.id_tahun', $id_tahun);
@@ -160,7 +164,7 @@ class Pengajar_model extends CI_Model
         $this->db->delete('tb_pengajar', ['id_pengajar' => $id]);
     }
 
-    var $column_order = array(null, 'tg.nama', 'jabatan', 'mapel', 'kelas', 'tahun', 'semester'); //Sesuaikan dengan field
+    var $column_order = array(null, 'tg.nama', 'tp.jabatan', 'mapel', 'tk.kelas', 'tahun', 'semester'); //Sesuaikan dengan field
     var $column_search = array('tg.nama'); //field yang diizin untuk pencarian 
     var $order = array('kelas' => 'asc'); // default order 
 
@@ -173,6 +177,8 @@ class Pengajar_model extends CI_Model
         $this->db->join('tb_kelas tk', 'tp.id_kelas  = tk.id_kelas', 'left');
         $this->db->join('tb_tahunajaran tt', 'tp.id_tahun = tt.id_tahun', 'left');
         $this->db->order_by('tk.kelas', 'asc');
+        $this->db->order_by('tp.jabatan', 'asc');
+
 
 
         $i = 0;

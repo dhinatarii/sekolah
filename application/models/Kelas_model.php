@@ -1,9 +1,22 @@
 <?php
 class Kelas_model extends CI_Model
 {
+    // public function get_data()
+    // {
+    //     $this->db->from('tb_kelas tk');
+    //     $this->db->join('tb_pengajar tp', 'tp.id_kelas = tk.id_kelas', 'inner');
+    //     $this->db->join('tb_tahunajaran tt', 'tt.id_tahun = tp.id_tahun', 'inner');
+    //     $this->db->where('tt.status', '1');
+    //     $this->db->order_by('tk.kelas', 'asc');
+    //     $this->db->group_by('tk.id_kelas');
+    //     return $this->db->get()->result();
+    // }
+
     public function get_data()
     {
-        return $this->db->get('tb_kelas')->result();
+        $this->db->from('tb_kelas');
+        $this->db->order_by('kelas', 'asc');
+        return $this->db->get()->result();
     }
 
     public function get_like_data($query)
@@ -31,6 +44,16 @@ class Kelas_model extends CI_Model
     public function get_detail_data($id)
     {
         return $this->db->get_where('tb_kelas', ['id_kelas' => $id])->row_array();
+    }
+
+    public function get_detail_siswa($id, $tahun)
+    {
+        $tahun = ($tahun) ? $tahun['nama'] : 'null';
+        $this->db->from('tb_datasiswa td');
+        $this->db->join('tb_kelas tk', 'tk.id_kelas = td.id_kelas', 'inner');
+        $this->db->where('td.id_siswa', $id);
+        $this->db->where('td.tahun_ajaran', $tahun);
+        return $this->db->get()->row_array();
     }
 
     public function get_id_kelas()
@@ -121,6 +144,7 @@ class Kelas_model extends CI_Model
     {
 
         $this->db->from('tb_kelas');
+        $this->db->order_by('kelas', 'asc');
 
         $i = 0;
 

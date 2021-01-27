@@ -17,9 +17,10 @@ class Nilai extends CI_Controller
 
     public function index()
     {
-        $tahun      = $this->Tahun_model->get_active_stats();
         $data       = $this->User_model->get_detail_siswa($this->session->userdata['id_user'], $this->session->userdata['level']);
-        $id_kelas   = $data['id_kelas'];
+        $tahun      = $this->Tahun_model->get_active_stats();
+        $kelas      = $this->Kelas_model->get_detail_siswa($data['id_siswa'], $tahun);
+        $id_kelas   = $kelas['id_kelas'];
         $id_tahun   = $tahun['id_tahun'];
         $id_siswa   = $data['id_siswa'];
         $nilai      = $this->Nilai_model->nilai_persiswa($id_siswa, $id_kelas, $id_tahun);
@@ -30,9 +31,8 @@ class Nilai extends CI_Controller
             'nama'      => $data['nama'],
             'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
-            'kelas'     => $data['kelas'],
+            'kelas'     => $kelas,
             'allkelas'  => $allkelas,
-            'wali_kelas' => $data['wali_kelas'],
             'menu'      => 'dashboard',
             'tahun'     => $this->Tahun_model->get_data(),
             'tahun_aktif' => $this->Tahun_model->get_active_stats(),

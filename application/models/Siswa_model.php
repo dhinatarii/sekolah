@@ -31,11 +31,13 @@ class Siswa_model extends CI_Model
 
     public function get_data_perkelas($id_kelas, $tahun)
     {
+        $tahun = ($tahun) ? $tahun['nama'] : 'null';
         return $this->_get_data_perkelas($id_kelas, $tahun)->result();
     }
 
     public function get_count_perkelas($id_kelas, $tahun)
     {
+        $tahun = ($tahun) ? $tahun['nama'] : 'null';
         return $this->_get_data_perkelas($id_kelas, $tahun)->num_rows();
     }
 
@@ -49,12 +51,24 @@ class Siswa_model extends CI_Model
         return $this->db->get();
     }
 
-    public function get_count_allsiswa()
+    // public function get_count_allsiswa()
+    // {
+    //     $this->db->select('*');
+    //     $this->db->from('tb_siswa');
+    //     $this->db->join('tb_orangtua', 'tb_siswa.id_orangtua = tb_orangtua.id_orangtua', 'left');
+    //     $this->db->join('tb_alamat', 'tb_orangtua.id_alamat = tb_alamat.id_alamat', 'left');
+    //     return $this->db->get()->num_rows();
+    // }
+
+    public function get_count_allsiswa($tahun)
     {
+        $tahun_ajaran = ($tahun) ? $tahun['nama'] : 'null';
         $this->db->select('*');
         $this->db->from('tb_siswa');
         $this->db->join('tb_orangtua', 'tb_siswa.id_orangtua = tb_orangtua.id_orangtua', 'left');
         $this->db->join('tb_alamat', 'tb_orangtua.id_alamat = tb_alamat.id_alamat', 'left');
+        $this->db->join('tb_datasiswa', 'tb_datasiswa.id_siswa = tb_siswa.id_siswa', 'inner');
+        $this->db->where('tb_datasiswa.tahun_ajaran', $tahun_ajaran);
         return $this->db->get()->num_rows();
     }
 
@@ -168,9 +182,11 @@ class Siswa_model extends CI_Model
 
     private function _input_user()
     {
+        $date = date_create($this->input->post('tanggal_lahir', TRUE));
+        $dateFormat = date_format($date, "mY");
         $data = array(
             'username'  => $this->input->post('nis', TRUE),
-            'password'  => MD5($this->input->post('tanggal_lahir', TRUE)),
+            'password'  => MD5($dateFormat),
             'level'     => 'siswa',
             'status'    => '1'
         );

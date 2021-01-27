@@ -5,7 +5,7 @@
     </div>
 
     <div class="alert alert-success" role="alert">
-        <h4 class="alert-heading">Sealamt Datang!</h4>
+        <h4 class="alert-heading">Selamat Datang!</h4>
         <p>Selamat Datang Orang Tua dari <strong><?php echo $nama; ?></strong> di Sistem Informasi Pengolahan Data Nilai Siswa SD Muhammadiyah Trini</p>
         <hr>
     </div>
@@ -61,7 +61,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Kelas</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $kelas ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $nama_kelas = ($kelas) ? $kelas['kelas'] : 'Belum Ditentukan' ; ?></div>
                         </div>
                         <div class="col-auto ">
                             <i class="fas fa-chalkboard fa-2x text-gray-300"></i>
@@ -78,7 +78,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Wali Kelas</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $wali_kelas ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $nama_wali = ($kelas) ? $kelas['wali_kelas'] : 'Belum Ditentukan'; ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>

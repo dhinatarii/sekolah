@@ -1,7 +1,8 @@
 <div class="container-fluid">
     <!-- Page Heading -->
+    <?php $button = ($tahun) ? 'enabled' : 'disabled'; ?>
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-sort-numeric-down"></i> Data Nilai <?= $thn = ($tahun['nama'] != null) ? '(Tahun Ajaran ' . $tahun['nama'] . ')' : '(Tidak Ada Tahun Ajaran Yang Aktif)';  ?></h1>
+        <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-sort-numeric-down"></i> Data Nilai <?= $thn = ($tahun) ? '(Tahun Ajaran ' . $tahun['nama'] . ')' : '(Tidak Ada Tahun Ajaran Yang Aktif)';  ?></h1>
     </div>
 
     <div class="row">
@@ -37,7 +38,7 @@
                         </select>
                         <?php echo form_error('penilaian', '<div class="text-danger small ml-3">', '</div>') ?>
                     </div>
-                    <button onclick="searchNilai()" class="btn btn-primary"><i class="fas fa-search"></i> Cari</button>
+                    <button onclick="searchNilai()" class="btn btn-primary" <?= $button ?>><i class="fas fa-search"></i> Cari</button>
                 </div>
             </div>
         </div>

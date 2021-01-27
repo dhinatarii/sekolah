@@ -29,7 +29,7 @@ class Dashboard extends CI_Controller
             'tahun'     => $tahun,
             'kelas'     => $kelas,
             'pengajar'  => $this->Pengajar_model->get_count_perpengajar($data['id_guru']),
-            'siswa'     => $this->Siswa_model->get_count_perkelas($kelas['id_kelas'], $tahun['nama']),
+            'siswa'     => $this->Siswa_model->get_count_perkelas($kelas['id_kelas'], $tahun),
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',

@@ -10,14 +10,29 @@ class User_model extends CI_Model
     public function count_user($level, $levels = null)
     {
         if ($levels != null) {
-            $this->db->select('*');
-            $this->db->from('tb_user');
-            $this->db->where('level', $level);
-            $this->db->where('status', '1');
-            $this->db->or_where('level', $levels);
-            return $this->db->get()->num_rows();
+            // $this->db->select('*');
+            // $this->db->from('tb_user');
+            // $this->db->where('level', $level);
+            // $this->db->or_where('level', $levels);
+            // $this->db->where('status', '1');
+            $query = $this->db->query("
+                select
+                    *
+                from
+                    tb_user tu
+                where
+                    tu.username in (
+                    select
+                        tu.username
+                    from
+                        tb_user tu
+                    where
+                        tu.level = '$level'
+                        or tu.level = '$levels')
+                    and tu.status = '1'");
+            return $query->num_rows();
         } else {
-            return $this->db->get_where('tb_user', ['level' => $level])->num_rows();
+            return $this->db->get_where('tb_user', ['level' => $level, 'status' => '1'])->num_rows();
         }
     }
 
@@ -59,13 +74,23 @@ class User_model extends CI_Model
         return $this->db->get()->row_array();
     }
 
+    // public function get_detail_siswa($id, $level)
+    // {
+    //     $this->db->select('*');
+    //     $this->db->from('tb_user tu');
+    //     $this->db->join('tb_siswa ts', "tu.id_user = ts.id_user", 'left');
+    //     $this->db->join('tb_datasiswa td', "ts.id_siswa = td.id_siswa", 'left');
+    //     $this->db->join('tb_kelas tk', "td.id_kelas = tk.id_kelas", 'left');
+    //     $this->db->where('tu.id_user', $id);
+    //     $this->db->where('tu.level', $level);
+    //     return $this->db->get()->row_array();
+    // }
+
     public function get_detail_siswa($id, $level)
     {
         $this->db->select('*');
         $this->db->from('tb_user tu');
         $this->db->join('tb_siswa ts', "tu.id_user = ts.id_user", 'left');
-        $this->db->join('tb_datasiswa td', "ts.id_siswa = td.id_siswa", 'left');
-        $this->db->join('tb_kelas tk', "td.id_kelas = tk.id_kelas", 'left');
         $this->db->where('tu.id_user', $id);
         $this->db->where('tu.level', $level);
         return $this->db->get()->row_array();
@@ -156,13 +181,25 @@ class User_model extends CI_Model
         $this->db->update('tb_user', $data);
     }
 
+    public function reset_password($id, $date_input)
+    {
+        $date = date_create($date_input);
+        $dateFormat = date_format($date, "mY");
+        $data = array(
+            'password'  => MD5($dateFormat),
+        );
+
+        $this->db->where('id_user', $id);
+        $this->db->update('tb_user', $data);
+    }
+
     public function delete_data($id)
     {
         $this->db->delete('tb_user', ['id_user' => $id]);
     }
 
     var $column_order = array(null, 'nama', 'username', 'level', 'status'); //Sesuaikan dengan field
-    var $column_search = array('nama','username'); //field yang diizin untuk pencarian 
+    var $column_search = array('nama', 'username'); //field yang diizin untuk pencarian 
     var $order = array('level' => 'asc'); // default order 
 
     private function _get_datatables_query($level, $levels)

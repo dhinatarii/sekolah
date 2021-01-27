@@ -357,7 +357,7 @@ class Nilai extends CI_Controller
             'mapel'             => $this->Mapel_model->get_detail_data($id_mapel),
             'komp_dasar'        => $this->Mapel_model->get_kd_detail($id_kd),
             'pengajar'          => $this->Pengajar_model->get_detail_data_with_kelas_and_mapel($id_kelas, $id_mapel),
-            'siswa'             => $this->Siswa_model->get_data_perkelas($id_kelas, $tahun['nama']),
+            'siswa'             => $this->Siswa_model->get_data_perkelas($id_kelas, $tahun),
             'jenis_nilai'       => array_diff($object_jenis, $result_jenis),
             'menu'              => 'nilai',
             'breadcrumb'        => [
@@ -418,7 +418,7 @@ class Nilai extends CI_Controller
             'mapel'         => $this->Mapel_model->get_detail_data($id_mapel),
             'komp_dasar'    => $this->Mapel_model->get_kd_detail($id_kd),
             'pengajar'      => $this->Pengajar_model->get_detail_data_with_kelas_and_mapel($id_kelas, $id_mapel),
-            'siswa'         => $this->Siswa_model->get_data_perkelas($id_kelas, $tahun['nama']),
+            'siswa'         => $this->Siswa_model->get_data_perkelas($id_kelas, $tahun),
             'nilai'         => $this->Nilai_model->detail_nilai_perkd($id_kelas, $id_mapel, $id_kd, $jenis, $tahun['nama']),
             'jenis_nilai'   => $jenis,
             'jenis_penilaian' => $nilai,

@@ -17,6 +17,7 @@ class Dashboard extends CI_Controller
 
     public function index()
     {
+        $tahun = $this->Tahun_model->get_active_stats();
         $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
             'id_user'   => $data['id_user'],
@@ -24,10 +25,10 @@ class Dashboard extends CI_Controller
             'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'menu'      => 'dashboard',
-            'tahun'     => $this->Tahun_model->get_active_stats(),
-            'siswa'     => $this->Siswa_model->get_count_allsiswa(),
+            'tahun'     => $tahun,
+            'siswa'     => $this->Siswa_model->get_count_allsiswa($tahun),
             'kelas'     => $this->Kelas_model->get_count(),
-            'guru'      => $this->Guru_model->get_count(),
+            'guru'      => $this->Guru_model->get_count($tahun),
             'breadcrumb' => [
                 0 => (object)[
                     'name' => 'Dashboard',

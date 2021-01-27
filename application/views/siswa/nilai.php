@@ -24,7 +24,7 @@
                 <button onclick="lihatNilai()" class="btn btn-primary mb-2 mr-2"><i class="fas fa-search"></i> Lihat</button>
             </div>
             <div id="data-nilai">
-                <h5 class="text-right">Kelas <?= $kelas ?></h5>
+                <h5 class="text-right">Kelas <?= $nama_kelas = ($kelas) ? $kelas['kelas'] : 'Belum Ditentukan' ; ?></h5>
                 <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-guru">
                     <thead>
                         <tr>

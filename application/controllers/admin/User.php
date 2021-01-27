@@ -114,11 +114,11 @@ class User extends CI_Controller
             $row[] = ($item->status == 1) ? '<strong class="badge badge-success">aktif</strong>' : '<strong class="badge badge-danger">tidak aktif</strong>';
             $row[] = $isDetail
                 . anchor(
-                    'admin/user/edit/' . $level . '/' . $item->id_user,
+                    'admin/user/edit/' . $item->level . '/' . $item->id_user,
                     '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>'
                 )
                 . anchor(
-                    'admin/user/change_password?level=' . $level . '&id=' . $item->id_user,
+                    'admin/user/change_password?level=' . $item->level . '&id=' . $item->id_user,
                     '<div class="btn btn-sm btn-success  mr-1 ml-1 mb-1"><i class="fa fa-lock"></i></div>'
                 ) . $isDelete;
             $data[] = $row;
@@ -335,6 +335,8 @@ class User extends CI_Controller
             'nama'          => $data['nama'],
             'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
+            'user_id'       => $id,
+            'user_level'    => $level,
             'menu'          => 'user',
             'breadcrumb'    => [
                 0 => (object)[
@@ -370,6 +372,36 @@ class User extends CI_Controller
         }
     }
 
+    public function resetpass()
+    {
+        $id     = $this->input->get('id', TRUE);
+        $level  = $this->input->get('level', TRUE);
+        $detail = $level == 'admin' ? '1' : ($level == 'guru' ? '2' : ($level == 'wali kelas' ? '3' : ($level == 'siswa' ? '4' : NULL)));
+        if ($level == 'admin') {
+            $data = $this->User_model->get_detail_admin($id, $level);
+            $this->User_model->reset_password($id, $data['tanggal_lahir']);
+            $this->session->set_flashdata('message', 'Password Berhasil Direset!');
+            redirect('admin/user/detail/' . $detail);
+        } elseif ($level == 'wali kelas') {
+            $data = $this->User_model->get_detail_guru($id, $level);
+            $this->User_model->reset_password($id, $data['tanggal_lahir']);
+            $this->session->set_flashdata('message', 'Password Berhasil Direset!');
+            redirect('admin/user/detail/' . $detail);
+        } elseif ($level == 'guru') {
+            $data = $this->User_model->get_detail_guru($id, $level);
+            $this->User_model->reset_password($id, $data['tanggal_lahir']);
+            $this->session->set_flashdata('message', 'Password Berhasil Direset!');
+            redirect('admin/user/detail/' . $detail);
+        } elseif ($level == 'siswa') {
+            $data = $this->User_model->get_detail_siswa($id, $level);
+            $this->User_model->reset_password($id, $data['tanggal_lahir']);
+            $this->session->set_flashdata('message', 'Password Berhasil Direset!');
+            redirect('admin/user/detail/' . $detail);
+        } else {
+            redirect('error_404');
+        }
+    }
+
     public function delete()
     {
         $level      = $this->uri->segment(4);
@@ -393,7 +425,7 @@ class User extends CI_Controller
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]|max_length[50]');
         $this->form_validation->set_rules('konfirmasi', 'Konfirmasi Password', "required|min_length[6]|matches[password]|max_length[50]");
         $this->form_validation->set_rules('status', 'status', 'required');
-        $this->form_validation->set_rules('nip', 'NIP', 'numeric|max_length[20]');
+        $this->form_validation->set_rules('nip', 'NIP', 'required|max_length[20]');
         $this->form_validation->set_rules('nama', 'Nama', 'required|max_length[100]');
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
         $this->form_validation->set_rules('no_hp', 'No Handphone', 'required|numeric|min_length[10]|max_length[15]');
