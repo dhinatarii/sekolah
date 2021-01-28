@@ -84,13 +84,18 @@ class Siswa extends CI_Controller
             redirect('admin/siswa');
         }
 
+        $siswa = $this->Siswa_model->get_detail_data($id);
+        if (!isset($siswa)) {
+            redirect('error_404');
+        }
+
         $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
             'level'         => $data['level'],
             'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
-            'siswa'         => $this->Siswa_model->get_detail_data($id),
+            'siswa'         => $siswa,
             'kelas'         => $this->Kelas_model->get_data(),
             'jenis_kelamin' => ['Laki-laki', 'Perempuan'],
             'menu'          => 'siswa',

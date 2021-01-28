@@ -58,7 +58,7 @@
                 </div>
                 <div class="form-group">
                     <label for="tahun">Tahun Ajaran</label>
-                    <input type="text" name="tahun" id="tahun" placeholder="Masukan Tahun Ajaran" class="form-control" value="<?= $tahun['nama'] ?>" disabled>
+                    <input type="text" name="tahun" id="tahun" placeholder="Masukan Tahun Ajaran" class="form-control" value="<?= $tahun['nama'] . ' - ' . $tahun['semester'] ?>" disabled>
                     <?php echo form_error('tahun', '<div class="text-danger small ml-3">', '</div>') ?>
                 </div>
                 <button type="submit" class="btn btn-primary">Simpan</button>

@@ -20,7 +20,6 @@ class Guru extends CI_Controller
         }
     }
 
-
     public function index()
     {
         $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
@@ -161,13 +160,18 @@ class Guru extends CI_Controller
             redirect('admin/guru');
         }
 
+        $guru = $this->Guru_model->get_detail_data($id);
+        if (!isset($guru)) {
+            redirect('error_404');
+        }
+
         $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
             'level'         => $data['level'],
             'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
-            'guru'          => $this->Guru_model->get_detail_data($id),
+            'guru'          => $guru,
             'jenis_kelamin' => ['Laki-laki', 'Perempuan'],
             'menu'          => 'guru',
             'breadcrumb'    => [

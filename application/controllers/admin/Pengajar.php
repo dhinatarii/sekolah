@@ -59,7 +59,8 @@ class Pengajar extends CI_Controller
             $row[] = $no;
             $row[] = $item->nama;
             $row[] = $item->jabatan;
-            $row[] = $item->mapel;
+            $row[] = $item->nama_mapel;
+            $row[] = $item->level;
             $row[] = $item->kelas;
             $row[] = $item->tahun;
             $row[] = $item->semester;
@@ -151,6 +152,11 @@ class Pengajar extends CI_Controller
             redirect('admin/pengajar');
         }
 
+        $tahun = $this->Tahun_model->get_detail_data($this->Pengajar_model->get_detail_data($id)['id_tahun']);
+        if (!isset($tahun)) {
+            redirect('error_404');
+        }
+
         $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
             'id_user'   => $data['id_user'],
@@ -160,9 +166,9 @@ class Pengajar extends CI_Controller
             'guru'      => $this->Guru_model->get_data(),
             'mapel'     => $this->Mapel_model->get_data(),
             'kelas'     => $this->Kelas_model->get_data(),
-            'tahun'     => $this->Tahun_model->get_detail_data($this->Pengajar_model->get_detail_data($id)['id_tahun']),
+            'tahun'     => $tahun,
             'pengajar'  => $this->Pengajar_model->get_detail_data($id),
-            'jabatan'   => ['Guru Kelas', 'Guru Agama','Guru Bahasa', 'Guru Penjas'],
+            'jabatan'   => ['Guru Kelas', 'Guru Agama', 'Guru Bahasa', 'Guru Penjas'],
             'menu'      => 'pengajar',
             'breadcrumb' => [
                 0 => (object)[

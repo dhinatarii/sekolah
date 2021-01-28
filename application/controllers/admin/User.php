@@ -103,7 +103,7 @@ class User extends CI_Controller
         $no             = @$_POST['start'];
         foreach ($list as $item) {
             $dataAdmin  = $level == 'admin' ? $this->User_model->get_detail_admin($item->id_user, $level) : NULL;
-            $isDelete   = $level == 'admin' ? '<a href="javascript:;" onclick="confirmDelete(' . $item->id_user . ')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>' : '';
+            $isDelete   = ($level == 'admin' && $no != 0) ? '<a href="javascript:;" onclick="confirmDelete(' . $item->id_user . ')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>' : '';
             $isDetail   = $level == 'admin' ? '<div id="set_detailModal" class="btn btn-sm btn-info mr-1 ml-1 mb-1" data-toggle="modal" data-target="#detailModal" data-level="' . $level . '" data-idadmin="' . $item->id_user . '" data-nip="' . $dataAdmin['nip'] . '" data-nama="' . $dataAdmin['nama'] . '" data-jeniskelamin="' . $dataAdmin['jenis_kelamin'] . '"data-tanggallahir="' . $dataAdmin['tanggal_lahir'] . '" data-nohp="' . $dataAdmin['no_hp'] . '" data-email="' . $dataAdmin['email'] . '"  data-alamat="' . $dataAdmin['alamat'] . '" data-photo="' . $dataAdmin['photo'] . '"><i class="fa fa-eye"></i></div>' : '';
             $no++;
             $row = array();
@@ -222,6 +222,7 @@ class User extends CI_Controller
         $level  = urldecode($this->uri->segment(4));
         $id     = $this->uri->segment(5);
         $detail = $level == 'admin' ? '1' : ($level == 'guru' ? '2' : ($level == 'wali kelas' ? '3' : ($level == 'siswa' ? '4' : NULL)));
+
         $data   = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data   = array(
             'id_user'       => $data['id_user'],
@@ -229,8 +230,6 @@ class User extends CI_Controller
             'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'levels'        => $level,
-            'user'          => $this->User_model->get_detail_user($id, $level),
-            'admin'         => $this->User_model->get_detail_admin($id, $level),
             'status'        => ['0', '1'],
             'jenis_kelamin' => ['Laki-laki', 'Perempuan'],
             'menu'          => 'user',
@@ -255,7 +254,15 @@ class User extends CI_Controller
         );
 
         if ($level == 'admin') {
-            $this->_rules_data();
+            $admin  = $this->User_model->get_detail_admin($id, $level);
+
+            if (!isset($admin)) {
+                redirect('error_404');
+            }
+
+            $data['admin'] = $admin;
+
+            $this->_rules();
 
             if ($this->form_validation->run() == FALSE) {
                 $this->load->view('templates/header');
@@ -309,6 +316,15 @@ class User extends CI_Controller
                 }
             }
         } else {
+
+            $user  = $this->User_model->get_detail_user($id, $level);
+
+            if (!isset($user)) {
+                redirect('error_404');
+            }
+
+            $data['user'] = $user;
+
             $this->_rules_data();
 
             if ($this->form_validation->run() == FALSE) {

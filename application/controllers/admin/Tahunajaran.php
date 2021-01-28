@@ -120,15 +120,21 @@ class TahunAjaran extends CI_Controller
             redirect('admin/tahunajaran');
         }
 
+        $tahun = $this->Tahun_model->get_detail_data($id);
+        if (!isset($tahun)) {
+            redirect('error_404');
+        }
+
         $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
             'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
-            'tahun'     => $this->Tahun_model->get_detail_data($id),
+            'tahun'     => $tahun,
             'status'    => ['0', '1'],
             'shared'    => ['0', '1'],
+            'semester'  => ['Ganjil', 'Genap'],
             'menu'      => 'tahun ajaran',
             'breadcrumb' => [
                 0 => (object)[
@@ -176,6 +182,7 @@ class TahunAjaran extends CI_Controller
     private function _rules_edit()
     {
         $this->form_validation->set_rules('nama', 'Tahun Ajaran', 'required|max_length[50]');
+        $this->form_validation->set_rules('semester', 'Semester', 'required');
         $this->form_validation->set_rules('status', 'Status', 'required');
         $this->form_validation->set_rules('shared', 'Bagikan', 'required');
     }

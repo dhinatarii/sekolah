@@ -63,12 +63,20 @@ class Tahun_model extends CI_Model
     {
         $data = array(
             'nama'      => $this->input->post('nama', TRUE),
+            'semester'  => $this->input->post('semester', TRUE),
             'status'    => $this->input->post('status', TRUE),
             'shared'    => $this->input->post('shared', TRUE),
         );
 
-        $this->db->where('id_tahun', $id);
-        $this->db->update('tb_tahunajaran', $data);
+        if ($data['status'] == '0') {
+            $this->db->where('id_tahun', $id);
+            $this->db->update('tb_tahunajaran', $data);
+        } else {
+            $this->db->update('tb_tahunajaran', ['status' => '0']);
+
+            $this->db->where('id_tahun', $id);
+            $this->db->update('tb_tahunajaran', $data);
+        }
     }
 
     public function delete_data($id)

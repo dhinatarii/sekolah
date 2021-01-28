@@ -23,6 +23,7 @@
                         <th>Guru</th>
                         <th>Jabatan</th>
                         <th>Mata Pelajaran</th>
+                        <th>Level</th>
                         <th>Kelas</th>
                         <th>Tahun Ajaran</th>
                         <th>Semester</th>

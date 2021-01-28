@@ -12,6 +12,19 @@
                     <?php echo form_error('nama', '<div class="text-danger small ml-3">', '</div>') ?>
                 </div>
                 <div class="form-group">
+                    <label for="">Semester</label>
+                    <select class="form-control" id="semester" name="semester">
+                        <?php foreach ($semester as $st) : ?>
+                            <?php if ($st == $tahun['semester']) : ?>
+                                <option value="<?= $st ?>" selected><?= $st ?></option>
+                            <?php else : ?>
+                                <option value="<?= $st ?>"><?= $st ?></option>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </select>
+                    <?php echo form_error('semester', '<div class="text-danger small ml-3">', '</div>') ?>
+                </div>
+                <div class="form-group">
                     <label for="">Bagikan ke Orang Tua</label>
                     <select class="form-control" id="shared" name="shared">
                         <?php foreach ($shared as $st) : ?>

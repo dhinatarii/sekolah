@@ -77,6 +77,14 @@ class Nilai extends CI_Controller
             redirect('error_404');
         }
 
+        $kelas = $this->Kelas_model->get_detail_data($id_kelas);
+        $mapel = $this->Mapel_model->get_detail_data($id_mapel);
+        $komp_dasar = $this->Mapel_model->get_mapel_with_kd_nilai($id_mapel, $id_kelas, $nilai);
+
+        if (!isset($kelas) || !isset($mapel) || !isset($komp_dasar)) {
+            redirect('error_404');
+        }
+
         $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
             'id_user'       => $data['id_user'],
@@ -86,9 +94,9 @@ class Nilai extends CI_Controller
             'id_kelas'      => $id_kelas,
             'id_mapel'      => $id_mapel,
             'jenis_nilai'   => $nilai,
-            'kelas'         => $this->Kelas_model->get_detail_data($id_kelas),
-            'mapel'         => $this->Mapel_model->get_detail_data($id_mapel),
-            'komp_dasar'    => $this->Mapel_model->get_mapel_with_kd_nilai($id_mapel, $id_kelas, $nilai),
+            'kelas'         => $kelas,
+            'mapel'         => $mapel,
+            'komp_dasar'    => $komp_dasar,
             'tahun'         => $this->Tahun_model->get_active_stats(),
             'menu'          => 'nilai',
             'breadcrumb'    => [
@@ -341,6 +349,14 @@ class Nilai extends CI_Controller
             redirect('error_404');
         }
 
+        $kelas = $this->Kelas_model->get_detail_data($id_kelas);
+        $mapel = $this->Mapel_model->get_detail_data($id_mapel);
+        $komp_dasar = $this->Mapel_model->get_kd_detail($id_kd);
+
+        if (!isset($kelas) || !isset($mapel) || !isset($komp_dasar)) {
+            redirect('error_404');
+        }
+
         $result_jenis = array_column($this->Nilai_model->get_jenis_nilai_in_perkd_array($id_kelas, $id_mapel, $id_kd, $tahun['nama']), 'jenis');
         $object_jenis = ['Tugas Harian 1', 'Tugas Harian 2', 'Tugas Harian 3', 'Tugas Harian 4', 'Ulangan Harian 1', 'Ulangan Harian 2', 'Ulangan Harian 3', 'Ulangan Harian 4', 'UTS', 'UAS'];
         $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
@@ -353,9 +369,9 @@ class Nilai extends CI_Controller
             'id_mapel'          => $id_mapel,
             'jenis_penilaian'   => $nilai,
             'tahun'             => $tahun,
-            'kelas'             => $this->Kelas_model->get_detail_data($id_kelas),
-            'mapel'             => $this->Mapel_model->get_detail_data($id_mapel),
-            'komp_dasar'        => $this->Mapel_model->get_kd_detail($id_kd),
+            'kelas'             => $kelas,
+            'mapel'             => $mapel,
+            'komp_dasar'        => $komp_dasar,
             'pengajar'          => $this->Pengajar_model->get_detail_data_with_kelas_and_mapel($id_kelas, $id_mapel),
             'siswa'             => $this->Siswa_model->get_data_perkelas($id_kelas, $tahun),
             'jenis_nilai'       => array_diff($object_jenis, $result_jenis),
@@ -408,15 +424,23 @@ class Nilai extends CI_Controller
             redirect('error_404');
         }
 
+        $kelas = $this->Kelas_model->get_detail_data($id_kelas);
+        $mapel = $this->Mapel_model->get_detail_data($id_mapel);
+        $komp_dasar = $this->Mapel_model->get_kd_detail($id_kd);
+
+        if (!isset($kelas) || !isset($mapel) || !isset($komp_dasar)) {
+            redirect('error_404');
+        }
+
         $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
             'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
-            'kelas'         => $this->Kelas_model->get_detail_data($id_kelas),
-            'mapel'         => $this->Mapel_model->get_detail_data($id_mapel),
-            'komp_dasar'    => $this->Mapel_model->get_kd_detail($id_kd),
+            'kelas'         => $kelas,
+            'mapel'         => $mapel,
+            'komp_dasar'    => $komp_dasar,
             'pengajar'      => $this->Pengajar_model->get_detail_data_with_kelas_and_mapel($id_kelas, $id_mapel),
             'siswa'         => $this->Siswa_model->get_data_perkelas($id_kelas, $tahun),
             'nilai'         => $this->Nilai_model->detail_nilai_perkd($id_kelas, $id_mapel, $id_kd, $jenis, $tahun['nama']),

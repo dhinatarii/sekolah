@@ -28,8 +28,6 @@
                 <button type="submit" class="btn btn-primary">Tambah</button>
                 <button type="reset" class="btn btn-secondary ml-1">Reset</button>
             </form>
-
-
         </div>
     </div>
     <div class="card">

@@ -120,6 +120,10 @@ class Kelas extends CI_Controller
         }
 
         $kelas = $this->Kelas_model->get_detail_data($id);
+        if (!isset($kelas)) {
+            redirect('error_404');
+        }
+
         $guru  = $this->Guru_model->get_detail_data(NULL, NULL, $kelas['wali_kelas']);
         $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(

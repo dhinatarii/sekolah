@@ -80,13 +80,18 @@ class Mapel extends CI_Controller
             redirect('admin/mapel');
         }
 
+        $mapel = $this->Mapel_model->get_detail_data($id);
+        if (!isset($mapel)) {
+            redirect('error_404');
+        }
+
         $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
-            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
-            'mapel'     => $this->Mapel_model->get_detail_data($id),
+            'mapel'     => $mapel,
             'komp_dasar' => $this->Mapel_model->get_kd_permapel($id),
             'menu'      => 'mata pelajaran',
             'breadcrumb' => [
@@ -167,13 +172,18 @@ class Mapel extends CI_Controller
             redirect('admin/mapel');
         }
 
+        $mapel = $this->Mapel_model->get_detail_data($id);
+        if (!isset($mapel)) {
+            redirect('error_404');
+        }
+
         $data = $this->User_model->get_detail_admin($this->session->userdata['id_user'], $this->session->userdata['level']);
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
             'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
-            'mapel'     => $this->Mapel_model->get_detail_data($id),
+            'mapel'     => $mapel,
             'levels'    => [1, 2, 3, 4, 5, 6],
             'menu'      => 'mata pelajaran',
             'breadcrumb' => [
@@ -228,7 +238,6 @@ class Mapel extends CI_Controller
     {
         $this->form_validation->set_rules('nama_mapel', 'Nama Mata Pelajaran', 'required|max_length[100]');
         $this->form_validation->set_rules('level', 'Level', 'required');
-        $this->form_validation->set_rules('kd[]', 'Kompetensi Dasar', 'required');
     }
 
     private function _rules_kd()
