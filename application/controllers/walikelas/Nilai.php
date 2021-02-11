@@ -62,7 +62,7 @@ class Nilai extends CI_Controller
         $daftar_kd      = $this->Nilai_model->get_kd_permapel_result($id_mapel, $id_kelas, $nilai);
         $html           = '';
 
-        if ($id_mapel == null || $id_kelas == null) {
+        if ($id_mapel == null || $id_kelas == null || $nilai == null) {
             //id not found
             $html = $html . '<div class="card">
                                 <div class="card-body">
@@ -202,8 +202,17 @@ class Nilai extends CI_Controller
             redirect('error_404');
         }
 
+
         $data = $this->User_model->get_detail_guru($this->session->userdata['id_user'], $this->session->userdata['level']);
+
         $kelas = $this->Kelas_model->get_like_walikelas($data['nama']);
+        $mapel = $this->Mapel_model->get_detail_data($id_mapel);
+        $komp_dasar = $this->Mapel_model->get_mapel_with_kd_nilai($id_mapel, $kelas['id_kelas'], $nilai);
+
+        if (!isset($kelas) || !isset($mapel) || !isset($komp_dasar)) {
+            redirect('error_404');
+        }
+
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
@@ -213,8 +222,8 @@ class Nilai extends CI_Controller
             'id_mapel'  => $id_mapel,
             'jenis_nilai'   => $nilai,
             'kelas'     => $kelas,
-            'mapel'     => $this->Mapel_model->get_detail_data($id_mapel),
-            'komp_dasar' => $this->Mapel_model->get_mapel_with_kd_nilai($id_mapel, $kelas['id_kelas'], $nilai),
+            'mapel'     => $mapel,
+            'komp_dasar' => $komp_dasar,
             'tahun'         => $this->Tahun_model->get_active_stats(),
             'menu'      => 'nilai',
             'breadcrumb' => [
@@ -327,29 +336,37 @@ class Nilai extends CI_Controller
         if (!isset($id_mapel) || !isset($id_kd)) {
             redirect('error_404');
         }
+
         $data = $this->User_model->get_detail_guru($this->session->userdata['id_user'], $this->session->userdata['level']);
+
         $kelas = $this->Kelas_model->get_like_walikelas($data['nama']);
+        $mapel = $this->Mapel_model->get_detail_data($id_mapel);
+        $komp_dasar = $this->Mapel_model->get_kd_detail($id_kd);
+
+        if (!isset($kelas) || !isset($mapel) || !isset($komp_dasar)) {
+            redirect('error_404');
+        }
 
         $result_jenis = array_column($this->Nilai_model->get_jenis_nilai_in_perkd_array($kelas['id_kelas'], $id_mapel, $id_kd, $tahun['nama']), 'jenis');
         $object_jenis = ['Tugas Harian 1', 'Tugas Harian 2', 'Tugas Harian 3', 'Tugas Harian 4', 'Ulangan Harian 1', 'Ulangan Harian 2', 'Ulangan Harian 3', 'Ulangan Harian 4', 'UTS', 'UAS'];
 
         $data = array(
-            'id_user'       => $data['id_user'],
-            'nama'          => $data['nama'],
-            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
-            'level'         => $data['level'],
-            'id_kelas'      => $kelas['id_kelas'],
-            'id_mapel'      => $id_mapel,
-            'kelas'         => $kelas,
+            'id_user'           => $data['id_user'],
+            'nama'              => $data['nama'],
+            'photo'             => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            'level'             => $data['level'],
+            'id_kelas'          => $kelas['id_kelas'],
+            'id_mapel'          => $id_mapel,
+            'kelas'             => $kelas,
             'jenis_penilaian'   => $nilai,
             'tahun'             => $tahun,
-            'mapel'         => $this->Mapel_model->get_detail_data($id_mapel),
-            'komp_dasar'    => $this->Mapel_model->get_kd_detail($id_kd),
-            'pengajar'      => $this->Pengajar_model->get_detail_data_with_kelas_and_mapel($kelas['id_kelas'], $id_mapel),
-            'siswa'         => $this->Siswa_model->get_data_perkelas($kelas['id_kelas'], $tahun),
-            'jenis_nilai'   => array_diff($object_jenis, $result_jenis),
-            'menu'          => 'nilai',
-            'breadcrumb'    => [
+            'mapel'             => $mapel,
+            'komp_dasar'        => $komp_dasar,
+            'pengajar'          => $this->Pengajar_model->get_detail_data_with_kelas_and_mapel($kelas['id_kelas'], $id_mapel),
+            'siswa'             => $this->Siswa_model->get_data_perkelas($kelas['id_kelas'], $tahun),
+            'jenis_nilai'       => array_diff($object_jenis, $result_jenis),
+            'menu'              => 'nilai',
+            'breadcrumb'        => [
                 0 => (object)[
                     'name' => 'Dashboard',
                     'link' => 'walikelas'

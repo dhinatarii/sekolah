@@ -227,7 +227,7 @@ class Guru extends CI_Controller
                     $this->image_lib->resize();
 
                     $photo = $gbr['file_name'];
-                    $this->Guru_model->edit_data($id, $photo);
+                    $this->Guru_model->edit_data($id, $photo, $data['guru']['nama']);
                     $this->session->set_flashdata('message', 'Data Guru Berhasil Diupdate!');
                     redirect('admin/guru');
                 } else {
