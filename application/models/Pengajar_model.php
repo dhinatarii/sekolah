@@ -47,7 +47,12 @@ class Pengajar_model extends CI_Model
 
     public function get_data()
     {
-        $this->db->select('tp.id_pengajar, tp.jabatan, tg.nama as guru, CONCAT_WS(" / ", tm.nama_mapel, tm.level) as mapel, tk.kelas, tt.nama as tahun');
+        //mysql
+        // $this->db->select('tp.id_pengajar, tp.jabatan, tg.nama as guru, CONCAT_WS(" / ", tm.nama_mapel, tm.level) as mapel, tk.kelas, tt.nama as tahun');
+
+        //sqlite
+        $this->db->select("tp.id_pengajar, tp.jabatan, tg.nama as guru, tm.nama_mapel ||' /'|| tm.level as mapel, tk.kelas, tt.nama as tahun");
+
         $this->db->from('tb_pengajar tp');
         $this->db->join('tb_guru tg', 'tp.id_guru = tg.id_guru', 'left');
         $this->db->join('tb_matapelajaran tm', 'tp.id_mapel = tm.id_mapel', 'left');

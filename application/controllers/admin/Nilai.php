@@ -114,7 +114,6 @@ class Nilai extends CI_Controller
                 ]
             ]
         );
-
         $this->load->view('templates/header');
         $this->load->view('templates_admin/sidebar', $data);
         $this->load->view('admin/nilai_perkd', $data);
@@ -306,7 +305,7 @@ class Nilai extends CI_Controller
             foreach ($data as $dt => $value_dt) {
                 $html = $html . '<tr>
                     <td width="20px">' . ++$dt . '</td>
-                    <td>' . $value_dt['nama'] . '</td>';
+                    <td> Nama Murid ' . $dt . '</td>';
                 foreach ($jenis as $jn => $value_jn) {
                     $html = $html . '<td>' . $value_dt[$value_jn->jenis] . '</td>';
                 }
