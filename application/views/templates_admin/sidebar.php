@@ -27,7 +27,9 @@
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'guru') echo 'c-active' ?>" href="<?= base_url('admin/guru') ?>"> Guru</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'kelas') echo 'c-active' ?>" href="<?= base_url('admin/kelas') ?>"> Kelas</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'siswa') echo 'c-active' ?>" href="<?= base_url('admin/siswa') ?>"> Siswa</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'absensi') echo 'c-active' ?>" href="<?= base_url('admin/absensi') ?>"> Absensi</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'mata pelajaran') echo 'c-active' ?>" href="<?= base_url('admin/mapel') ?>"> Mata Pelajaran</a></li>
+                    <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'ekstrakurikuler') echo 'c-active' ?>" href="<?= base_url('admin/ekstrakurikuler') ?>"> Ekstrakurikuler</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'tahun ajaran') echo 'c-active' ?>" href="<?= base_url('admin/tahunajaran') ?>"> Tahun Ajaran</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'pengajar') echo 'c-active' ?>" href="<?= base_url('admin/pengajar') ?>"> Guru Pengajar</a></li>
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'peserta') echo 'c-active' ?>" href="<?= base_url('admin/pesertadidik') ?>"> Peserta Didik</a></li>
@@ -78,7 +80,7 @@
                     </svg>Hello, <?= $nama ?>
                 </li>
                 <li class="c-header-nav-item dropdown"><a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        <div class="c-avatar"><img class="c-avatar-img" style="max-width:36px; max-height:36px; object-fit: scale-down; object-position: center; " ></div>
+                        <div class="c-avatar"><img class="c-avatar-img" style="max-width:36px; max-height:36px; object-fit: scale-down; object-position: center; "></div>
                         <!-- src="<?= base_url('assets/photos/' . $photo) ?>" alt="user@email.com" harus e ada di dalam style bagian line 81-->
                     </a>
                     <div class="dropdown-menu dropdown-menu-right pt-0">
