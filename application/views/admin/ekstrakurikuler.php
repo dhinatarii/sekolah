@@ -19,8 +19,12 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Nama Ekstrakurikuler</th>
-                        <th>Nilai</th>
+                        <th>ID Siswa</th>
+                        <th>Nama Siswa</th>
+                        <th>Pramuka</th>
+                        <th>Drumband</th>
+                        <th>Tapak Suci</th>
+                        <th>Kaligrafi</th>
                         <th width="160px" class="text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -44,17 +48,29 @@
                     "data": "no"
                 }, // Nomor urut
                 {
-                    "data": "nama_ekstrakurikuler"
-                }, // Nama Ekstrakurikuler
+                    "data": "id_datasiswa"
+                }, // ID Siswa
                 {
-                    "data": "nilai"
-                }, // Nilai Ekstrakurikuler
+                    "data": "nama_siswa"
+                }, // Nama Siswa
+                {
+                    "data": "pramuka"
+                }, // Nilai Pramuka
+                {
+                    "data": "drumband"
+                }, // Nilai Drumband
+                {
+                    "data": "tapak_suci"
+                }, // Nilai Tapak Suci
+                {
+                    "data": "kaligrafi"
+                }, // Nilai Kaligrafi
                 { // Kolom Aksi
                     "data": null,
                     "render": function(data, type, row) {
                         return `
-                            <button class="btn btn-sm btn-info" onclick="editData(${data.id})">Edit</button>
-                            <button class="btn btn-sm btn-danger" onclick="confirmDelete(${data.id})">Hapus</button>
+                            <button class="btn btn-sm btn-info" onclick="editData(${data.id_ekstrakurikuler})">Edit</button>
+                            <button class="btn btn-sm btn-danger" onclick="confirmDelete(${data.id_ekstrakurikuler})">Hapus</button>
                         `;
                     },
                     "orderable": false,
@@ -72,7 +88,7 @@
 
         Swal.fire({
             title: 'Apakah anda yakin?',
-            text: "data ekstrakurikuler akan dihapus",
+            text: "Data ekstrakurikuler akan dihapus",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
