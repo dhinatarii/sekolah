@@ -21,7 +21,7 @@ class LaporanGuru extends CI_Controller
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
-            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            // 'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'tahun'     => $this->Tahun_model->get_data_groupname(),
             'menu'      => 'laporan_guru',
@@ -54,7 +54,7 @@ class LaporanGuru extends CI_Controller
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
-            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            // 'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'guru'      => $this->Guru_model->get_detail_data($id),
             'data'      => $this->Laporan_model->get_detail_lap_guru($id),
             'id_guru'   => $id,

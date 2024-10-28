@@ -52,7 +52,7 @@ class Laporan_model extends CI_Model
         $this->db->select('ts.*, ta.*, to.nama_ayah,to.pendidikan_ayah,to.pekerjaan_ayah,to.nama_ibu,to.pendidikan_ibu,to.pekerjaan_ibu, to.no_hp');
         $this->db->from('tb_siswa ts');
         $this->db->join('tb_orangtua to', 'ts.id_orangtua = to.id_orangtua', 'left');
-        $this->db->join('tb_alamat ta', 'to.id_alamat = ta.id_alamat', 'left');
+        // $this->db->join('tb_alamat ta', 'to.id_alamat = ta.id_alamat', 'left');
         $this->db->join('tb_datasiswa td', 'ts.id_siswa = td.id_siswa', 'inner');
         $this->db->where('td.tahun_ajaran', $tahun);
         $this->db->where('td.id_kelas', $id_kelas);

@@ -22,7 +22,6 @@ class Dashboard extends CI_Controller
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
-            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'menu'      => 'dashboard',
             'tahun'     => $tahun,

@@ -23,7 +23,7 @@ class LaporanNilai extends CI_Controller
             'id_user'   => $data['id_user'],
             'id_guru'   => $guru['id_guru'],
             'nama'      => $data['nama'],
-            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            // 'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'tahun'     => $this->Tahun_model->get_data(),
             'menu'      => 'laporan_nilai',

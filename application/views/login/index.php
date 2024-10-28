@@ -7,7 +7,7 @@
         <div class="forms-container">
             <div class="signin">
                 <form method="post" action="" class="sign-in-form">
-                    <img src="<?php echo base_url() ?>assets/img/logo_dikdasmen.svg" alt="" class="image-logo">
+                    <img src="<?php echo base_url() ?>assets/img/logoo.png" alt="" class="image-logo">
                     <?php if ($this->session->flashdata('message')) : ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <?php echo $this->session->flashdata('message'); ?>
@@ -34,12 +34,12 @@
         <div class="panels-container">
             <div class="panel left-panel">
                 <div class="content">
-                    <h1>SD Muhammadiyah Trini</h1>
+                <h1>Madrasah Tsanawiyah Thawalib Tanjung Limau</h1>
                     <p>
-                        Sistem Informasi Nilai Siswa
+                        Sistem Pengelola Nilai
                     </p>
                 </div>
-                <img src="<?php echo base_url() ?>assets/img/school.svg" class="image" alt="" />
+                <!-- <img src="<?php echo base_url() ?>assets/img/school.svg" class="image" alt="" /> -->
             </div>
         </div>
     </div>

@@ -22,7 +22,7 @@ class Profile extends CI_Controller
             'guru'      => $data,
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
-            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            // 'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'menu'      => 'dashboard',
             'breadcrumb' => [
@@ -49,7 +49,7 @@ class Profile extends CI_Controller
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
-            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            // 'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'menu'      => 'dashboard',
             'breadcrumb' => [

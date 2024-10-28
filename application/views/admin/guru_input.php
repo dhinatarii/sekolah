@@ -54,11 +54,11 @@
                 <input type="text" name="alamat" id="alamat" placeholder="Masukan Alamat" class="form-control">
                 <?php echo form_error('alamat', '<div class="text-danger small ml-3">', '</div>') ?>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="photo">Photo (ukuran 4x6 atau 2x3)</label>
                 <input type="file" class="form-control-file" name="photo" id="photo">
                 <small>(Biarkan kosong jika tidak ada)</small>
-            </div>
+            </div> -->
             <button type="submit" class="btn btn-primary">Simpan</button>
             <button type="reset" class="btn btn-secondary ml-1">Reset</button>
             <?= form_close() ?>

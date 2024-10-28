@@ -17,17 +17,17 @@ class Siswa_model extends CI_Model
         $this->db->from('tb_siswa');
         $this->db->where('id_siswa', $id);
         $this->db->join('tb_orangtua', 'tb_siswa.id_orangtua = tb_orangtua.id_orangtua', 'left');
-        $this->db->join('tb_alamat', 'tb_orangtua.id_alamat = tb_alamat.id_alamat', 'left');
+        // $this->db->join('tb_alamat', 'tb_orangtua.id_alamat = tb_alamat.id_alamat', 'left');
         return $this->db->get()->row_array();
     }
 
-    public function get_id_address($id)
-    {
-        $this->db->select('*');
-        $this->db->from('tb_orangtua');
-        $this->db->where('id_orangtua', $id);
-        return $this->db->get()->row_array()['id_alamat'];
-    }
+    // public function get_id_address($id)
+    // {
+    //     $this->db->select('*');
+    //     $this->db->from('tb_orangtua');
+    //     $this->db->where('id_orangtua', $id);
+    //     return $this->db->get()->row_array()['id_alamat'];
+    // }
 
     public function get_data_perkelas($id_kelas, $tahun)
     {
@@ -66,13 +66,13 @@ class Siswa_model extends CI_Model
         $this->db->select('*');
         $this->db->from('tb_siswa');
         $this->db->join('tb_orangtua', 'tb_siswa.id_orangtua = tb_orangtua.id_orangtua', 'left');
-        $this->db->join('tb_alamat', 'tb_orangtua.id_alamat = tb_alamat.id_alamat', 'left');
+        // $this->db->join('tb_alamat', 'tb_orangtua.id_alamat = tb_alamat.id_alamat', 'left');
         $this->db->join('tb_datasiswa', 'tb_datasiswa.id_siswa = tb_siswa.id_siswa', 'inner');
         $this->db->where('tb_datasiswa.tahun_ajaran', $tahun_ajaran);
         return $this->db->get()->num_rows();
     }
 
-    public function input_data_siswa($photo)
+    public function input_data_siswa()//$photo harusnya ini berada dalam kurung
     {
         $id_user = $this->_input_user();
         $id_orangtua = $this->_input_data_orangtua();
@@ -83,7 +83,7 @@ class Siswa_model extends CI_Model
             'tanggal_lahir' => $this->input->post('tanggal_lahir', TRUE),
             'agama'         => $this->input->post('agama', TRUE),
             'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
-            'photo'         => $photo,
+            // 'photo'         => $photo,
             'id_orangtua'   => $id_orangtua,
             'id_user'       => $id_user
         );
@@ -91,10 +91,10 @@ class Siswa_model extends CI_Model
         $this->db->insert('tb_siswa', $data);
     }
 
-    public function edit_data($id, $photo)
+    public function edit_data($id)//,$photo harusnya ini berada dalam kurung
     {
         $id_orangtua = $this->db->get_where('tb_siswa', ['id_siswa' => $id])->row()->id_orangtua;
-        $id_alamat = $this->db->get_where('tb_orangtua', ['id_orangtua' => $id_orangtua])->row()->id_alamat;
+        // $id_alamat = $this->db->get_where('tb_orangtua', ['id_orangtua' => $id_orangtua])->row()->id_alamat;
         $dataDetail = $this->get_detail_data($id);
 
         $dataUser = array(
@@ -110,9 +110,9 @@ class Siswa_model extends CI_Model
             'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE)
         );
 
-        if ($photo != null) {
-            $data_siswa['photo'] = $photo;
-        }
+        // if ($photo != null) {
+        //     $data_siswa['photo'] = $photo;
+        // }
 
         $data_orangtua = array(
             'nama_ibu'          => $this->input->post('nama_ibu', TRUE),
@@ -140,14 +140,14 @@ class Siswa_model extends CI_Model
         $this->db->where('id_orangtua', $id_orangtua);
         $this->db->update('tb_orangtua', $data_orangtua);
 
-        $this->db->where('id_alamat', $id_alamat);
-        $this->db->update('tb_alamat', $data_alamat);
+        // $this->db->where('id_alamat', $id_alamat);
+        // $this->db->update('tb_alamat', $data_alamat);
     }
 
-    public function delete_data($id)
-    {
-        $this->db->delete('tb_alamat', ['id_alamat' => $id]);
-    }
+    // public function delete_data($id)
+    // {
+    //     $this->db->delete('tb_alamat', ['id_alamat' => $id]);
+    // }
 
     private function _input_data_orangtua()
     {
@@ -176,7 +176,7 @@ class Siswa_model extends CI_Model
             'kabupaten' => $this->input->post('kabupaten', TRUE)
         );
 
-        $this->db->insert('tb_alamat', $data);
+        // $this->db->insert('tb_alamat', $data);
         return $this->db->insert_id();
     }
 
@@ -205,7 +205,7 @@ class Siswa_model extends CI_Model
         $this->db->select('*');
         $this->db->from('tb_siswa');
         $this->db->join('tb_orangtua', 'tb_siswa.id_orangtua = tb_orangtua.id_orangtua', 'left');
-        $this->db->join('tb_alamat', 'tb_orangtua.id_alamat = tb_alamat.id_alamat', 'left');
+        // $this->db->join('tb_alamat', 'tb_orangtua.id_alamat = tb_alamat.id_alamat', 'left');
 
         $i = 0;
 

@@ -23,7 +23,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/sipdn-web/';
+$config['base_url'] = 'http://localhost/sekolah/';
 
 /*
 |--------------------------------------------------------------------------
@@ -138,7 +138,7 @@ $config['subclass_prefix'] = 'MY_';
 |	autoloading (application/config/autoload.php)
 */
 // $config['composer_autoload'] = TRUE;
-$config['composer_autoload'] = FCPATH. 'vendor/autoload.php';
+$config['composer_autoload'] = FCPATH . 'vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -523,3 +523,10 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+$config['sess_driver'] = 'files'; // or 'database', depending on your setup
+$config['sess_cookie_name'] = 'ci_session';
+$config['sess_expiration'] = 7200; // Session expiration time
+$config['sess_save_path'] = sys_get_temp_dir(); // Path to save sessions (use a valid directory)
+$config['sess_match_ip'] = FALSE; // If TRUE, session will be valid only for the user's IP
+$config['sess_time_to_update'] = 300; // How often the session ID should be regenerated
+$config['sess_regenerate_destroy'] = FALSE; // Whether to destroy old session data when regenerating session ID

@@ -96,7 +96,7 @@ class User_model extends CI_Model
         return $this->db->get()->row_array();
     }
 
-    public function input_data($photo)
+    public function input_data()//$photo harusnya ini berada dalam kurung
     {
         $id_user = $this->_input_admin();
         $data = array(
@@ -107,7 +107,7 @@ class User_model extends CI_Model
             'no_hp'         => $this->input->post('no_hp', TRUE),
             'email'         => $this->input->post('email', TRUE),
             'alamat'        => $this->input->post('alamat', TRUE),
-            'photo'         => $photo,
+            // 'photo'         => $photo,
             'id_user'       => $id_user
         );
 
@@ -142,7 +142,7 @@ class User_model extends CI_Model
         $this->db->update('tb_user', $data);
     }
 
-    public function edit_admin($id, $photo)
+    public function edit_admin($id) //$photo harusnya ini berada dalam kurung
     {
         $data_admin = array(
             'nip'           => $this->input->post('nip', TRUE),
@@ -154,9 +154,9 @@ class User_model extends CI_Model
             'alamat'        => $this->input->post('alamat', TRUE)
         );
 
-        if ($photo != null) {
-            $data_admin['photo'] = $photo;
-        }
+        // if ($photo != null) {
+        //     $data_admin['photo'] = $photo;
+        // }
 
         $data_account = array(
             'username'  => $this->input->post('username', TRUE),

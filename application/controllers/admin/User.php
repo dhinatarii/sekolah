@@ -26,7 +26,7 @@ class User extends CI_Controller
         $data = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
-            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            // 'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'count_admin'   => $this->User_model->count_user('admin'),
             'count_guru'    => $this->User_model->count_user('guru', 'wali kelas'),
@@ -65,7 +65,7 @@ class User extends CI_Controller
         $data       = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
-            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            // 'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'id'            => $id,
             'levels'        => $level,
@@ -104,7 +104,8 @@ class User extends CI_Controller
         foreach ($list as $item) {
             $dataAdmin  = $level == 'admin' ? $this->User_model->get_detail_admin($item->id_user, $level) : NULL;
             $isDelete   = ($level == 'admin' && $no != 0) ? '<a href="javascript:;" onclick="confirmDelete(' . $item->id_user . ')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>' : '';
-            $isDetail   = $level == 'admin' ? '<div id="set_detailModal" class="btn btn-sm btn-info mr-1 ml-1 mb-1" data-toggle="modal" data-target="#detailModal" data-level="' . $level . '" data-idadmin="' . $item->id_user . '" data-nip="' . $dataAdmin['nip'] . '" data-nama="' . $dataAdmin['nama'] . '" data-jeniskelamin="' . $dataAdmin['jenis_kelamin'] . '"data-tanggallahir="' . $dataAdmin['tanggal_lahir'] . '" data-nohp="' . $dataAdmin['no_hp'] . '" data-email="' . $dataAdmin['email'] . '"  data-alamat="' . $dataAdmin['alamat'] . '" data-photo="' . $dataAdmin['photo'] . '"><i class="fa fa-eye"></i></div>' : '';
+            $isDetail   = $level == 'admin' ? '<div id="set_detailModal" class="btn btn-sm btn-info mr-1 ml-1 mb-1" data-toggle="modal" data-target="#detailModal" data-level="' . $level . '" data-idadmin="' . $item->id_user . '" data-nama="' . $dataAdmin['nama'] . '" data-jeniskelamin="' . $dataAdmin['jenis_kelamin'] . '"data-tanggallahir="' . $dataAdmin['tanggal_lahir'] . '" data-nohp="' . $dataAdmin['no_hp'] . '" data-email="' . $dataAdmin['email'] . '" ><i class="fa fa-eye"></i></div>' : '';
+            //data-photo="' . $dataAdmin['photo'] . '" bagian pojok harusnya line diatas
             $no++;
             $row = array();
             $row[] = $no;
@@ -140,7 +141,7 @@ class User extends CI_Controller
         $data = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
-            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            // 'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'menu'          => 'user',
             'breadcrumb'    => [
@@ -170,51 +171,53 @@ class User extends CI_Controller
             $this->load->view('templates_admin/sidebar', $data);
             $this->load->view('admin/user_input', $data);
             $this->load->view('templates/footer');
-        } else {
-            $cek = $this->User_model->cek_user();
-            if ($cek == 0) {
-                $config['upload_path']          = './assets/photos/';
-                $config['allowed_types']        = 'gif|jpg|png|jpeg';
-                $config['max_size']             = 5000;
-                $config['file_name']            = 'photo-admin-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
-                $this->upload->initialize($config);
+        }
+        // else {
+        //     $cek = $this->User_model->cek_user();
+        //     if ($cek == 0) {
+        //         $config['upload_path']          = './assets/photos/';
+        //         $config['allowed_types']        = 'gif|jpg|png|jpeg';
+        //         $config['max_size']             = 5000;
+        //         $config['file_name']            = 'photo-admin-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
+        //         $this->upload->initialize($config);
 
-                if (@$_FILES['photo']['name'] != null) {
+        //         if (@$_FILES['photo']['name'] != null) {
 
-                    if ($this->upload->do_upload('photo')) {
-                        $gbr = $this->upload->data();
-                        //Compress Image
-                        $config['image_library'] = 'gd2';
-                        $config['source_image'] = './assets/photos/' . $gbr['file_name'];
-                        $config['create_thumb'] = FALSE;
-                        $config['maintain_ratio'] = FALSE;
-                        $config['quality'] = '50%';
-                        $config['width'] = 400;
-                        $config['height'] = 600;
-                        $config['new_image'] = './assets/photos/' . $gbr['file_name'];
-                        $this->image_lib->initialize($config);
-                        $this->image_lib->resize();
+        //             if ($this->upload->do_upload('photo')) {
+        //                 $gbr = $this->upload->data();
+        //                 //Compress Image
+        //                 $config['image_library'] = 'gd2';
+        //                 $config['source_image'] = './assets/photos/' . $gbr['file_name'];
+        //                 $config['create_thumb'] = FALSE;
+        //                 $config['maintain_ratio'] = FALSE;
+        //                 $config['quality'] = '50%';
+        //                 $config['width'] = 400;
+        //                 $config['height'] = 600;
+        //                 $config['new_image'] = './assets/photos/' . $gbr['file_name'];
+        //                 $this->image_lib->initialize($config);
+        //                 $this->image_lib->resize();
 
-                        $photo = $gbr['file_name'];
-                        $this->User_model->input_data($photo);
-                        $this->session->set_flashdata('message', 'Data Admin Berhasil Ditambahkan!');
-                        redirect('admin/user/detail/1');
-                    } else {
-                        $error = $this->upload->display_errors();
-                        $this->session->set_flashdata('message_error', $error);
-                        redirect('admin/user/input');
-                    }
-                } else {
+        //                 $photo = $gbr['file_name'];
+        //                 $this->User_model->input_data($photo);
+        //                 $this->session->set_flashdata('message', 'Data Admin Berhasil Ditambahkan!');
+        //                 redirect('admin/user/detail/1');
+        //             } else {
+        //                 $error = $this->upload->display_errors();
+        //                 $this->session->set_flashdata('message_error', $error);
+        //                 redirect('admin/user/input');
+        //             }
+        //         } 
+                    else {
                     $photo = NULL;
                     $this->User_model->input_data($photo);
                     $this->session->set_flashdata('message', 'Data Admin Berhasil Ditambahkan!');
                     redirect('admin/user/detail/1');
                 }
-            } else {
-                $this->session->set_flashdata('message_error', 'Username telah ada');
-                redirect('admin/user/input');
-            }
-        }
+        //     } else {
+        //         $this->session->set_flashdata('message_error', 'Username telah ada');
+        //         redirect('admin/user/input');
+        //     }
+        // }
     }
 
     public function edit()
@@ -227,7 +230,7 @@ class User extends CI_Controller
         $data   = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
-            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            // 'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'levels'        => $level,
             'status'        => ['0', '1'],
@@ -269,52 +272,54 @@ class User extends CI_Controller
                 $this->load->view('templates_admin/sidebar', $data);
                 $this->load->view('admin/user_admin', $data);
                 $this->load->view('templates/footer');
-            } else {
-                $config['upload_path']          = './assets/photos/';
-                $config['allowed_types']        = 'gif|jpg|png|jpeg';
-                $config['max_size']             = 5000;
-                $config['file_name']            = 'photo-admin-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
-                $this->upload->initialize($config);
+            }
+            // else {
+            //     $config['upload_path']          = './assets/photos/';
+            //     $config['allowed_types']        = 'gif|jpg|png|jpeg';
+            //     $config['max_size']             = 5000;
+            //     $config['file_name']            = 'photo-admin-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
+            //     $this->upload->initialize($config);
 
-                if (@$_FILES['photo']['name'] != null) {
+            //     if (@$_FILES['photo']['name'] != null) {
 
-                    if ($this->upload->do_upload('photo')) {
+            //         if ($this->upload->do_upload('photo')) {
 
-                        $item = $this->User_model->get_detail_admin($id, $level);
-                        if ($item['photo'] != null) {
-                            $target_delete = './assets/photos/' . $item['photo'];
-                            unlink($target_delete);
-                        }
+            //             $item = $this->User_model->get_detail_admin($id, $level);
+            //             if ($item['photo'] != null) {
+            //                 $target_delete = './assets/photos/' . $item['photo'];
+            //                 unlink($target_delete);
+            //             }
 
-                        $gbr = $this->upload->data();
-                        //Compress Image
-                        $config['image_library'] = 'gd2';
-                        $config['source_image'] = './assets/photos/' . $gbr['file_name'];
-                        $config['create_thumb'] = FALSE;
-                        $config['maintain_ratio'] = FALSE;
-                        $config['quality'] = '50%';
-                        $config['width'] = 400;
-                        $config['height'] = 600;
-                        $config['new_image'] = './assets/photos/' . $gbr['file_name'];
-                        $this->image_lib->initialize($config);
-                        $this->image_lib->resize();
+            //             $gbr = $this->upload->data();
+            //             //Compress Image
+            //             $config['image_library'] = 'gd2';
+            //             $config['source_image'] = './assets/photos/' . $gbr['file_name'];
+            //             $config['create_thumb'] = FALSE;
+            //             $config['maintain_ratio'] = FALSE;
+            //             $config['quality'] = '50%';
+            //             $config['width'] = 400;
+            //             $config['height'] = 600;
+            //             $config['new_image'] = './assets/photos/' . $gbr['file_name'];
+            //             $this->image_lib->initialize($config);
+            //             $this->image_lib->resize();
 
-                        $photo = $gbr['file_name'];
-                        $this->User_model->edit_admin($id, $photo);
-                        $this->session->set_flashdata('message', 'Data Berhasil Diupdate!');
-                        redirect('admin/user/detail/' . $detail);
-                    } else {
-                        $error = $this->upload->display_errors();
-                        $this->session->set_flashdata('message_error', $error);
-                        redirect('admin/user/input');
-                    }
-                } else {
+            //             $photo = $gbr['file_name'];
+            //             $this->User_model->edit_admin($id, $photo);
+            //             $this->session->set_flashdata('message', 'Data Berhasil Diupdate!');
+            //             redirect('admin/user/detail/' . $detail);
+            //         } else {
+            //             $error = $this->upload->display_errors();
+            //             $this->session->set_flashdata('message_error', $error);
+            //             redirect('admin/user/input');
+            //         }
+            //     } 
+                    else {
                     $photo = NULL;
                     $this->User_model->edit_admin($id, $photo);
                     $this->session->set_flashdata('message', 'Data Berhasil Diupdate!');
                     redirect('admin/user/detail/' . $detail);
                 }
-            }
+            // }
         } else {
 
             $user  = $this->User_model->get_detail_user($id, $level);
@@ -349,7 +354,7 @@ class User extends CI_Controller
         $data   = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
-            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            // 'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'user_id'       => $id,
             'user_level'    => $level,
@@ -425,10 +430,10 @@ class User extends CI_Controller
         $detail     = $level == 'admin' ? '1' : ($level == 'guru' ? '2' : ($level == 'wali kelas' ? '3' : ($level == 'siswa' ? '4' : NULL)));
 
         $item = $this->User_model->get_detail_admin($id, $level);
-        if ($item['photo'] != null) {
-            $target_delete = './assets/photos/' . $item['photo'];
-            unlink($target_delete);
-        }
+        // if ($item['photo'] != null) {
+        //     $target_delete = './assets/photos/' . $item['photo'];
+        //     unlink($target_delete);
+        // }
 
         $this->User_model->delete_data($id);
         $this->session->set_flashdata('message', 'Data User Berhasil Dihapus!');

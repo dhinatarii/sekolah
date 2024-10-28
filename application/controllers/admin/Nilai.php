@@ -29,7 +29,7 @@ class Nilai extends CI_Controller
         $data = array(
             'id_user'   => $data['id_user'],
             'nama'      => $data['nama'],
-            'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            // 'photo'     => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'mapel'     => $this->Mapel_model->get_data(),
             'kelas'     => $this->Kelas_model->get_data(),
@@ -89,7 +89,7 @@ class Nilai extends CI_Controller
         $data = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
-            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            // 'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'id_kelas'      => $id_kelas,
             'id_mapel'      => $id_mapel,
@@ -362,7 +362,7 @@ class Nilai extends CI_Controller
         $data = array(
             'id_user'           => $data['id_user'],
             'nama'              => $data['nama'],
-            'photo'             => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            // 'photo'             => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'             => $data['level'],
             'id_kelas'          => $id_kelas,
             'id_mapel'          => $id_mapel,
@@ -435,7 +435,7 @@ class Nilai extends CI_Controller
         $data = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
-            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            // 'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'kelas'         => $kelas,
             'mapel'         => $mapel,
@@ -503,7 +503,7 @@ class Nilai extends CI_Controller
         $data = array(
             'id_user'       => $data['id_user'],
             'nama'          => $data['nama'],
-            'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
+            // 'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'         => $data['level'],
             'id_kelas'      => $id_kelas,
             'id_mapel'      => $id_mapel,
