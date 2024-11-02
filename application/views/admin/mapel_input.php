@@ -10,12 +10,9 @@
                     <label for="level">Level</label>
                     <select class="form-control" id="level" name="level">
                         <option value="">--Pilih Level--</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
+                        <option value="1">7</option>
+                        <option value="2">8</option>
+                        <option value="3">9</option>
                     </select>
                     <?php echo form_error('level', '<div class="text-danger small ml-3">', '</div>') ?>
                 </div>

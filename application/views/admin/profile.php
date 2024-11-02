@@ -15,25 +15,11 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-sm-3" class="text-center">
-                    <h6 class="text-dark font-weight-bold">Foto Admin</h6>
-                    <div id="photo" class="mb-3">
-                        <?php if ($admin['photo']) : ?>
-                            <img src="<?= base_url('assets/photos/' . $admin['photo']) ?>" alt="photo <?= $admin['nama'] ?>" style="width: 200px; height: 300px; border-radius: 15px;">
-                        <?php else : ?>
-                            <img src="<?= base_url('assets/photos/user-placeholder.jpg') ?>" alt="photo <?= $admin['nama'] ?>" style="width: 200px; height: 300px; border-radius: 15px;">
-                        <?php endif ?>
-                    </div>
-                </div>
-                <div class="col-sm-9">
+                <div class="col-sm-12">
                     <h6 class="text-dark font-weight-bold">Data Diri</h6>
                     <div class="card">
                         <div class="card-body">
                             <table class="table table-borderless no-margin table-striped">
-                                <tr>
-                                    <th class="text-left">NIP</th>
-                                    <td><span id="nip"><?= $admin['nip'] ?></span></td>
-                                </tr>
                                 <tr>
                                     <th class="text-left">Nama</th>
                                     <td><span id="nama"><?= $admin['nama'] ?></span></td>
@@ -54,13 +40,9 @@
                                     <th class="text-left">Email</th>
                                     <td><span id="email"><?= $admin['email'] ?></span></td>
                                 </tr>
-                                <tr>
-                                    <th class="text-left">Alamat</th>
-                                    <td><span id="alamat"><?= $admin['alamat'] ?></span></td>
-                                </tr>
                             </table>
 
-                            <?= anchor('admin/profile/password?id_user=' . $admin['id_user'], '<div class="btn btn-sm btn-primary  mr-1 ml-1 mb-1"><i class="fa fa-lock"></i> Ganti Password</div>') ?>
+                            <?= anchor('admin/profile/password?id_user=' . $admin['id_user'], '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-lock"></i> Ganti Password</div>') ?>
                         </div>
                     </div>
                 </div>

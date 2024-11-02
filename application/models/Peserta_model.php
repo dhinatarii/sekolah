@@ -19,13 +19,13 @@ class Peserta_model extends CI_Model
 
     public function get_data_kelas($id_kelas, $tahun)
     {
-        $this->db->select('td.id_datasiswa, ts.id_siswa, ts.nis, ts.nisn, ts.nama, ts.jenis_kelamin, ts.agama, tk.kelas');
+        $this->db->select('td.id_datasiswa, ts.id_siswa, ts.nik, ts.nisn, ts.nama, ts.jenis_kelamin, ts.status, tk.kelas');
         $this->db->from('tb_datasiswa td');
         $this->db->join('tb_siswa ts', 'ts.id_siswa = td.id_siswa', 'inner');
         $this->db->join('tb_kelas tk', 'tk.id_kelas = td.id_kelas', 'inner');
         $this->db->where('td.id_kelas', $id_kelas);
         $this->db->where('td.tahun_ajaran', $tahun);
-        $this->db->order_by('ts.nis', 'asc');
+        $this->db->order_by('ts.nik', 'asc');
 
         return $this->db->get()->result();
     }

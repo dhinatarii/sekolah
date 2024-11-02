@@ -15,19 +15,28 @@
     <?php echo anchor('admin/guru/input', '<button class="btn btn-sm btn-primary mb-3"><i class="fas fa-plus fa-sm"></i> Tambah Data</button>') ?>
     <div class="card">
         <div class="card-body">
-            <table class="table table-responsive-sm table-bordered table-striped table-sm w-100 d-block d-md-table" id="table-guru">
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-bordered table-striped table-sm w-100" id="table-guru">
                 <thead>
                     <tr>
-                        <th class="text-center" style="vertical-align : middle;text-align:center;">No</th>
-                        <th style="vertical-align : middle;text-align:center;">NIP</th>
-                        <th style="vertical-align : middle;text-align:center;">Nama</th>
-                        <th style="vertical-align : middle;text-align:center;">Jenis Kelamin</th>
-                        <th style="vertical-align : middle;text-align:center;">Tanggal Lahir</th>
-                        <th style="vertical-align : middle;text-align:center;">No Handphone</th>
-                        <th style="vertical-align : middle;text-align:center;">Email</th>
-                        <th style="vertical-align : middle;text-align:center;">Foto</th>
-                        <th style="vertical-align : middle;text-align:center;">Alamat</th>
-                        <th class="text-center" width="80px" style="vertical-align : middle;text-align:center;">Aksi</th>
+                            <th class="text-center" style="vertical-align : middle;text-align:center;">No</th>
+                            <th style="min-width: 120px;">NIK</th>
+                            <th style="min-width: 150px;">Nama</th>
+                            <th style="min-width: 100px;">Jenis Kelamin</th>
+                            <th style="min-width: 120px;">Tanggal Lahir</th>
+                            <th style="min-width: 130px;">No Handphone</th>
+                            <th style="min-width: 150px;">Email</th>
+                            <th style="min-width: 200px;">Alamat</th>
+                            <th style="min-width: 100px;">NIP</th>
+                            <th style="min-width: 150px;">Pendidikan</th>
+                            <th style="min-width: 150px;">Bidang Studi</th>
+                            <th style="min-width: 150px;">Tempat Tugas</th>
+                            <th style="min-width: 130px;">Tahun Mulai Tugas</th>
+                            <th style="min-width: 100px;">NIY</th>
+                            <th style="min-width: 180px;">No Sertifikat Sertifikasi</th>
+                            <th style="min-width: 180px;">No Peserta Sertifikasi</th>
+                            <th style="min-width: 130px;">Tahun Lulus Sertifikasi</th>
+                            <th class="text-center" width="80px" style="vertical-align : middle;text-align:center;">Aksi</th>
                     </tr>
                 </thead>
 

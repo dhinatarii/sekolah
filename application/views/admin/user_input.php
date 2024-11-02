@@ -23,11 +23,6 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="nip">NIP</label>
-                                <input type="text" name="nip" id="nip" placeholder="Masukan NIP" class="form-control">
-                                <?php echo form_error('nip', '<div class="text-danger small ml-3">', '</div>') ?>
-                            </div>
-                            <div class="form-group">
                                 <label for="nama">Nama</label>
                                 <input type="text" name="nama" id="nama" placeholder="Masukan Nama" class="form-control">
                                 <?php echo form_error('nama', '<div class="text-danger small ml-3">', '</div>') ?>
@@ -55,16 +50,6 @@
                                 <label for="email">Email</label>
                                 <input type="text" name="email" id="email" placeholder="Masukan Email" class="form-control">
                                 <?php echo form_error('email', '<div class="text-danger small ml-3">', '</div>') ?>
-                            </div>
-                            <div class="form-group">
-                                <label for="alamat">Alamat</label>
-                                <input type="text" name="alamat" id="alamat" placeholder="Masukan Alamat" class="form-control">
-                                <?php echo form_error('alamat', '<div class="text-danger small ml-3">', '</div>') ?>
-                            </div>
-                            <div class="form-group">
-                                <label for="photo">Photo (ukuran 4x6 atau 2x3)</label>
-                                <input type="file" class="form-control-file" name="photo" id="photo">
-                                <small>(Biarkan kosong jika tidak ada)</small>
                             </div>
                         </div>
                     </div>

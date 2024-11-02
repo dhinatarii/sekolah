@@ -184,7 +184,7 @@ class Mapel extends CI_Controller
             // 'photo'         => $data['photo'] != null ? $data['photo'] : 'user-placeholder.jpg',
             'level'     => $data['level'],
             'mapel'     => $mapel,
-            'levels'    => [1, 2, 3, 4, 5, 6],
+            'levels'    => [7,8,9],
             'menu'      => 'mata pelajaran',
             'breadcrumb' => [
                 0 => (object)[

@@ -168,7 +168,7 @@ class Pengajar extends CI_Controller
             'kelas'     => $this->Kelas_model->get_data(),
             'tahun'     => $tahun,
             'pengajar'  => $this->Pengajar_model->get_detail_data($id),
-            'jabatan'   => ['Guru Kelas', 'Guru Agama', 'Guru Bahasa', 'Guru Penjas'],
+            'jabatan'   => ['Kepala Madrasah', 'Waka Kurikulum', 'Wakasis', 'Waka SarPras','Guru','Ka. Tata Usaha','Staff Tata Usaha'],
             'menu'      => 'pengajar',
             'breadcrumb' => [
                 0 => (object)[

@@ -7,7 +7,7 @@
 
     <div class="alert alert-success" role="alert">
         <h4 class="alert-heading">Selamat Datang!</h4>
-        <p>Selamat Datang <strong><?php echo $nama; ?></strong> di Sistem Informasi Pengolahan Data Nilai Siswa SD Muhammadiyah Trini, Anda Login Sebagai <strong><?php echo $level; ?></strong></p>
+        <p>Selamat Datang <strong><?php echo $nama; ?></strong> di Sistem Informasi Pengelolaan Data Nilai Siswa MTSS Thawalib Tanjung Limau, Anda Login Sebagai <strong><?php echo $level; ?></strong></p>
         <hr>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#controlpanelModal">
             <i class="fas fa-landmark"></i> Menu

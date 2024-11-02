@@ -7,7 +7,7 @@
             <a class="c-sidebar-brand-full">
                 <svg width="46" height="46" alt="CoreUI Logo">
                     <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-education"></use>
-                </svg> SIPDN
+                </svg> ThawalibEdu
             </a>
             <svg class="c-sidebar-brand-minimized" width="46" height="46" alt="CoreUI Logo">
                 <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-education"></use>
@@ -30,7 +30,7 @@
             <li class="c-sidebar-nav-dropdown"><a class="c-sidebar-nav-dropdown-toggle" href="#">
                     <svg class="c-sidebar-nav-icon">
                         <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-education"></use>
-                    </svg> Pengolahan Data</a>
+                    </svg> Pengelolaan Data</a>
                 <ul class="c-sidebar-nav-dropdown-items">
                     <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link <?php if ($menu == 'nilai') echo 'c-active' ?>" href="<?= base_url('walikelas/nilai') ?>"> Nilai</a></li>
                 </ul>
@@ -56,14 +56,14 @@
             </button><a class="c-header-brand d-lg-none" href="#">
                 <svg width="46" height="46" alt="CoreUI Logo">
                     <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-education"></use>
-                </svg> SIPDN</a>
+                </svg> ThawalibEdu</a>
             <button class="c-header-toggler c-class-toggler mfs-3 d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true">
                 <svg class="c-icon c-icon-lg">
                     <use xlink:href="<?= base_url() ?>assets/vendors/@coreui/icons/svg/free.svg#cil-menu"></use>
                 </svg>
             </button>
             <ul class="c-header-nav d-md-down-none">
-                <li class="c-header-nav-item px-3">Sistem Informasi Pengolahan Data Nilai Siswa</li>
+                <li class="c-header-nav-item px-3">Sistem Informasi Pengelolaan Data Nilai Siswa</li>
             </ul>
             <ul class="c-header-nav ml-auto mr-4">
                 <li class="c-header-nav-item d-md-down-none mx-2">
@@ -71,7 +71,7 @@
                     </svg>Hello, <?= $nama ?>
                 </li>
                 <li class="c-header-nav-item dropdown"><a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        <div class="c-avatar"><img class="c-avatar-img" style="max-width:36px; max-height:36px; object-fit: scale-down; object-position: center; "></div>
+                        <div class="c-avatar"><img class="c-avatar-img" style="max-width:36px; max-height:36px; object-fit: scale-down; object-position: center; " src="<?= base_url('assets/img/default.svg') ?>" alt="user@email.com"></div>
                         <!-- src="<?= base_url('assets/photos/' . $photo) ?>" alt="user@email.com" -->
                     </a>
                     <div class="dropdown-menu dropdown-menu-right pt-0">

@@ -23,9 +23,9 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="nis">NIS</label>
-                                <input type="text" name="nis" id="nis" placeholder="Masukan NIS" class="form-control">
-                                <?php echo form_error('nis', '<div class="text-danger small ml-3">', '</div>') ?>
+                                <label for="nik">NIK</label>
+                                <input type="text" name="nik" id="nik" placeholder="Masukan NIK" class="form-control">
+                                <?php echo form_error('nik', '<div class="text-danger small ml-3">', '</div>') ?>
                             </div>
                             <div class="form-group">
                                 <label for="nisn">NISN</label>
@@ -43,9 +43,9 @@
                                 <?php echo form_error('tanggal_lahir', '<div class="text-danger small ml-3">', '</div>') ?>
                             </div>
                             <div class="form-group">
-                                <label for="agama">Agama</label>
-                                <input type="text" name="agama" id="agama" placeholder="Masukan Agama" class="form-control">
-                                <?php echo form_error('agama', '<div class="text-danger small ml-3">', '</div>') ?>
+                                <label for="tempat_lahir">Tempat Lahir</label>
+                                <input type="text" name="tempat_lahir" id="tempat_lahir" placeholder="Masukan Tempat Lahir" class="form-control">
+                                <?php echo form_error('tempat_lahir', '<div class="text-danger small ml-3">', '</div>') ?>
                             </div>
                             <div class="form-group">
                                 <label for="">Jenis Kelamin</label>
@@ -57,9 +57,23 @@
                                 <?php echo form_error('jenis_kelamin', '<div class="text-danger small ml-3">', '</div>') ?>
                             </div>
                             <div class="form-group">
-                                <label for="photo">Photo (ukuran 4x6 atau 2x3)</label>
-                                <input type="file" class="form-control-file" name="photo" id="photo">
-                                <small>(Biarkan kosong jika tidak ada)</small>
+                                <label for="">Status</label>
+                                <select class="form-control" id="status" name="status">
+                                    <option value="">--Pilih Status Siswa--</option>
+                                    <option value="Aktif">Aktif</option>
+                                    <option value="Nonaktif">Nonaktif</option>
+                                </select>
+                                <?php echo form_error('status', '<div class="text-danger small ml-3">', '</div>') ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="alamat">Alamat</label>
+                                <input type="text" name="alamat" id="alamat" placeholder="Masukan Alamat" class="form-control">
+                                <?php echo form_error('alamat', '<div class="text-danger small ml-3">', '</div>') ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="no_kip_pip">No KIP/PIP</label>
+                                <input type="text" name="no_kip_pip" id="no_kip_pip" placeholder="Masukan No KIP/PIP" class="form-control">
+                                <?php echo form_error('no_kip_pip', '<div class="text-danger small ml-3">', '</div>') ?>
                             </div>
                         </div>
                     </div>
@@ -76,39 +90,19 @@
                                 <?php echo form_error('nama_ibu', '<div class="text-danger small ml-3">', '</div>') ?>
                             </div>
                             <div class="form-group">
-                                <label for="pendidikan_ibu">Pendidikan Ibu</label>
-                                <input type="text" name="pendidikan_ibu" id="pendidikan_ibu" placeholder="Masukan Pendidikan Ibu" class="form-control">
-                                <?php echo form_error('pendidikan_ibu', '<div class="text-danger small ml-3">', '</div>') ?>
-                            </div>
-                            <div class="form-group">
-                                <label for="pekerjaan_ibu">Pekerjaan Ibu</label>
-                                <input type="text" name="pekerjaan_ibu" id="pekerjaan_ibu" placeholder="Masukan Pekerjaan Ibu" class="form-control">
-                                <?php echo form_error('pekerjaan_ibu', '<div class="text-danger small ml-3">', '</div>') ?>
-                            </div>
-                            <div class="form-group">
                                 <label for="nama_ayah">Nama Ayah</label>
                                 <input type="text" name="nama_ayah" id="nama_ayah" placeholder="Masukan Nama Ayah" class="form-control">
                                 <?php echo form_error('nama_ayah', '<div class="text-danger small ml-3">', '</div>') ?>
                             </div>
                             <div class="form-group">
-                                <label for="pendidikan_ayah">Pendidikan Ayah</label>
-                                <input type="text" name="pendidikan_ayah" id="pendidikan_ayah" placeholder="Masukan Pendidikan Ayah" class="form-control">
-                                <?php echo form_error('pendidikan_ayah', '<div class="text-danger small ml-3">', '</div>') ?>
-                            </div>
-                            <div class="form-group">
-                                <label for="pekerjaan_ayah">Pekerjaan Ayah</label>
-                                <input type="text" name="pekerjaan_ayah" id="pekerjaan_ayah" placeholder="Masukan Pekerjaan Ayah" class="form-control">
-                                <?php echo form_error('pekerjaan_ayah', '<div class="text-danger small ml-3">', '</div>') ?>
-                            </div>
-                            <div class="form-group">
-                                <label for="no_hp">Nomor Handphone</label>
-                                <input type="text" name="no_hp" id="no_hp" placeholder="Masukan Nomor Handphone" class="form-control">
-                                <?php echo form_error('no_hp', '<div class="text-danger small ml-3">', '</div>') ?>
+                                <label for="nama_wali">Nama Wali</label>
+                                <input type="text" name="nama_wali" id="nama_wali" placeholder="Masukan Nama Wali" class="form-control">
+                                <?php echo form_error('nama_wali', '<div class="text-danger small ml-3">', '</div>') ?>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 mb-3">
+                <!-- <div class="col-sm-6 mb-3">
                     <div class="card">
                         <div class="card-header bg-primary text-white">
                             <h5 class="card-title">Alamat</h5>
@@ -136,7 +130,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-sm">
                 </div>
             </div>

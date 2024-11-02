@@ -100,14 +100,11 @@ class User_model extends CI_Model
     {
         $id_user = $this->_input_admin();
         $data = array(
-            'nip'           => $this->input->post('nip', TRUE),
             'nama'          => $this->input->post('nama', TRUE),
             'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
             'tanggal_lahir' => $this->input->post('tanggal_lahir', TRUE),
             'no_hp'         => $this->input->post('no_hp', TRUE),
             'email'         => $this->input->post('email', TRUE),
-            'alamat'        => $this->input->post('alamat', TRUE),
-            // 'photo'         => $photo,
             'id_user'       => $id_user
         );
 
@@ -145,13 +142,11 @@ class User_model extends CI_Model
     public function edit_admin($id) //$photo harusnya ini berada dalam kurung
     {
         $data_admin = array(
-            'nip'           => $this->input->post('nip', TRUE),
             'nama'          => $this->input->post('nama', TRUE),
             'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
             'tanggal_lahir' => $this->input->post('tanggal_lahir', TRUE),
             'no_hp'         => $this->input->post('no_hp', TRUE),
             'email'         => $this->input->post('email', TRUE),
-            'alamat'        => $this->input->post('alamat', TRUE)
         );
 
         // if ($photo != null) {

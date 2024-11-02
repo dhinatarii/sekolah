@@ -1,7 +1,7 @@
 <?php if (!isset($login)) : ?>
     <footer class="c-footer">
-        <div>Copyright © 2021 SD Muhammadiyah Trini. All rights reserved.</div>
-        <div class="ml-auto">Powered by&nbsp;<a href="https://coreui.io/">CoreUI</a></div>
+        <div>Copyright © 2024 MTSS Thawalib Tanjung Limau. All rights reserved.</div>
+        <div class="ml-auto">Powered by&nbsp;<a href="https://coreui.io/">dhinatari</a></div>
     </footer>
     </div>
     </div>

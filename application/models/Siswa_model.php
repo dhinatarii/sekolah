@@ -3,12 +3,12 @@ class Siswa_model extends CI_Model
 {
     public function get_data()
     {
-        return $this->db->query('select * from tb_siswa ts where ts.id_siswa not in (select td.id_siswa from tb_datasiswa td) order by ts.nis')->result();
+        return $this->db->query('select * from tb_siswa ts where ts.id_siswa not in (select td.id_siswa from tb_datasiswa td) order by ts.nik')->result();
     }
 
     public function get_data_tahun($tahun)
     {
-        return $this->db->query("select * from tb_siswa ts where ts.id_siswa not in (select td.id_siswa from tb_datasiswa td where td.tahun_ajaran = '$tahun') order by ts.nis asc")->result();
+        return $this->db->query("select * from tb_siswa ts where ts.id_siswa not in (select td.id_siswa from tb_datasiswa td where td.tahun_ajaran = '$tahun') order by ts.nik asc")->result();
     }
 
     public function get_detail_data($id)
@@ -66,7 +66,6 @@ class Siswa_model extends CI_Model
         $this->db->select('*');
         $this->db->from('tb_siswa');
         $this->db->join('tb_orangtua', 'tb_siswa.id_orangtua = tb_orangtua.id_orangtua', 'left');
-        // $this->db->join('tb_alamat', 'tb_orangtua.id_alamat = tb_alamat.id_alamat', 'left');
         $this->db->join('tb_datasiswa', 'tb_datasiswa.id_siswa = tb_siswa.id_siswa', 'inner');
         $this->db->where('tb_datasiswa.tahun_ajaran', $tahun_ajaran);
         return $this->db->get()->num_rows();
@@ -77,13 +76,15 @@ class Siswa_model extends CI_Model
         $id_user = $this->_input_user();
         $id_orangtua = $this->_input_data_orangtua();
         $data = array(
-            'nis'           => $this->input->post('nis', TRUE),
+            'nik'           => $this->input->post('nik', TRUE),
             'nisn'          => $this->input->post('nisn', TRUE),
             'nama'          => $this->input->post('nama', TRUE),
             'tanggal_lahir' => $this->input->post('tanggal_lahir', TRUE),
-            'agama'         => $this->input->post('agama', TRUE),
+            'tempat_lahir'  => $this->input->post('tempat_lahir', TRUE),
             'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
-            // 'photo'         => $photo,
+            'alamat'        => $this->input->post('alamat', TRUE),
+            'status'        => $this->input->post('status', TRUE),
+            'no_kip_pip'    => $this->input->post('no_kip_pip', TRUE),
             'id_orangtua'   => $id_orangtua,
             'id_user'       => $id_user
         );
@@ -98,16 +99,19 @@ class Siswa_model extends CI_Model
         $dataDetail = $this->get_detail_data($id);
 
         $dataUser = array(
-            'username'       => $this->input->post('nis', TRUE),
+            'username'       => $this->input->post('nik', TRUE),
         );
 
         $data_siswa = array(
-            'nis'           => $this->input->post('nis', TRUE),
+            'nik'           => $this->input->post('nik', TRUE),
             'nisn'          => $this->input->post('nisn', TRUE),
             'nama'          => $this->input->post('nama', TRUE),
             'tanggal_lahir' => $this->input->post('tanggal_lahir', TRUE),
-            'agama'         => $this->input->post('agama', TRUE),
-            'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE)
+            'tempat_lahir'  => $this->input->post('tempat_lahir', TRUE),
+            'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
+            'alamat'        => $this->input->post('alamat', TRUE),
+            'status'        => $this->input->post('status', TRUE),
+            'no_kip_pip'    => $this->input->post('no_kip_pip', TRUE),
         );
 
         // if ($photo != null) {
@@ -116,22 +120,12 @@ class Siswa_model extends CI_Model
 
         $data_orangtua = array(
             'nama_ibu'          => $this->input->post('nama_ibu', TRUE),
-            'pendidikan_ibu'    => $this->input->post('pendidikan_ibu', TRUE),
-            'pekerjaan_ibu'     => $this->input->post('pekerjaan_ibu', TRUE),
             'nama_ayah'         => $this->input->post('nama_ayah', TRUE),
-            'pendidikan_ayah'   => $this->input->post('pendidikan_ayah', TRUE),
-            'pekerjaan_ayah'    => $this->input->post('pekerjaan_ayah', TRUE),
-            'no_hp'             => $this->input->post('no_hp', TRUE)
+            'nama_wali'         => $this->input->post('nama_wali', TRUE),
         );
 
-        $data_alamat = array(
-            'dusun'     => $this->input->post('dusun', TRUE),
-            'desa'      => $this->input->post('desa', TRUE),
-            'kecamatan' => $this->input->post('kecamatan', TRUE),
-            'kabupaten' => $this->input->post('kabupaten', TRUE)
-        );
 
-        $this->db->where('username', $dataDetail['nis']);
+        $this->db->where('username', $dataDetail['nik']);
         $this->db->update('tb_user', $dataUser);
 
         $this->db->where('id_siswa', $id);
@@ -151,41 +145,35 @@ class Siswa_model extends CI_Model
 
     private function _input_data_orangtua()
     {
-        $id_alamat = $this->_input_data_alamat();
         $data = array(
             'nama_ibu'          => $this->input->post('nama_ibu', TRUE),
-            'pendidikan_ibu'    => $this->input->post('pendidikan_ibu', TRUE),
-            'pekerjaan_ibu'     => $this->input->post('pekerjaan_ibu', TRUE),
             'nama_ayah'         => $this->input->post('nama_ayah', TRUE),
-            'pendidikan_ayah'   => $this->input->post('pendidikan_ayah', TRUE),
-            'pekerjaan_ayah'    => $this->input->post('pekerjaan_ayah', TRUE),
-            'no_hp'             => $this->input->post('no_hp', TRUE),
-            'id_alamat'         => $id_alamat
+            'nama_wali'         => $this->input->post('nama_wali', TRUE),
         );
 
         $this->db->insert('tb_orangtua', $data);
         return $this->db->insert_id();
     }
 
-    private function _input_data_alamat()
-    {
-        $data = array(
-            'dusun'     => $this->input->post('dusun', TRUE),
-            'desa'      => $this->input->post('desa', TRUE),
-            'kecamatan' => $this->input->post('kecamatan', TRUE),
-            'kabupaten' => $this->input->post('kabupaten', TRUE)
-        );
+    // private function _input_data_alamat()
+    // {
+    //     $data = array(
+    //         'dusun'     => $this->input->post('dusun', TRUE),
+    //         'desa'      => $this->input->post('desa', TRUE),
+    //         'kecamatan' => $this->input->post('kecamatan', TRUE),
+    //         'kabupaten' => $this->input->post('kabupaten', TRUE)
+    //     );
 
-        // $this->db->insert('tb_alamat', $data);
-        return $this->db->insert_id();
-    }
+    //     // $this->db->insert('tb_alamat', $data);
+    //     return $this->db->insert_id();
+    // }
 
     private function _input_user()
     {
         $date = date_create($this->input->post('tanggal_lahir', TRUE));
         $dateFormat = date_format($date, "mY");
         $data = array(
-            'username'  => $this->input->post('nis', TRUE),
+            'username'  => $this->input->post('nik', TRUE),
             'password'  => MD5($dateFormat),
             'level'     => 'siswa',
             'status'    => '1'
@@ -195,8 +183,8 @@ class Siswa_model extends CI_Model
         return $this->db->insert_id();
     }
 
-    var $column_order = array(null, 'tb_siswa.nis', 'tb_siswa.nisn', 'tb_siswa.nama', 'tb_siswa.tanggal_lahir', 'tb_siswa.agama', 'tb_siswa.jenis_kelamin'); //Sesuaikan dengan field
-    var $column_search = array('tb_siswa.nis', 'tb_siswa.nisn', 'tb_siswa.nama'); //field yang diizin untuk pencarian 
+    var $column_order = array(null, 'tb_siswa.nik', 'tb_siswa.nisn', 'tb_siswa.nama', 'tb_siswa.tanggal_lahir', 'tb_siswa.agama', 'tb_siswa.jenis_kelamin'); //Sesuaikan dengan field
+    var $column_search = array('tb_siswa.nik', 'tb_siswa.nisn', 'tb_siswa.nama'); //field yang diizin untuk pencarian 
     var $order = array('tb_kelas.kelas' => 'asc'); // default order 
 
     private function _get_datatables_query()

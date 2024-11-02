@@ -107,11 +107,11 @@ class PesertaDidik extends CI_Controller
                         <thead>
                             <tr>
                                 <th class="text-center" style="vertical-align : middle;text-align:center;" width="20px">No</th>
-                                <th style="vertical-align : middle;text-align:center;">NIS</th>
+                                <th style="vertical-align : middle;text-align:center;">NIK</th>
                                 <th style="vertical-align : middle;text-align:center;">NISN</th>
                                 <th style="vertical-align : middle;text-align:center;">Nama</th>
                                 <th style="vertical-align : middle;text-align:center;">Jenis Kelamin</th>
-                                <th style="vertical-align : middle;text-align:center;">Agama</th>
+                                <th style="vertical-align : middle;text-align:center;">Status</th>
                                 <th class="text-center" width="80px" style="vertical-align : middle;text-align:center;">Aksi</th>
                             </tr>
                         </thead>
@@ -119,11 +119,11 @@ class PesertaDidik extends CI_Controller
             foreach ($data_peserta as $key => $value) {
                 $html = $html . '<tr>
                                 <td class="text-center" style="vertical-align : middle;text-align:center;" widtd="20px">' . ++$key . '</td>
-                                <td style="vertical-align : middle;text-align:center;">' . $value->nis . '</td>
+                                <td style="vertical-align : middle;text-align:center;">' . $value->nik . '</td>
                                 <td style="vertical-align : middle;text-align:center;">' . $value->nisn . '</td>
                                 <td style="vertical-align : middle;text-align:left;">' . $value->nama . '</td>
                                 <td style="vertical-align : middle;text-align:center;">' . $value->jenis_kelamin . '</td>
-                                <td style="vertical-align : middle;text-align:center;">' . $value->agama . '</td>
+                                <td style="vertical-align : middle;text-align:center;">' . $value->status . '</td>
                                 <td class="text-center" width="80px" style="vertical-align : middle;text-align:center;"><a href="javascript:;" id="data-siswa" data-idsiswa="' . $value->id_datasiswa . '" class="btn btn-sm btn-danger btn-delete-guru btn-xs mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a></td>
                             </tr>';
             }
@@ -204,10 +204,10 @@ class PesertaDidik extends CI_Controller
         $html = $html . '<label class="col-form-label" for="old-daftar">Daftar Peserta Didik Lama Kelas ' . $kelas['kelas'] . '</label>
                         <div class="">
                             <select class="form-control" id="old-daftar" name="old-daftar" size="20" multiple="">
-                                <option value="">NIS - NISN - Nama Siswa</option>';
+                                <option value="">NIK - NISN - Nama Siswa</option>';
         if ($data_peserta) {
             foreach ($data_peserta as $dp) {
-                $html = $html . '<option value="">' . $dp->nis . '-' . $dp->nisn . '-' . $dp->nama . '</option>';
+                $html = $html . '<option value="">' . $dp->nik . '-' . $dp->nisn . '-' . $dp->nama . '</option>';
             }
         }
 
@@ -228,7 +228,7 @@ class PesertaDidik extends CI_Controller
                                 <option value="">NIS - NISN - Nama Siswa</option>';
         if ($data_peserta) {
             foreach ($data_peserta as $dp) {
-                $html = $html . '<option value="">' . $dp->nis . '-' . $dp->nisn . '-' . $dp->nama . '</option>';
+                $html = $html . '<option value="">' . $dp->nik . '-' . $dp->nisn . '-' . $dp->nama . '</option>';
             }
         }
 

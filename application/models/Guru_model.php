@@ -10,48 +10,39 @@ class Guru_model extends CI_Model
     // Menghitung jumlah guru berdasarkan tahun ajaran
     public function get_count($tahun)
     {
-        $tahun_ajaran = !empty($tahun) ? $tahun['nama'] : null;
-
+        $tahun_ajaran = ($tahun) ? $tahun['nama'] : 'null';
         $this->db->from('tb_guru tg');
         $this->db->join('tb_pengajar tp', 'tp.id_guru = tg.id_guru', 'inner');
         $this->db->join('tb_tahunajaran tt', 'tt.id_tahun = tp.id_tahun', 'inner');
-
-        if ($tahun_ajaran !== null) {
-            $this->db->where('tt.nama', $tahun_ajaran);
-        }
-
+        $this->db->where('tt.nama', $tahun_ajaran);
         $this->db->group_by('tg.id_guru');
         return $this->db->get()->num_rows();
     }
 
-    // Mengambil nama guru yang tidak menjadi wali kelas
     public function get_data_only_name()
     {
-        return $this->db->query("
-            SELECT tg.nama, tg.id_user 
-            FROM tb_guru tg
-            WHERE tg.nama NOT IN (
-                SELECT tk.wali_kelas
-                FROM tb_kelas tk
-                WHERE tk.wali_kelas = tg.nama
-            )
-        ")->result();
+        return $this->db->query("select tg.nama, tg.id_user 
+            from
+                tb_guru tg
+            where
+                tg.nama not in (
+                select
+                    tk.wali_kelas
+                from
+                    tb_kelas tk
+                where
+                    tk.wali_kelas = tg.nama)")->result();
     }
 
-    // Mendapatkan detail guru
-    public function get_detail_data($id_user = NULL, $id_guru = NULL)
+    public function get_detail_data($id, $id_user = NULL, $name = NULL)
     {
-        // Jika id_user diberikan, cari berdasarkan id_user
         if ($id_user) {
-            $this->db->where('id_user', $id_user);
+            return $this->db->get_where('tb_guru', ['id_user' => $id_user])->row_array();
+        } elseif ($name) {
+            return $this->db->get_where('tb_guru', ['nama' => $name])->row_array();
+        } else {
+            return $this->db->get_where('tb_guru', ['id_guru' => $id])->row_array();
         }
-
-        // Jika id_guru diberikan, cari berdasarkan id_guru
-        if ($id_guru) {
-            $this->db->where('id_guru', $id_guru);
-        }
-
-        return $this->db->get('tb_guru')->row_array();
     }
 
 
@@ -74,45 +65,58 @@ class Guru_model extends CI_Model
     {
         $id_user = $this->_input_user();
         $data = array(
-            'nip'           => $this->input->post('nip', TRUE),
-            'nama'          => $this->input->post('nama', TRUE),
-            'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
-            'tanggal_lahir' => $this->input->post('tanggal_lahir', TRUE),
-            'no_hp'         => $this->input->post('no_hp', TRUE),
-            'email'         => $this->input->post('email', TRUE),
-            'alamat'        => $this->input->post('alamat', TRUE),
-            // 'photo'         => $photo,
+            'nik'                              => $this->input->post('nik', TRUE),
+            'nama'                             => $this->input->post('nama', TRUE),
+            'jenis_kelamin'                    => $this->input->post('jenis_kelamin', TRUE),
+            'tanggal_lahir'                    => $this->input->post('tanggal_lahir', TRUE),
+            'no_hp'                            => $this->input->post('no_hp', TRUE),
+            'email'                            => $this->input->post('email', TRUE),
+            'alamat'                           => $this->input->post('alamat', TRUE),
+            'nip'                              => $this->input->post('nip', TRUE),
+            'pendidikan'                       => $this->input->post('pendidikan', TRUE),
+            'bidang_studi'                     => $this->input->post('bidang_studi', TRUE),
+            'tempat_tugas'                     => $this->input->post('tempat_tugas', TRUE),
+            'tahun_mulai_tugas'                => $this->input->post('tahun_mulai_tugas', TRUE),
+            'niy'                              => $this->input->post('niy', TRUE),
+            'no_sertifikat_sertifikasi'        => $this->input->post('no_sertifikat_sertifikasi', TRUE),
+            'no_peserta_sertifikasi'           => $this->input->post('no_peserta_sertifikasi', TRUE),
+            'tahun_lulus_sertifikasi'          => $this->input->post('tahun_lulus_sertifikasi', TRUE),
             'id_user'       => $id_user
         );
 
         $this->db->insert('tb_guru', $data);
     }
 
-    public function edit_data($id)//,$photo = null harusnya ini berada dalam kurung
+    public function edit_data($id,$name_guru)//,$photo = null harusnya ini berada dalam kurung
     {
         $dataDetail = $this->get_detail_data($id);
-        if (!$dataDetail) {
-            log_message('error', 'Data guru tidak ditemukan saat edit dengan id: ' . $id);
-            return; // Menghentikan eksekusi jika data tidak ditemukan
-        }
+        $dataWali = $this->db->get_where('tb_kelas', ['wali_kelas' => $name_guru])->num_rows();
 
         $dataUser = array(
             'username' => $this->input->post('email', TRUE),
         );
-
-        $data = array(
-            'nip'           => $this->input->post('nip', TRUE),
-            'nama'          => $this->input->post('nama', TRUE),
-            'jenis_kelamin' => $this->input->post('jenis_kelamin', TRUE),
-            'tanggal_lahir' => $this->input->post('tanggal_lahir', TRUE),
-            'no_hp'         => $this->input->post('no_hp', TRUE),
-            'email'         => $this->input->post('email', TRUE),
-            'alamat'        => $this->input->post('alamat', TRUE),
+        $dataWali = array(
+            'wali_kelas'     => $this->input->post('nama', TRUE),
         );
 
-        // if ($photo != null) {
-        //     $data['photo'] = $photo;
-        // }
+        $data = array(
+            'nik'                              => $this->input->post('nik', TRUE),
+            'nama'                             => $this->input->post('nama', TRUE),
+            'jenis_kelamin'                    => $this->input->post('jenis_kelamin', TRUE),
+            'tanggal_lahir'                    => $this->input->post('tanggal_lahir', TRUE),
+            'no_hp'                            => $this->input->post('no_hp', TRUE),
+            'email'                            => $this->input->post('email', TRUE),
+            'alamat'                           => $this->input->post('alamat', TRUE),
+            'nip'                              => $this->input->post('nip', TRUE),
+            'pendidikan'                       => $this->input->post('pendidikan', TRUE),
+            'bidang_studi'                     => $this->input->post('bidang_studi', TRUE),
+            'tempat_tugas'                     => $this->input->post('tempat_tugas', TRUE),
+            'tahun_mulai_tugas'                => $this->input->post('tahun_mulai_tugas', TRUE),
+            'niy'                              => $this->input->post('niy', TRUE),
+            'no_sertifikat_sertifikasi'        => $this->input->post('no_sertifikat_sertifikasi', TRUE),
+            'no_peserta_sertifikasi'           => $this->input->post('no_peserta_sertifikasi', TRUE),
+            'tahun_lulus_sertifikasi'          => $this->input->post('tahun_lulus_sertifikasi', TRUE),
+        );
 
         // Update data guru
         $this->db->where('id_guru', $id);
@@ -121,6 +125,12 @@ class Guru_model extends CI_Model
         // Update data user
         $this->db->where('username', $dataDetail['email']);
         $this->db->update('tb_user', $dataUser);
+
+        if ($dataWali > 0) {
+            $this->db->where('wali_kelas', $name_guru);
+            $this->db->update('tb_kelas', $dataWali);
+        }
+
     }
 
     public function delete_data($id)
@@ -130,8 +140,8 @@ class Guru_model extends CI_Model
     }
 
     // Variabel untuk datatables
-    var $column_order = array(null, 'nip', 'nama', 'jenis_kelamin', 'tanggal_lahir', 'no_hp', 'email', 'alamat');
-    var $column_search = array('nama', 'no_hp', 'email', 'alamat');
+    var $column_order = array(null, 'nik', 'nama', 'jenis_kelamin', 'tanggal_lahir', 'no_hp', 'email', 'alamat', 'nip', 'pendidikan', 'bidang_studi', 'tempat_tugas', 'tahun_mulai_tugas', 'niy', 'no_sertifikat_sertifikasi', 'no_peserta_sertifikasi', 'tahun_lulus_sertifikasi');
+    var $column_search = array('nama', 'no_hp', 'email', 'alamat', 'bidang_studi');
     var $order = array('nama' => 'asc');
 
     private function _get_datatables_query()

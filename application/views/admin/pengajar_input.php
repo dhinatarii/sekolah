@@ -55,10 +55,13 @@
                     <label for="jabatan">Jabatan</label>
                     <select class="form-control" id="jabatan" name="jabatan">
                         <option value="">--Pilih Jabatan--</option>
-                        <option value="Guru Kelas">Guru Kelas</option>
-                        <option value="Guru Agama">Guru Agama</option>
-                        <option value="Guru Agama">Guru Bahasa</option>
-                        <option value="Guru Penjas">Guru Penjas</option>
+                        <option value="Guru Kelas">Kepala Madrasah</option>
+                        <option value="Waka Kurikulum">Waka Kurikulum</option>
+                        <option value="Wakasis">Wakasis</option>
+                        <option value="Waka SarPras">Waka SarPras</option>
+                        <option value="Guru">Guru</option>
+                        <option value="Ka. Tata Usaha">Ka. Tata Usaha</option>
+                        <option value="Staff Tata Usaha">Staff Tata Usaha</option>
                     </select>
                     <?php echo form_error('jabatan', '<div class="text-danger small ml-3">', '</div>') ?>
                 </div>

@@ -24,9 +24,9 @@
                     <label class="col-form-label" for="siswa">Siswa</label>
                     <div class="">
                         <select class="form-control" id="siswa" name="siswa[]" size="20" multiple="">
-                            <option value="">NIS - NISN - Nama Siswa</option>
+                            <option value="">NIK - NISN - Nama Siswa</option>
                             <?php foreach ($siswa as $sw) : ?>
-                                <option value="<?php echo $sw->id_siswa ?>"><?= "$sw->nis - $sw->nisn - $sw->nama" ?></option>
+                                <option value="<?php echo $sw->id_siswa ?>"><?= "$sw->nik - $sw->nisn - $sw->nama" ?></option>
                             <?php endforeach; ?>
                         </select>
                         <?php echo form_error('siswa[]', '<div class="text-danger small ml-3">', '</div>') ?>

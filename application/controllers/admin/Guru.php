@@ -56,13 +56,22 @@ class Guru extends CI_Controller
             $no++;
             $row = array();
             $row[] = $no;
-            $row[] = $item->nip;
+            $row[] = $item->nik;
             $row[] = $item->nama;
             $row[] = $item->jenis_kelamin;
             $row[] = $item->tanggal_lahir;
             $row[] = $item->no_hp;
             $row[] = $item->email;
             $row[] = $item->alamat;
+            $row[] = $item->nip;
+            $row[] = $item->pendidikan;
+            $row[] = $item->bidang_studi;
+            $row[] = $item->tempat_tugas;
+            $row[] = $item->tahun_mulai_tugas;
+            $row[] = $item->niy;
+            $row[] = $item->no_sertifikat_sertifikasi;
+            $row[] = $item->no_peserta_sertifikasi;
+            $row[] = $item->tahun_lulus_sertifikasi;
             $row[] = anchor('admin/guru/edit/' . $item->id_guru, '<div class="btn btn-sm btn-primary btn-xs mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>')
                 . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_guru . ')" class="btn btn-sm btn-danger btn-delete-guru btn-xs mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';
             $data[] = $row;
@@ -110,45 +119,12 @@ class Guru extends CI_Controller
             $this->load->view('admin/guru_input');
             $this->load->view('templates/footer');
         } 
-        // else {
-        //     $config['allowed_types']        = 'gif|jpg|png|jpeg';
-        //     $config['max_size']             = 5000;
-        //     $config['file_name']            = 'photo-guru-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
-        //     $this->upload->initialize($config);
-
-        //     if (@$_FILES['photo']['name'] != null) {
-
-        //         if ($this->upload->do_upload('photo')) {
-        //             $gbr = $this->upload->data();
-        //             //Compress Image
-        //             $config['image_library'] = 'gd2';
-        //             $config['source_image'] = './assets/photos/' . $gbr['file_name'];
-        //             $config['create_thumb'] = FALSE;
-        //             $config['maintain_ratio'] = FALSE;
-        //             $config['width'] = 400;
-        //             $config['height'] = 600;
-        //             $config['quality'] = '50%';
-        //             $config['new_image'] = './assets/photos/' . $gbr['file_name'];
-        //             $this->image_lib->initialize($config);
-        //             $this->image_lib->resize();
-
-        //             $photo = $gbr['file_name'];
-        //             $this->Guru_model->input_data($photo);
-        //             $this->session->set_flashdata('message', 'Data Guru Berhasil Ditambahkan!');
-        //             redirect('admin/guru');
-        //         } else {
-        //             $error = $this->upload->display_errors();
-        //             $this->session->set_flashdata('message_error', $error);
-        //             redirect('admin/guru/input');
-        //         }
-        //     } 
             else {
-                $photo = NULL;
-                $this->Guru_model->input_data($photo);
+                // $photo = NULL;
+                $this->Guru_model->input_data();
                 $this->session->set_flashdata('message', 'Data Guru Berhasil Ditambahkan!');
                 redirect('admin/guru');
             }
-        // }
     }
 
     public function edit()
@@ -195,61 +171,17 @@ class Guru extends CI_Controller
             $this->load->view('admin/guru_edit', $data);
             $this->load->view('templates/footer');
         } 
-        // else {
-        //     $config['upload_path']          = './assets/photos/';
-        //     $config['allowed_types']        = 'gif|jpg|png|jpeg';
-        //     $config['max_size']             = 5000;
-        //     $config['file_name']            = 'photo-guru-' . $this->input->post('tanggal_lahir', TRUE) . '-' . substr(md5(rand()), 0, 10);
-        //     $this->upload->initialize($config);
-
-        //     if (@$_FILES['photo']['name'] != null) {
-
-        //         if ($this->upload->do_upload('photo')) {
-        //             $item =  $this->Guru_model->get_detail_data($id);
-        //             if ($item['photo'] != null) {
-        //                 $target_delete = './assets/photos/' . $item['photo'];
-        //                 unlink($target_delete);
-        //             }
-
-        //             $gbr = $this->upload->data();
-        //             //Compress Image
-        //             $config['image_library'] = 'gd2';
-        //             $config['source_image'] = './assets/photos/' . $gbr['file_name'];
-        //             $config['create_thumb'] = FALSE;
-        //             $config['maintain_ratio'] = FALSE;
-        //             $config['width'] = 400;
-        //             $config['height'] = 600;
-        //             $config['quality'] = '50%';
-        //             $config['new_image'] = './assets/photos/' . $gbr['file_name'];
-        //             $this->image_lib->initialize($config);
-        //             $this->image_lib->resize();
-
-        //             $photo = $gbr['file_name'];
-        //             $this->Guru_model->edit_data($id, $photo, $data['guru']['nama']);
-        //             $this->session->set_flashdata('message', 'Data Guru Berhasil Diupdate!');
-        //             redirect('admin/guru');
-        //         } else {
-        //             $error = $this->upload->display_errors();
-        //             $this->session->set_flashdata('message_error', $error);
-        //             redirect('admin/guru/input');
-        //         }
-        //     } else {
-        //         $photo = NULL;
-        //         $this->Guru_model->edit_data($id, $photo, $data['guru']['nama']);
-        //         $this->session->set_flashdata('message', 'Data Guru Berhasil Diupdate!');
-        //         redirect('admin/guru');
-        //     }
-        // }
+        else {
+                $this->Guru_model->edit_data($id, $data['guru']['nama']);
+                $this->session->set_flashdata('message', 'Data Guru Berhasil Diupdate!');
+                redirect('admin/guru');
+            }
     }
 
     public function delete()
     {
         $id           = $this->uri->segment(4);
         $item         = $this->Guru_model->get_detail_data($id);
-        // if ($item['photo'] != null) {
-        //     $target_delete = './assets/photos/' . $item['photo'];
-        //     unlink($target_delete);
-        // }
 
         $this->User_model->delete_data($item['id_user']);
         $this->Kelas_model->delete_walikelas($item['nama']);
@@ -260,12 +192,21 @@ class Guru extends CI_Controller
 
     function _rules()
     {
-        $this->form_validation->set_rules('nip', 'NIP', 'required|max_length[20]');
+        $this->form_validation->set_rules('nik', 'NIK', 'required|max_length[20]');
         $this->form_validation->set_rules('nama', 'Nama', 'required|max_length[100]');
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('tanggal_lahir', 'Tanggal lahir', 'required');
         $this->form_validation->set_rules('no_hp', 'No Handphone', 'required|numeric|min_length[10]|max_length[15]');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email|max_length[100]');
         $this->form_validation->set_rules('alamat', 'Alamat', 'required|max_length[100]');
-        $this->form_validation->set_rules('tanggal_lahir', 'Tanggal lahir', 'required');
+        $this->form_validation->set_rules('nip', 'NIP');
+        $this->form_validation->set_rules('pendidikan', 'Pendidikan', 'required|max_length[100]');
+        $this->form_validation->set_rules('bidang_studi', 'Bidang Studi', 'required|max_length[100]');
+        $this->form_validation->set_rules('tempat_tugas', 'Tempat Tugas', 'required|max_length[100]');
+        $this->form_validation->set_rules('tahun_mulai_tugas', 'Tahun Mulai Tugas');
+        $this->form_validation->set_rules('niy', 'NIY');
+        $this->form_validation->set_rules('no_sertifikat_sertifikasi', 'No Sertifikat Sertifikasi');
+        $this->form_validation->set_rules('no_peserta_sertifikasi', 'No Peserta Sertifikasi');
+        $this->form_validation->set_rules('tahun_lulus_sertifikasi', 'Tahun Lulus Sertifikasi');
     }
 }

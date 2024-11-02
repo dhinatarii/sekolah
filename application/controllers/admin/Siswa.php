@@ -55,13 +55,16 @@ class Siswa extends CI_Controller
             $no++;
             $row = array();
             $row[] = $no;
-            $row[] = $item->nis;
+            $row[] = $item->nik;
             $row[] = $item->nisn;
             $row[] = $item->nama;
             $row[] = $item->tanggal_lahir;
-            $row[] = $item->agama;
+            $row[] = $item->tempat_lahir;
             $row[] = $item->jenis_kelamin;
-            $row[] = '<div id="set_detailModal" class="btn btn-sm btn-success mr-1 ml-1 mb-1" data-toggle="modal" data-target="#detailModal" data-idsiswa="' . $item->id_siswa . '" data-siswa="' . $item->nama . '" data-namaibu="' . $item->nama_ibu . '" data-namaayah="' . $item->nama_ayah . '"><i class="fa fa-eye"></i></div>'
+            $row[] = $item->status;
+            $row[] = $item->alamat;
+            $row[] = $item->no_kip_pip;
+            $row[] = '<div id="set_detailModal" class="btn btn-sm btn-success mr-1 ml-1 mb-1" data-toggle="modal" data-target="#detailModal" data-idsiswa="' . $item->id_siswa . '" data-siswa="' . $item->nama . '" data-namaibu="' . $item->nama_ibu . '" data-namaayah="' . $item->nama_ayah . '"data-namawali="' . $item->nama_wali . '"><i class="fa fa-eye"></i></div>'
                 . anchor('admin/siswa/edit/' . $item->id_siswa, '<div class="btn btn-sm btn-primary mr-1 ml-1 mb-1"><i class="fa fa-edit"></i></div>')
                 . '<a href="javascript:;" onclick="confirmDelete(' . $item->id_siswa . ')" class="btn btn-sm btn-danger btn-delete-siswa mr-1 ml-1 mb-1"><i class="fa fa-trash"></i></a>';
             $data[] = $row;
@@ -98,6 +101,7 @@ class Siswa extends CI_Controller
             'siswa'         => $siswa,
             'kelas'         => $this->Kelas_model->get_data(),
             'jenis_kelamin' => ['Laki-laki', 'Perempuan'],
+            'status' => ['Aktif', 'Nonaktif'],
             'menu'          => 'siswa',
             'breadcrumb'    => [
                 0 => (object)[
@@ -252,10 +256,6 @@ class Siswa extends CI_Controller
     {
         $item = $this->Siswa_model->get_detail_data($id);
         $id_address = $this->Siswa_model->get_id_address($item['id_orangtua']);
-        // if ($item['photo'] != null) {
-        //     $target_delete = './assets/photos/' . $item['photo'];
-        //     unlink($target_delete);
-        // }
 
         $this->Siswa_model->delete_data($id_address);
         $this->User_model->delete_data($item['id_user']);
@@ -266,22 +266,19 @@ class Siswa extends CI_Controller
     private function _rules()
     {
         // rules data diri
-        $this->form_validation->set_rules('nis', 'NIS', 'required|numeric|max_length[10]');
+        $this->form_validation->set_rules('nik', 'NIK', 'required|numeric|max_length[20]');
         $this->form_validation->set_rules('nisn', 'NISN', 'required|numeric|max_length[20]');
         $this->form_validation->set_rules('nama', 'Nama', 'required|max_length[100]');
         $this->form_validation->set_rules('tanggal_lahir', 'Tanggal lahir', 'required');
-        $this->form_validation->set_rules('agama', 'Agama', 'required|max_length[10]');
+        $this->form_validation->set_rules('tempat_lahir', 'Tempat lahir', 'required|max_length[100]');
         $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
-
+        $this->form_validation->set_rules('status', 'Status', 'required');
+        $this->form_validation->set_rules('alamat', 'Alamat', 'required|max_length[100]');
+        $this->form_validation->set_rules('no_kip_pip', 'No KIP/PIP', 'numeric|max_length[20]');
         // rules data orang tua
         $this->form_validation->set_rules('nama_ibu', 'Nama Ibu', 'required|max_length[100]');
         $this->form_validation->set_rules('nama_ayah', 'Nama Ayah', 'required|max_length[100]');
-        // $this->form_validation->set_rules('nama_wali', 'Nama Wali', 'required|max_length[100]');
+        $this->form_validation->set_rules('nama_wali', 'Nama Wali', 'required|max_length[100]');
 
-        // // rules data alamat
-        // $this->form_validation->set_rules('dusun', 'Dusun', 'required|max_length[50]');
-        // $this->form_validation->set_rules('desa', 'Desa', 'required|max_length[50]');
-        // $this->form_validation->set_rules('kecamatan', 'Kecamatan', 'required|max_length[50]');
-        // $this->form_validation->set_rules('kabupaten', 'Kabupaten', 'required|max_length[50]');
     }
 }

@@ -65,7 +65,7 @@ class Tahun_model extends CI_Model
             'nama'      => $this->input->post('nama', TRUE),
             'semester'  => $this->input->post('semester', TRUE),
             'status'    => $this->input->post('status', TRUE),
-            'shared'    => $this->input->post('shared', TRUE),
+            // 'shared'    => $this->input->post('shared', TRUE),
         );
 
         if ($data['status'] == '0') {
@@ -84,7 +84,7 @@ class Tahun_model extends CI_Model
         $this->db->delete('tb_tahunajaran', ['id_tahun' => $id]);
     }
 
-    var $column_order = array(null, 'nama', 'semester', 'shared', 'status',); //Sesuaikan dengan field
+    var $column_order = array(null, 'nama', 'semester', 'status',); // , 'shared'Sesuaikan dengan field
     var $column_search = array('nama'); //field yang diizin untuk pencarian 
     var $order = array('nama' => 'asc'); // default order 
 

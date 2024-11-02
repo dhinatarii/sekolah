@@ -25,11 +25,6 @@
                 <?php echo form_error('status', '<div class="text-danger small ml-3">', '</div>') ?>
             </div>
             <div class="form-group">
-                <label for="nip">NIP</label>
-                <input type="text" name="nip" id="nip" placeholder="Masukan NIP" class="form-control" value="<?= $admin['nip'] ?>">
-                <?php echo form_error('nip', '<div class="text-danger small ml-3">', '</div>') ?>
-            </div>
-            <div class="form-group">
                 <label for="nama">Nama</label>
                 <input type="text" name="nama" id="nama" placeholder="Masukan Nama" class="form-control" value="<?= $admin['nama'] ?>">
                 <?php echo form_error('nama', '<div class="text-danger small ml-3">', '</div>') ?>
@@ -61,21 +56,6 @@
                 <label for="email">Email</label>
                 <input type="text" name="email" id="email" placeholder="Masukan Email" class="form-control" value="<?= $admin['email'] ?>">
                 <?php echo form_error('email', '<div class="text-danger small ml-3">', '</div>') ?>
-            </div>
-            <div class="form-group">
-                <label for="alamat">Alamat</label>
-                <input type="text" name="alamat" id="alamat" placeholder="Masukan Alamat" class="form-control" value="<?= $admin['alamat'] ?>">
-                <?php echo form_error('alamat', '<div class="text-danger small ml-3">', '</div>') ?>
-            </div>
-            <div class="form-group">
-                <label for="photo">Photo (ukuran 4x6 atau 2x3)</label>
-                <?php if ($admin['photo'] != null) : ?>
-                    <div class="mb-3">
-                        <img src="<?= base_url('assets/photos/' . $admin['photo']) ?>" alt="photo <?= $admin['nama'] ?>" style="max-width:200px; max-height:300px; object-fit: scale-down; object-position: center; border-radius: 8px;">
-                    </div>
-                <?php endif ?>
-                <input type="file" class="form-control-file" name="photo" id="photo">
-                <small>(Biarkan kosong jika tidak diganti)</small>
             </div>
             <button type="submit" class="btn btn-primary">Simpan</button>
             <button type="reset" class="btn btn-secondary ml-1">Reset</button>
